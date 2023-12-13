@@ -191,7 +191,6 @@ $(document).ready(function () {
         
         $('#modalDict').modal('show');
 	});
-
 	//저장 submit
 	$('#btnUpdate').on('click', function(){
 
