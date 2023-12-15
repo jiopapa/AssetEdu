@@ -35,17 +35,17 @@
 		
    </select>
 
-   <select id="selectOne" parameterType="Sys02Dict" resultType="Sys02Dict">
+   <select id="selectOne" parameterType="Sys01User" resultType="Sys01User">
 	   SELECT 
-               sys02_dict_id
-             , sys02_short
-             , sys02_full
-             , sys02_kor_nm
-             , sys02_note
+               sys01_user_id
+             , sys01_user_nm
+             , sys01_user_tel
+             , sys01_user_email
+            
 	   FROM 
-	   		sys02_dict
+	   		sys01_user
 	   WHERE 1=1
-	   	AND sys02_dict_id = #{sys02DictId}
+	   	AND sys01_user = #{sys01UserId}
    </select>
    
    <select id="getDictId" resultType="String">
