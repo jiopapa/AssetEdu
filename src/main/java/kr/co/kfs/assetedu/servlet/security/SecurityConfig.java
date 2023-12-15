@@ -42,19 +42,25 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 		http.csrf().disable();
-		http.cors();
+		//동일한 url로 접속했는지 체크
+		http.cors(); 
 		http.authorizeHttpRequests(
 				(auth)-> auth
-				.antMatchers("/", "/login").permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/test/**").hasRole("ADMIN")
+				//모두 들어오게
+				.antMatchers("/", "/login").permitAll() 
+				//admin/url은 admin만 접속
+				.antMatchers("/admin/**").hasRole("ADMIN") 
+				// test도 admin 만 접속
+				.antMatchers("/test/**").hasRole("ADMIN") 
 				.anyRequest().authenticated()
 		);
-		
-		http.formLogin().loginPage("/login")
+	//  login은 로그인폼 띄워라
+		http.formLogin().loginPage("/login") 
 			.defaultSuccessUrl("/main", true);
-		http.formLogin().loginProcessingUrl("/loginProcess")
+		//로그인버튼누르면 실행되는 프로세스
+		http.formLogin().loginProcessingUrl("/loginProcess")  
 			.defaultSuccessUrl("/main", true)
+			//실패하면 다시 로그인
 			.failureUrl("/login?error=true")
 			.successHandler(new AuthenticationSuccessHandler() {
 				
@@ -64,7 +70,8 @@ public class SecurityConfig {
 					UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 //					System.out.println("loginId:" + userPrincipal.getUserId());
 //					System.out.println("loginNm:" + userPrincipal.getUsername());
-					request.getSession().setAttribute("userId", userPrincipal.getUserId());
+					//로그인 성공하면 세션에 id와 이름을 넣어라
+					request.getSession().setAttribute("userId", userPrincipal.getUserId()); 
 					request.getSession().setAttribute("userNm", userPrincipal.getUsername());
 					response.sendRedirect("/main");
 				}
