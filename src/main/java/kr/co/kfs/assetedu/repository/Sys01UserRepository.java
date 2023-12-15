@@ -10,7 +10,7 @@ public interface Sys01UserRepository {
 	List<Sys01User> selectList(Condition condition);
 	Integer selectCount(Condition condition);
 	
-	String getDictId();
+	String getUserId();
 	
 	// CRUD
 	Sys01User selectOne(Sys01User user);

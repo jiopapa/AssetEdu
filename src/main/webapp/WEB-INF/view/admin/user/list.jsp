@@ -25,6 +25,38 @@
 <!-- =================================================== -->
 <main class="container mx-3 my-3">
 	<h2><i class="fa-solid fa-cube my-3"></i> 사용자관리</h2>
+	<div class="container-lg p-3 border border-2 rounded-1">
+		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
+		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
+        <a class="btn d-inline align-middle btn-success btnInsert" href="/admin/user/insert"><i class="fa-solid fa-pencil-alt"></i> 등록</a>
+	</div>
+	<table class="mt-3 table table-hover table-sm dictTable" style="font-size:small">
+	  <thead class="table-light">
+	    <tr class="text-center">
+	      <th scope="col" style="width:50px">No</th>
+          <th scope="col" style="width:150px">유저ID</th>
+	      <th scope="col" style="width:250px">유저이름</th>
+	       <th scope="col" style="width:250px">유저전화번호</th>
+	        <th scope="col" style="width:250px">유저이메일</th>
+	    </tr>
+	  </thead>
+	  <tbody class="table-group-divider" >
+	  	<c:forEach var="list" items="${list}" varStatus="status">
+		    <tr class="align-middle">
+		      <td scope="row" class="text-center fw-bold">${status.count}</td>
+              <td class="sys01UserId text-center">${list.sys01UserId}</td>
+		      <td class="sys01UserNm">${list.sys01UserNm}</td>
+		      <td class="sys01UserTel">${list.sys01UserTel}</td>
+		      <td class="sys01UserEmail">${list.sys01UserEmail}</td>
+              <td align="right">
+                  <button class="btn btn-primary btn-sm btnModify" data-bs-target="#modalDict"><span><i class="fa-regular fa-pen-to-square"></i></span> 수정</button>
+                  <button class="btn btn-danger btn-sm btnDelete" data-user-id="${list.sys01UserId }" ><span><i class="fa-regular fa-trash-can"></i></span> 삭제</button>
+              </td>
+		    </tr>
+	    </c:forEach>
+	  </tbody>
+	</table>
+	
 </main>
 
 <!-- 등록/수정 Modal -->
@@ -39,8 +71,8 @@
         </div>
         <div class="modal-body">
             <div class="mb-3">
-                <label for="sys02DictId" class="form-label fw-bold">용어사전ID</label>
-                <input type="text" class="form-control" name="sys02DictId" readonly />
+                <label for="sys01UserId" class="form-label fw-bold">유저ID</label>
+                <input type="text" class="form-control" name="sys01UserId" readonly />
             </div>
             <div class="mb-3">
                 <label for="sys02KorNm" class="form-label fw-bold" >용어명</label>
