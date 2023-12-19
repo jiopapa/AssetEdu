@@ -1,5 +1,7 @@
 package kr.co.kfs.assetedu.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 
 import lombok.extern.slf4j.Slf4j;
@@ -9,16 +11,17 @@ class PageAttrTest {
 
 	@Test
 	void test() {
-		PageAttr pageAttr = new PageAttr(0L,10,1);
-		log.debug(pageAttr.toString());
+		//총갯수 10, 1페이지당 3개, 현재 페이지 번호 1일때 총 페이지 갯수는 4개여야한다
+		PageAttr pageAttr = new PageAttr(10L,3,1);
+		log.debug("pageAttr: {}", pageAttr);
+		assertEquals(pageAttr.getTotalPageCount(), 4);
 		
-		pageAttr = new PageAttr(13L,10,1);
-		log.debug(pageAttr.toString());
 		
-		String s= "20221103";
-		System.out.println(s.substring(0,4));
-		System.out.println(s.substring(4,6));
-		System.out.println(s.substring(6));
+		//총갯수 10, 1페이지당 5개, 현재 페이지 번호 1일때 총 페이지 갯수는 2개여야한다
+		pageAttr = new PageAttr(10L,5,2);
+		log.debug("pageAttr: {}", pageAttr);
+		assertEquals(pageAttr.getTotalPageCount(), 2);
+		assertEquals(pageAttr.getOffset(), 5);
 	}
 
 }

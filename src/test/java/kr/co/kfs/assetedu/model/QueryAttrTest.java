@@ -9,19 +9,13 @@ import org.junit.jupiter.api.Test;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
- class ConditionTest {
+ class QueryAttrTest {
 
 	@Test
 	@Disabled
 	void test() {
-//		Condition condition = new Condition();
-//	assertNotNull( condition);
-		PageAttr pageAttr = new PageAttr(130L,10);
 		Map<String,Object> map = new HashMap<String, Object>();
-		map.put("age", 11 );
-		map.put("id", "abc");
-		map.put("name", "홍길동");
-		map.put("pageAttr", pageAttr);
+		
 		
 		String name = (String)map.get("name");
 		PageAttr pageAttr1 = (PageAttr)map.get("pageAttr");
@@ -33,12 +27,12 @@ import lombok.extern.slf4j.Slf4j;
 	}
 	@Test
 	void test2() {
-		Condition condition = new Condition();
+		QueryAttr queryAttr = new QueryAttr();
 		PageAttr pageAttr = new PageAttr(130L,20);
-		condition.put("name", "홍길동");
-		condition.put("pageAttr", pageAttr);
+		queryAttr.put("name", "홍길동");
+		queryAttr.put("pageAttr", pageAttr);
 		
-		PageAttr pageAttr1 = (PageAttr) condition.get("pageAttr");
+		PageAttr pageAttr1 = (PageAttr) queryAttr.get("pageAttr");
 		Long totalCount = pageAttr1.getTotalItemCount();
 	}
 	

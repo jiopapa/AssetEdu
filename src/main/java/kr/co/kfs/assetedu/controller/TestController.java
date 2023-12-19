@@ -16,6 +16,10 @@ public class TestController {
 
 	@RequestMapping(value = "/test1", method = RequestMethod.GET)
 	public String displayJsp() {
+		log.debug("-------------------in TestController --------------------");
+		log.debug("-------------------in TestController --------------------");
+		log.debug("-------------------in TestController --------------------");
+		
 		return "/test/test1";
 	}
 	//client로 데이터받는 방법1

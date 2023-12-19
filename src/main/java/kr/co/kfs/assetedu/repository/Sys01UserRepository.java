@@ -2,13 +2,13 @@ package kr.co.kfs.assetedu.repository;
 
 import java.util.List;
 
-import kr.co.kfs.assetedu.model.Condition;
+import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.model.Sys01User;
 
 public interface Sys01UserRepository {
 	// list and totalcount
-	List<Sys01User> selectList(Condition condition);
-	Integer selectCount(Condition condition);
+	List<Sys01User> selectList(QueryAttr queryAttr);
+	Integer selectCount(QueryAttr queryAttr);
 	
 	String getUserId();
 	

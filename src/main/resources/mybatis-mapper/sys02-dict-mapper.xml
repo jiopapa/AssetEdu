@@ -4,7 +4,7 @@
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.co.kfs.assetedu.repository.Sys02DictRepository">
-   <sql id="whereConditon">
+   <sql id="whereQueryAttr">
 		<!--    검색조건 -->
    		<if test="sys02DictId != null">
 	       	AND sys02_dict_id = #{sys02DictId}
@@ -13,16 +13,16 @@
 	       	AND upper(concat(sys02_short,sys02_full,sys02_kor_nm,sys02_note)) like concat('%',upper(#{searchText}),'%')
 		</if>
    </sql>	
-	<select id="selectCount" parameterType="Condition" resultType="Integer">
+	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
    		SELECT 
    			count(*) as count
    		FROM
    			sys02_dict
    		WHERE 1=1
-   			<include refid="whereConditon"/>	
+   			<include refid="whereQueryAttr"/>	
    </select> 
    
-   <select id="selectList" parameterType="Condition" resultType="Sys02Dict">
+   <select id="selectList" parameterType="QueryAttr" resultType="Sys02Dict">
 	   SELECT
 	           sys02_dict_id
              , sys02_short
@@ -32,7 +32,7 @@
 	   FROM 
 	   		sys02_dict
 	   WHERE 1=1
-	   	<include refid="whereConditon"/>
+	   	<include refid="whereQueryAttr"/>
 	   ORDER BY sys02_kor_nm	
 		<if test="pageAttr != null and pageAttr.offset != null">
 	      	OFFSET #{pageAttr.offset}

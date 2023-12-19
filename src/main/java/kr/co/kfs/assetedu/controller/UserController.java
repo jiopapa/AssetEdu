@@ -1,5 +1,6 @@
 package kr.co.kfs.assetedu.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -7,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import kr.co.kfs.assetedu.model.PageAttr;
+import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.model.Sys01User;
 import kr.co.kfs.assetedu.service.Sys01UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +47,11 @@ public class UserController {
 		log.debug("★★★★★★★★★★★★★★★★★★★★★★");
 		log.debug("사용자리스트");
 		log.debug("★★★★★★★★★★★★★★★★★★★★★★");
-		List<Sys01User> list =sys01UserService.selectList(null);
-		model.addAttribute("list", list);
+		model.addAttribute("pageTitle", "사용자리스트");
+		QueryAttr queryAttr = new QueryAttr();
+		queryAttr.put("searchText", searchText);
+		List<Sys01User> list =sys01UserService.selectList(queryAttr);
+		model.addAttribute("user", list);
 		return "/admin/user/list";
 	}
 	@GetMapping("insert")
@@ -54,17 +61,52 @@ public class UserController {
 		model.addAttribute("user", new Sys01User());
 		return "/admin/user/insert_form";
 	}
-	@PostMapping("insert")
+	@PostMapping("insert") //실제 저장할때 호출되는 url
 	public String Insert(@Valid @ModelAttribute Sys01User user, RedirectAttributes redirectAttr) {
 		log.debug("사용자정보 저장하고 리스트로 이동");
-		String pwd = user.getSys01Pwd();
-		
+		String pwd = user.getSys01Pwd(); //비밀번호 암호화
 		user.setSys01Pwd(passwordEncoder.encode(pwd));
+		
 		int affectedCount = sys01UserService.insert(user);
 		log.debug("DB에 적용된 갯수 : {}", affectedCount);
+		
 		String msg = String.format("사용자 %s 님이 추가 되었습니다.", user.getSys01UserNm());
 		redirectAttr.addAttribute("mode", "insert");
 		redirectAttr.addAttribute("msg", msg);
 		return "redirect:/admin/user/success";
 	}
-}
+	
+	@GetMapping("update")
+	public String update(@ModelAttribute("user") Sys01User user, Model model) {
+		log.debug("사용자정보 수정 폼 표시");
+		user = sys01UserService.selectOne(user);
+		model.addAttribute("user",user);
+		return "admin/user/update_form";
+	}
+	@PostMapping("update")
+	public String update_form(@ModelAttribute("user") Sys01User user, RedirectAttributes redirectAttr) throws UnsupportedEncodingException  {
+		log.debug("사용자 정보 수정 ");
+		String pwd = user.getSys01Pwd();
+		user.setSys01Pwd(passwordEncoder.encode(pwd));
+		sys01UserService.update(user);
+		
+		String msg = String.format("사용자 %s 님의 정보가 수정되었습니다.", user.getSys01UserNm());
+		redirectAttr.addAttribute("mode", "update");
+		redirectAttr.addAttribute("userId", user.getSys01UserId());
+		redirectAttr.addAttribute("msg", msg);
+		return "redirect:/admin/user/success";
+	}
+	@GetMapping("delete")
+	public String delete(@ModelAttribute("user") Sys01User user) {
+		log.debug("사용자 정보 삭제 id : " + user.getSys01UserId());
+		
+		int deletedCount = sys01UserService.delete(user);
+		if(deletedCount >0 ) {
+			log.warn("사용자 id : {}가 삭제되었습니다");
+		}
+		return "redirect:/admin/user/list";
+		
+		}
+		
+	}
+	
