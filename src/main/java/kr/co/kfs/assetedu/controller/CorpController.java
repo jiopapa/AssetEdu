@@ -92,7 +92,7 @@ public class CorpController {
 
 	@GetMapping("success")
 	public String success(String msg, String mode, String corpCd, Model model) {
-		model.addAttribute("pageTitle", "기관정보등록완료");
+		model.addAttribute("pageTitle", "기관정보등록/수정완료");
 		model.addAttribute("msg", msg);
 		model.addAttribute("mode", mode);
 		model.addAttribute("corpCd", corpCd);
@@ -109,7 +109,14 @@ public class CorpController {
 		return "/corp/update_form";
 	}
 	@PostMapping("update")
-	public String update(@Valid @ModelAttribute("corp") Com01Corp corp, BindingResult bindingResult, Model model) {
-		return "/corp/success";
+	public String update(@Valid @ModelAttribute("corp") Com01Corp corp, BindingResult bindingResult, Model model, RedirectAttributes redirectAttr) {
+		int affectedCount = com01CorpService.update(corp);
+		log.debug("수정된 기관정보 숫자 : {}", affectedCount);
+		String msg;
+		msg = String.format("\"%s\" 기관정보가 수정되었습니다", corp.getCom01CorpNm());
+		redirectAttr.addAttribute("mode", "insert");
+		redirectAttr.addAttribute("msg", msg);
+		return "redirect:/corp/success";
+		
 	}
 }

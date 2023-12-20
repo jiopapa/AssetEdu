@@ -24,4 +24,8 @@ public class Com01CorpService {
 		return com01CorpRepository.selectOne(corp);
 	}
 	
+	public Integer update(Com01Corp corp) {
+		return com01CorpRepository.update(corp);
+	}
+	
 }
