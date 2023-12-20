@@ -45,10 +45,10 @@
 	    </tr>
 	  </thead>
 	  <tbody class="table-group-divider" >
-	  	<c:forEach var="corp" items="${list}" varStatus="status"> 
+	  	<c:forEach var="corp" items="${corpList`}" varStatus="status"> 
 		    <tr class="align-middle">
 		      <td><input type="radio" data-com01-corp-cd="${corp.com01CorpCd }" data-com01-corp-nm="${corp.com01CorpNm }" id="com01CorpCd_${status.count }" name="com01CorpCd"/></td>
-              <td class="text-center"><label for="com01CorpTypeNm_${status.count }">${corp.com01CorpTypeNm }</label></td>
+              <td class="text-center"><label for="com01CorpType_${status.count }">${corp.com01CorpType }</label></td>
               <td class="text-center"><label for="com01CorpCd_${status.count }">${corp.com01CorpCd }</label></td>
 		      <td>                    <label for="com01CorpCd_${status.count }">${corp.com01CorpNm }</label></td>
 		      <td>                    <label for="com01CorpCd_${status.count }">${corp.com01CorpEnm }</label></td>

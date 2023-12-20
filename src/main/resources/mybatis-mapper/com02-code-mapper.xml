@@ -42,4 +42,6 @@
 	  <include refid="whereQueryAttr"/>
 	  Order by com02_com_cd, com02_dtl_cd, com02_seq
    </select>
+   
+   
    </mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Com01CorpRepository">
+   <sql id="whereQueryAttr">
+		<!--    검색조건 -->
+		<if test="com01CorpCd != null and com01CorpCd != ''">
+			AND com01_corp_cd  = #{com01CorpCd}
+		</if>
+		<if test="com01CorpNm != null and com01CorpNm != ''">
+			AND com01_corp_nm = #{com01CorpNm}
+		</if>
+		<if test="com01CorpType != null and com01CorpType !=''">
+			AND com01_corp_type = #{com01CorpType}
+		</if>
+		<if test="com01CorpEnm != null and  com01CorpEnm != ''">
+			AND com01_corp_enm = #{com01CorpEnm}
+		</if>
+			<if test="com01ExtnCorpCd != null and  com01ExtnCorpCd != ''">
+			AND com01_extn_corp_cd = #{com01ExtnCorpCd}
+		</if>
+		<if test="searchText != null and  searchText != ''">
+			AND upper(concat(com01_corp_cd,' ', com01_corp_nm, ' ', com01_corp_type,' ', com01_corp_enm, com01_extn_corp_cd)) like upper(concat('%',#{searchText},'%'))
+		</if>
+	</sql>
+	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
+   		SELECT 
+   			count(*) as count
+   		FROM
+   			com03_date
+   		WHERE 1=1
+   			<include refid="whereQueryAttr"/>	
+   </select> 
+   
+  <select id="selectList" parameterType="QueryAttr" resultType="Com01Corp">
+	  select com01_corp_cd as com01CorpCd 
+	  , com01_corp_nm as com01CorpNm
+	  , com01_corp_type as com01CorpType
+	  , com01_corp_enm as com01CorpEnm
+	  , com01_extn_corp_cd as com01ExtnCorpCd
+
+	  from com01_corp
+	  where 1=1
+	  <include refid="whereQueryAttr"/>
+	  Order by com01_corp_cd, com01CorpType, com01ExtnCorpCd
+   </select>
+   
+   <select id="selectOne" parameterType="Com01Corp" resultType="Com01Corp">
+     select com01_corp_cd as com01CorpCd 
+	  , com01_corp_nm as com01CorpNm
+	  , com01_corp_type as com01CorpType
+	  , com01_corp_enm as com01CorpEnm
+	  , com01_extn_corp_cd as com01ExtnCorpCd
+
+	  from com01_corp
+	  
+	  where com01_corp_cd = #{com01CorpCd} 
+   </select>
+
+	<insert id="insert" parameterType="Com01Corp">
+	insert into com01_corp( com01_corp_cd
+	,	com01_corp_nm
+	,	com01_corp_type
+	,	com01_corp_enm
+	,	com01_extn_corp_cd)
+	values(#{com01CorpCd}, #{com01CorpNm}, #{com01CorpType}, #{com01CorpEnm}, #{com01ExtnCorpCd})
+	</insert>
+   </mapper>
