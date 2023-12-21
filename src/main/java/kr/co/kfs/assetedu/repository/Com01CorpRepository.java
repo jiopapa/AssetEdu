@@ -13,4 +13,5 @@ public interface Com01CorpRepository {
 	
 	Integer insert(Com01Corp corp);
 	Integer update(Com01Corp corp);
+	Integer delete(Com01Corp corp);
 }

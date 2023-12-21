@@ -15,13 +15,15 @@
    </sql>	
    
    
-	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
+	<select id="selectCount" parameterType="QueryAttr" resultType="Long">
    		SELECT 
    			count(*) as count
    		FROM
    			sys01_user
    		WHERE 1=1
    			<include refid="whereQueryAttr"/>	
+   			
+
    </select> 
    
    <select id="selectList" parameterType="QueryAttr" resultType="Sys01User">
@@ -35,13 +37,12 @@
 	   		sys01_user
 	  WHERE 1=1
 	   	<include refid="whereQueryAttr"/>
+	 
 	   	ORDER by sys01_user_nm
-	<if test="pageAttr != null and pageAttr.offset != null">
-	     OFFSET #{pageAttr.offset}
-		</if>   
-		 <if test="pageAttr != null and pageAttr.limit != null">
-		 	LIMIT #{pageAttr.limit}
-		 </if>
+	   	   	<if test="pageAttr != null ">
+	      	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+		</if>  
+	
    </select>
 
    <select id="selectOne" parameterType="Sys01User" resultType="Sys01User">

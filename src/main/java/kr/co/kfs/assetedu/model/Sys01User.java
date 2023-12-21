@@ -21,4 +21,8 @@ public class Sys01User{
 	
 	@NotNull
 	private String sys01UserEmail; //사용자 이메일
+	
+	private String pageSize;
+	
+	private String currentPageNumber;
 }

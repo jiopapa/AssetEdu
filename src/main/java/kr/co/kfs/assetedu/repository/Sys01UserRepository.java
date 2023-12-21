@@ -8,7 +8,7 @@ import kr.co.kfs.assetedu.model.Sys01User;
 public interface Sys01UserRepository {
 	// list and totalcount
 	List<Sys01User> selectList(QueryAttr queryAttr);
-	Integer selectCount(QueryAttr queryAttr);
+	Long selectCount(QueryAttr queryAttr);
 	
 	String getUserId();
 	

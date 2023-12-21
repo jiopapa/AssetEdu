@@ -1,6 +1,7 @@
 package kr.co.kfs.assetedu.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -73,7 +74,7 @@ public class CorpController {
 		if (corpCheck != null) {
 			log.debug("기관코드 중복.");
 			msg = String.format("\"%s\" 코드는 이미 \"%s\" 기관으로 등록되어 있습니다.", corpCheck.getCom01CorpCd(),
-					corp.getCom01CorpNm());
+					corpCheck.getCom01CorpNm());
 			bindingResult.addError(new FieldError("", "", msg));
 			model.addAttribute("corpTypeList", com02CodeService.corpTypeList("CorpType"));
 			return "/corp/insert_form";
@@ -100,23 +101,32 @@ public class CorpController {
 		return "/corp/success";
 	}
 	@GetMapping("update")
-	public String update( @ModelAttribute("corp") Com01Corp corp, Model model) {
+	public String update( @ModelAttribute("corp") Com01Corp corp, Model model)throws UnsupportedEncodingException {
 		log.debug("업데이트페이지로이동");
 		corp = com01CorpService.selectOne(corp);
 		model.addAttribute("corpTypeList", com02CodeService.corpTypeList("CorpType"));
 		model.addAttribute("corp", corp);
-		
 		return "/corp/update_form";
 	}
 	@PostMapping("update")
-	public String update(@Valid @ModelAttribute("corp") Com01Corp corp, BindingResult bindingResult, Model model, RedirectAttributes redirectAttr) {
-		int affectedCount = com01CorpService.update(corp);
-		log.debug("수정된 기관정보 숫자 : {}", affectedCount);
+	public String update_form(@ModelAttribute("corp") Com01Corp corp,  Model model)throws UnsupportedEncodingException {
+		log.debug("기관정보수정");
+		com01CorpService.update(corp);
 		String msg;
 		msg = String.format("\"%s\" 기관정보가 수정되었습니다", corp.getCom01CorpNm());
-		redirectAttr.addAttribute("mode", "insert");
-		redirectAttr.addAttribute("msg", msg);
-		return "redirect:/corp/success";
+		log.debug("업데이트 수정 완료");
+		return "redirect:/corp/success?mode=update&corpCd=" + corp.getCom01CorpCd()+"&msg=" + URLEncoder.encode(msg,"UTF-8");
 		
 	}
-}
+	@GetMapping("delete")
+	public String delete(@ModelAttribute("corp") Com01Corp corp){
+		int deletedCount = com01CorpService.delete(corp);
+		log.debug("삭제된 기관정보 숫자 : {}" , deletedCount);
+		
+		if(deletedCount > 0) {
+			log.debug("{}의  기관정보가 삭제되었습니다.", corp.getCom01CorpNm());
+		}
+		return "redirect:/corp/list";
+		}
+	
+	}

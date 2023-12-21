@@ -39,7 +39,7 @@
 				</c:if>
 				<c:if test="${mode eq 'update'}">
 					<form id="form1" method="GET" action="/corp/update">
-						<input type="hidden" name="com01CorpCd" value="${corp }"/>
+						<input type="hidden" name="com01CorpCd" value="${corpCd }"/>
 						<button type="submit" class="btn btn-warning">계속수정</button>
 					</form>
 				</c:if>

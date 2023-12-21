@@ -28,7 +28,8 @@
             <table class="table table-sm table-borderless">
                 <tr class="align-middle">
                     <td class="text-end" style="width:130px">기관코드</td>
-                    <td><form:input type="text" class="form-control w-25" path="com01CorpCd" data-v-max-length="5" data-v-min-length="5" maxlength ="5" required="true" /></td>
+                    <td><form:input type="text" class="form-control w-25" path="com01CorpCd" pattern="[0-9]+" data-v-max-length="5" data-v-min-length="5" maxlength ="5" required="true"
+                    					title="숫자(5자리)만 입력해 주세요" /></td>
                 </tr>
                 <tr class="align-middle">
                     <td class="text-end">기관한글명</td>

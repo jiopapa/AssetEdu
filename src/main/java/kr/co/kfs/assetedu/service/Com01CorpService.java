@@ -28,4 +28,8 @@ public class Com01CorpService {
 		return com01CorpRepository.update(corp);
 	}
 	
+	public Integer delete(Com01Corp corp) {
+		return com01CorpRepository.delete(corp);
+	}
+	
 }

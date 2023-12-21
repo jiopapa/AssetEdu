@@ -6,6 +6,7 @@
 <%@ taglib prefix="kfs" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="asset"  uri="/WEB-INF/asset-tags/asset.tld"%>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,6 +36,7 @@
 	</div>
 
 	<table class="table table-sm table-hover mt-3 userTable" style="font-size:small">
+	
 	  <thead class="table-light">
 	    <tr>
 	      <th scope="col" class="text-center" style="width:50px">No</th>
@@ -48,7 +50,7 @@
 	  <tbody class="table-group-divider">
 	  	<c:forEach var="user" items="${user}" varStatus="status">
 		    <tr class="align-middle">
-		      <td scope="row" class="text-center fw-bold">${status.count }</td>
+		      <td scope="row" class="text-center fw-bold">${((pageAttr.currentPageNumber-1)*pageAttr.pageSize)+status.count}</td>
 		      <td class="sys01UserId text-center">${user.sys01UserId}</td>
 		      <td class="sys01UserNm">${user.sys01UserNm}</td>
 		      <td class="sys01UserTel">${user.sys01UserTel}</td>
@@ -60,8 +62,16 @@
 		      </td>
 		    </tr>
 	    </c:forEach>
-	  </tbody>
+	  </tbody>	 
+
 	</table>
+	<kfs:Pagination pageAttr="${pageAttr }" id="Pagination1" functionName="go"></kfs:Pagination>
+	<kfs:PageInfo pageAttr="${pageAttr }" id="Pagination2" ></kfs:PageInfo>
+	<kfs:PageSizeSetter pageAttr="${pageAttr }"></kfs:PageSizeSetter>
+	   <form id="form1" action="/user/list" method="GET">
+ 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
+ 		<input type="hidden" name="currentPageNumber" value="1"/>
+ 			</form>
 </main>
 <!-- =================================================== -->
 <jsp:include page="../../common/footer.jsp" flush="false" />
@@ -86,8 +96,7 @@ $(document).ready(function () {
 		}else if (key.keyCode ==27){
 			$(this).val('');
 		}
-		
-		
+
 	})
 	$('.btnModify').on('click', function(){
 		var userId = $(this).data('user-id');
@@ -104,4 +113,20 @@ $(document).ready(function () {
 		AssetUtil.submitGet('/admin/user/list', {searchText : null});	
 	});
 });
+</script>
+
+<script>
+function go(pageNo){
+//	$('#form1 input[name=currentPageNumber]').val(pageNo);
+//	$('#form1').submit();
+	var searchText = $('#searchText').val();
+	AssetUtil.submitGet('/admin/user/list', {searchText: searchText, currentPageNo : pageNo});
+}
+</script>
+<script>
+function pageInfo(show){
+	
+	
+}
+
 </script>

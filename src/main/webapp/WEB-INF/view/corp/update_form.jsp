@@ -21,7 +21,7 @@
 <!-- =================================================== -->
 <main class="container mx-3 my-3">
 
-	<h2><i class="fa-solid fa-cube my-3"></i> 기관정보관리 > 기관정보등록</h2>
+	<h2><i class="fa-solid fa-cube my-3"></i> 기관정보관리 > 기관정보수정 </h2>
     <div class="border-top border-2 p-4">
 
         <form:form action="/corp/update" method="POST" modelAttribute="corp" class="validcheck" >

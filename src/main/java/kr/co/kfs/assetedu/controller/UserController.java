@@ -8,12 +8,12 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.PageAttr;
@@ -43,15 +43,25 @@ public class UserController {
 		return"/admin/user/success";
 	}
 	@GetMapping("list")
-	public String list(String searchText, Model model) {
-		log.debug("★★★★★★★★★★★★★★★★★★★★★★");
+	public String list(String searchText
+						, @RequestParam(value="pageSize", defaultValue="10", required=false) Integer pageSize
+						, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo
+						, Model model) {
 		log.debug("사용자리스트");
-		log.debug("★★★★★★★★★★★★★★★★★★★★★★");
 		model.addAttribute("pageTitle", "사용자리스트");
+		
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText", searchText);
+		
+		Long totalItemCount = sys01UserService.selectCount(queryAttr);
+		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
+		queryAttr.put("pageAttr", pageAttr);
 		List<Sys01User> list =sys01UserService.selectList(queryAttr);
 		model.addAttribute("user", list);
+		model.addAttribute("pageAttr", pageAttr);
+		model.addAttribute("searchText", searchText);
+		
+		log.debug("pageAttr:{}", pageAttr);
 		return "/admin/user/list";
 	}
 	@GetMapping("insert")

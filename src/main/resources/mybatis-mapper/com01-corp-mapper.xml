@@ -65,4 +65,23 @@
 	,	com01_extn_corp_cd)
 	values(#{com01CorpCd}, #{com01CorpNm}, #{com01CorpType}, #{com01CorpEnm}, #{com01ExtnCorpCd})
 	</insert>
+	
+	
+	<update id="update" parameterType="Com01Corp">
+	update com01_corp 
+	
+	set  com01_corp_cd = #{com01CorpCd}
+	,	com01_corp_nm = #{com01CorpNm}
+	,	com01_corp_type =  #{com01CorpType}
+	,	com01_corp_enm = #{com01CorpEnm}
+	,	com01_extn_corp_cd = #{com01ExtnCorpCd}
+	where com01_corp_cd = #{com01CorpCd}
+	</update>
+	
+	
+	<delete id="delete" parameterType="Com01Corp">
+	delete from com01_corp
+	where com01_corp_cd = #{com01CorpCd}
+	
+	</delete>
    </mapper>

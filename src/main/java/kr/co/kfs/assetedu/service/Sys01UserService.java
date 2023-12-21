@@ -27,7 +27,7 @@ public class Sys01UserService  {
 		return userRepository.selectList(queryAttr);
 	}
 	
-	public Integer selectCount(QueryAttr queryAttr){
+	public Long selectCount(QueryAttr queryAttr){
 		return userRepository.selectCount(queryAttr);
 	}
 	
