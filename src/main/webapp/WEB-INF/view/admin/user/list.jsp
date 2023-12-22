@@ -67,7 +67,7 @@
 	</table>
 	<kfs:Pagination pageAttr="${pageAttr }" id="Pagination1" functionName="go"></kfs:Pagination>
 	<kfs:PageInfo pageAttr="${pageAttr }" id="Pagination2" ></kfs:PageInfo>
-	<kfs:PageSizeSetter pageAttr="${pageAttr }"></kfs:PageSizeSetter>
+	<kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter>
 	   <form id="form1" action="/user/list" method="GET">
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
  		<input type="hidden" name="currentPageNumber" value="1"/>
@@ -117,16 +117,23 @@ $(document).ready(function () {
 
 <script>
 function go(pageNo){
-//	$('#form1 input[name=currentPageNumber]').val(pageNo);
-//	$('#form1').submit();
 	var searchText = $('#searchText').val();
 	AssetUtil.submitGet('/admin/user/list', {searchText: searchText, currentPageNo : pageNo});
 }
 </script>
-<script>
-function pageInfo(show){
-	
-	
+<!--  <script>
+function select(pageInfo){
+	var searchText = $('#searchText').val();
+	AssetUtil.submitGet('/admin/user/list', {searchText: searchText, pageSize : pageInfo});
 }
 
+</script>-->
+<script>
+  $(function() {
+    $("#pageInfo").on("change", function() {
+      var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      AssetUtil.submitGet('/admin/user/list', { searchText: searchText, pageSize: pageInfo });
+    });
+  });
 </script>

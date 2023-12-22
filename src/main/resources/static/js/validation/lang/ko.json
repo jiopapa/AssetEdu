@@ -1,8 +1,8 @@
 {
   "maxValue": "Value must be less than or equal to %s.",
   "minValue": "Value must be greater than or equal to %s.",
-  "maxLength": "최대 %s 글자 이하이어야합니다.(현재  %s 글자)",
-  "minLength": "최소 %s 글자 이상이어야합니다.(현재  %s 글자)",
+  "maxLength": "최대 %s 글자 이하여이어합니다.(현재  %s 글자)",
+  "minLength": " %s 글자를 작성해 주세요.(현재  %s 글자)",
   "invalidNumber": "다섯글자 숫자를 입력하세요.",
   "minSelectOption": "Please select at least %s options.",
   "maxSelectOption": "Please select at most %s options.",

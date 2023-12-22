@@ -35,8 +35,8 @@
 			AND itm01_iss_co_cd = #{itm01IssCoCd}
 		</if>
 		<if test="searchText != null and  searchText != ''">
-			AND concat(itm01_item_cd,' ', itm01_item_nm, ' ', itm01_item_enm,' ', itm01_short_cd,' ',itm01_iss_type,' '
-			,itm01_stk_type,' ',itm01_list_type,' ',itm01_market_type,' ',itm01_par,' ',itm01_iss_co_cd) like concat('%',#{searchText},'%')
+			AND upper(concat(itm01_item_cd,' ', itm01_item_nm, ' ', itm01_item_enm,' ', itm01_short_cd,' ',itm01_iss_type,' '
+			,itm01_stk_type,' ',itm01_list_type,' ',itm01_market_type,' ',itm01_par,' ',itm01_iss_co_cd)) like upper(concat('%',#{searchText},'%'))
 		</if>
 	</sql>
 	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
@@ -49,22 +49,50 @@
    </select> 
    
    <select id="selectList" parameterType="QueryAttr" resultType="Itm01Item">
-	  select itm01_item_cd as com02ComCd 
-	  , itm01_item_nm as com02DtlCd
-	  , itm01_item_enm as com02CodeNm
-	  , itm01_short_cd as com02CodeType
-	  , itm01_iss_type as com02Seq
-	  , itm01_stk_type as com02UseYn
-	  , itm01_list_type as com02Note
-	  , itm01_list_type as com02Note
-	  , itm01_list_type as com02Note
-	  , itm01_list_type as com02Note
-	  
-	  from com02_code
+	  select itm01_item_cd as itm01ItemCd 
+	  , itm01_item_nm as itm01ItemNm
+	  , itm01_item_enm as itm01ItemEnm
+	  , itm01_short_cd as itm01ShortCd
+	  , itm01_iss_type as itm01IssType
+	  , itm01_stk_type as itm01StkType
+	  , itm01_list_type as itm01ListType
+	  , itm01_market_type as itm01MarketType
+	  , itm01_par as itm01Par
+	  , itm01_iss_co_cd as itm01IssCoCd
+	  , f_com_nm('StkType',itm01_stk_type) as itm01StkTypeNm
+	  , f_com_nm('ListType',itm01_list_type) as itm01ListTypeNm
+	  , f_com_nm('MarketType',itm01_market_type) as itm01MarketTypeNm
+	  from itm01_item
 	  where 1=1
 	  <include refid="whereQueryAttr"/>
-	  Order by com02_com_cd, com02_dtl_cd, com02_seq
+	  Order by itm01_item_cd, itm01ItemNm
    </select>
+   
+   <insert id="insert" parameterType="Itm01Item">
+   insert into itm01_item(itm01_item_cd, itm01_item_nm, itm01_item_enm, itm01_short_cd
+   						,	itm01_iss_type, itm01_stk_type, itm01_list_type, itm01_market_type
+   						,	itm01_par, itm01_iss_co_cd)
+   values(#{itm01ItemCd},#{itm01ItemNm},#{itm01ItemEnm},#{itm01ShortCd}
+   		, #{itm01IssType},#{itm01StkType},#{itm01ListType},#{itm01MarketType}
+   		, #{itm01Par},#{itm01IssCoCd})
+   </insert>
+   
+   <select id="selectOne" parameterType="Itm01Item" resultType="Itm01Item">
+   select itm01_item_cd as itm01ItemCd 
+	  , itm01_item_nm as itm01ItemNm
+	  , itm01_item_enm as itm01ItemEnm
+	  , itm01_short_cd as itm01ShortCd
+	  , itm01_iss_type as itm01IssType
+	  , itm01_stk_type as itm01StkType
+	  , itm01_list_type as itm01ListType
+	  , itm01_market_type as itm01MarketType
+	  , itm01_par as itm01Par
+	  , itm01_iss_co_cd as itm01IssCoCd
+   from itm01_item 
+   where itm01_item_cd = #{itm01ItemCd}
+   </select>
+   
+  
    
   
    </mapper>

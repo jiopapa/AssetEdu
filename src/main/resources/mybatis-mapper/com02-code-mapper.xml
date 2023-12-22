@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.kfs.assetedu.repository.Com02CodeRepository">
-   <sql id="whereQueryAttr">
-		<!--    검색조건 -->
+<mapper
+	namespace="kr.co.kfs.assetedu.repository.Com02CodeRepository">
+	<sql id="whereQueryAttr">
+		<!-- 검색조건 -->
 		<if test="com02ComCd != null and com02ComCd != ''">
-			AND com02_com_cd  = #{com02ComCd}
+			AND com02_com_cd = #{com02ComCd}
 		</if>
 		<if test="com02DtlCd != null and com02DtlCd != ''">
 			AND com02_dtl_cd = #{com02DtlCd}
@@ -17,31 +18,34 @@
 			AND COALESCE(com02_use_yn,'false') = #{com02UseYn}
 		</if>
 		<if test="searchText != null and  searchText != ''">
-			AND concat(com02_code_nm,' ', com02_com_cd, ' ', com02_com_cd,' ', com02_note) like concat('%',#{searchText},'%')
+			AND concat(com02_code_nm,' ', com02_com_cd, ' ',
+			com02_com_cd,' ', com02_note) like concat('%',#{searchText},'%')
 		</if>
 	</sql>
-	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
-   		SELECT 
-   			count(*) as count
-   		FROM
-   			com03_date
-   		WHERE 1=1
-   			<include refid="whereQueryAttr"/>	
-   </select> 
-   
-   <select id="selectList" parameterType="QueryAttr" resultType="Com02Code">
-	  select com02_com_cd as com02ComCd 
-	  , com02_dtl_cd as com02DtlCd
-	  , com02_code_nm as com02CodeNm
-	  , com02_code_type as com02CodeType
-	  , com02_seq as com02Seq
-	  , com02_use_yn as com02UseYn
-	  , com02_note as com02Note
-	  from com02_code
-	  where 1=1
-	  <include refid="whereQueryAttr"/>
-	  Order by com02_com_cd, com02_dtl_cd, com02_seq
-   </select>
-   
-   
-   </mapper>
+	<select id="selectCount" parameterType="QueryAttr"
+		resultType="Integer">
+		SELECT
+		count(*) as count
+		FROM
+		com03_date
+		WHERE 1=1
+		<include refid="whereQueryAttr" />
+	</select>
+
+	<select id="selectList" parameterType="QueryAttr"
+		resultType="Com02Code">
+		select com02_com_cd as com02ComCd
+		, com02_dtl_cd as com02DtlCd
+		, com02_code_nm as com02CodeNm
+		, com02_code_type as com02CodeType
+		, com02_seq as com02Seq
+		, com02_use_yn as com02UseYn
+		, com02_note as com02Note
+		from com02_code
+		where 1=1
+		<include refid="whereQueryAttr" />
+		Order by com02_com_cd, com02_dtl_cd, com02_seq
+	</select>
+
+
+</mapper>

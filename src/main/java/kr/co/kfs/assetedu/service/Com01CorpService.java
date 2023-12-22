@@ -31,5 +31,8 @@ public class Com01CorpService {
 	public Integer delete(Com01Corp corp) {
 		return com01CorpRepository.delete(corp);
 	}
+	public Long selectCount(QueryAttr queryAttr) {
+		return com01CorpRepository.selectCount(queryAttr);
+	}
 	
 }

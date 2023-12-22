@@ -1,6 +1,5 @@
 package kr.co.kfs.assetedu.model;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import lombok.Data;
@@ -19,6 +18,7 @@ public class Com01Corp {
 	
 	private String com01CorpEnm;
 	private String com01ExtnCorpCd;
+	private String com01CorpTypeNm; // 기관분류이름
 	
 	
 }

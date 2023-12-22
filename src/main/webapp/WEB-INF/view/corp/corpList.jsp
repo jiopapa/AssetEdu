@@ -60,7 +60,7 @@
 				<c:forEach var="corp" items="${CorpList}" varStatus="status">
 					<tr class="align-middle">
 						<td scope="row" class="text-center fw-bold">${status.count }</td>
-						<td class="text-center">${corp.com01CorpType }</td>
+						<td class="text-center">${corp.com01CorpTypeNm }</td>
 						<td class="text-center">${corp.com01CorpCd }</td>
 						<td>${corp.com01CorpNm }</td>
 						<td>${corp.com01CorpEnm }</td>

@@ -27,11 +27,11 @@ public class CodeController {
 		QueryAttr queryAttr = new QueryAttr();
 	
 		queryAttr.put("searchText", searchText);
-		List<Com02Code>listCategory = selectComCds(queryAttr);
+		List<Com02Code>listCategory = codeList(queryAttr);
 		model.addAttribute("CodeList", listCategory);
 		return "/code/codeList";
 	}
-	private List<Com02Code>selectComCds(QueryAttr queryAttr){
+	private List<Com02Code> codeList(QueryAttr queryAttr){
 		Com02Code code = new Com02Code();
 		code.setCom02CodeType("C");
 		queryAttr.putClass(code);

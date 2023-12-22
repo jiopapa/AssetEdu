@@ -17,7 +17,7 @@ public class Com02CodeService {
 	public List<Com02Code> selectList(QueryAttr queryAttr){
 		return com02CodeRepository.selectList(queryAttr);
 	}
-	public List<Com02Code> corpTypeList(String com02Cd){
+	public List<Com02Code> codeList(String com02Cd){
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("com02ComCd"   , com02Cd);
 		queryAttr.put("com02CodeType", "D");

@@ -23,26 +23,35 @@
 			AND upper(concat(com01_corp_cd,' ', com01_corp_nm, ' ', com01_corp_type,' ', com01_corp_enm, com01_extn_corp_cd)) like upper(concat('%',#{searchText},'%'))
 		</if>
 	</sql>
-	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
-   		SELECT 
-   			count(*) as count
-   		FROM
-   			com03_date
-   		WHERE 1=1
-   			<include refid="whereQueryAttr"/>	
-   </select> 
-   
+
+  
   <select id="selectList" parameterType="QueryAttr" resultType="Com01Corp">
 	  select com01_corp_cd as com01CorpCd 
 	  , com01_corp_nm as com01CorpNm
 	  , com01_corp_type as com01CorpType
 	  , com01_corp_enm as com01CorpEnm
 	  , com01_extn_corp_cd as com01ExtnCorpCd
+	  , com01_corp_type_nm as com01CorpTypeNm
 
-	  from com01_corp
+	  FROM ( 
+	           SELECT com01_corp.*
+	                , f_com_nm('CorpType', com01_corp_type) as com01_corp_type_nm
+	             FROM com01_corp
+	        ) 
 	  where 1=1
 	  <include refid="whereQueryAttr"/>
-	  Order by com01_corp_cd, com01CorpType, com01ExtnCorpCd
+	  Order by com01CorpType, com01_corp_cd, com01ExtnCorpCd
+	  <if test="pageAttr != null ">
+		OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+	</if>   
+	  
+   
+   </select>
+   
+   <select id="selectCount" parameterType="QueryAttr" resultType="Long">
+   select count(*) as count
+   from com01_corp
+ 
    </select>
    
    <select id="selectOne" parameterType="Com01Corp" resultType="Com01Corp">
