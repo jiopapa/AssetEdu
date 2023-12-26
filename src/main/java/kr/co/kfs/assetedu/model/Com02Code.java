@@ -16,7 +16,7 @@ public class Com02Code {
 	@NotNull(message = "코드명을 입력해 주세요.")
 	private String com02CodeNm;
 	
-	
+
 	private String com02CodeType;
 	private Integer com02Seq;
 	private String com02UseYn;

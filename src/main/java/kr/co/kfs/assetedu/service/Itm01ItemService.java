@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Com02Code;
 import kr.co.kfs.assetedu.model.Itm01Item;
 import kr.co.kfs.assetedu.model.QueryAttr;
@@ -32,18 +32,18 @@ public class Itm01ItemService {
 		return com02CodeRepository.selectList(queryAttr);
 	}
 	
-	
+	@Transactional
 	public Integer insert(Itm01Item item) {
 		return itm01ItemRepository.insert(item);
 	}
 	public Itm01Item selectOne(Itm01Item item) {
 		return itm01ItemRepository.selectOne(item);
 	}
-	
+	@Transactional
 	public Integer update(Itm01Item item) {
 		return itm01ItemRepository.update(item);
 	}
-	
+	@Transactional
 	public Integer delete(Itm01Item item) {
 		return itm01ItemRepository.delete(item);
 	}

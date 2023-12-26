@@ -44,9 +44,9 @@
 	  <if test="pageAttr != null ">
 		OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
 	</if>   
-	  
+	</select>
+	
    
-   </select>
    
    <select id="selectCount" parameterType="QueryAttr" resultType="Long">
    select count(*) as count

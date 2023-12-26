@@ -13,7 +13,7 @@
 <!-- =================================================== -->
 <jsp:include page="../common/meta_css.jsp" flush="false" />
 <!-- =================================================== -->
-<title><c:out value="${pageTitle}" default="주식종목정보-등록" /></title>
+<title><c:out value="${pageTitle}" default="종목정보 상세보기 및 변경" /></title>
 </head>
 <body>
 <!-- =================================================== -->
@@ -21,25 +21,20 @@
 <!-- =================================================== -->
 <main class="container mx-3 my-3">
 
-	<h2><i class="fa-solid fa-cube my-3"></i> 주식종목정보관리 > 종목정보등록</h2>
+	<h2><i class="fa-solid fa-cube my-3"></i> 주식종목정보관리 > 상세보기 및 정보수정</h2>
     <div class="border-top border-2 p-4">
 
-        <form:form action="/item/insert" method="POST" modelAttribute="item" class="validcheck" >
+        <form:form action="/item/update" method="POST" modelAttribute="item" class="validcheck" >
             <table class="table table-sm table-borderless">
                 <tr class="align-middle">
                     <td class="text-end" style="width:150px">종목코드/단축코드</td>
-                    <td style="width:250px"><form:input type="text" class="form-control" path="itm01ItemCd" data-v-min-length="12"  
-                        placeholder = "필수입력(12자리)" maxlength="12" required="true" 
-                        pattern="[a-zA-Z0-9]+" title="영문과 숫자만 입력하세요." /></td>
-                    <td style="width:150px"><form:input type="text" class="form-control" path="itm01ShortCd" 
-                    							placeholder = "입력"/></td>
+                    <td style="width:250px"><form:input type="text" class="form-control bg-light" path="itm01ItemCd" readonly="true" /></td>
+                    <td style="width:150px"><form:input type="text" class="form-control" path="itm01ShortCd" /></td>
                     <td></td>
                 </tr>
                 <tr class="align-middle">
                     <td class="text-end">종목한글명</td>
-                    <td colspan=3><form:input type="text" class="form-control" path="itm01ItemNm" required="true" 
-                    					placeholder = "필수입력"/></td>
-                    				
+                    <td colspan=3><form:input type="text" class="form-control" path="itm01ItemNm" required="true" /></td>
                 </tr>
                 <tr class="align-middle">
                     <td class="text-end">종목영문명</td>
@@ -48,8 +43,8 @@
                 <tr class="align-middle">
                     <td class="text-end">상장구분</td>
                     <td>
-                        <form:select path="itm01ListType" class="form-select" required="true" >
-             	<option value="" disabled selected>선택</option>
+                        <form:select path="itm01ListType" class="form-select">
+                            <form:option value="" />
                             <form:options items="${stkListTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
                         </form:select>
                     </td>
@@ -58,8 +53,8 @@
                 <tr class="align-middle">
                     <td class="text-end">시장구분</td>
                     <td>
-                        <form:select path="itm01MarketType" class="form-select"  required="true" >
-                        <option value="" disabled selected>선택</option>
+                        <form:select path="itm01MarketType" class="form-select">
+                            <form:option value="" />
                             <form:options items="${marketTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
                         </form:select>
                     </td>
@@ -69,7 +64,7 @@
                     <td class="text-end">증권종류</td>
                     <td>
                         <form:select path="itm01StkType" class="form-select">
-                        <option value="" disabled selected>선택</option>
+                            <form:option value="" />
                             <form:options items="${stkTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
                         </form:select>
                     </td>
@@ -77,24 +72,19 @@
                 </tr>
                 <tr class="align-middle">
                     <td class="text-end">액면가</td>
-                    <td><form:input type="text" class="form-control text-end amtinput" path="itm01Par" 
-                    		 placeholder="입력"/></td>
+                    <td><form:input type="text" class="form-control text-end amtinput" path="itm01Par" /></td>
                     <td colspan=2></td>
                 </tr>
                 <tr class="align-middle">
                     <td class="text-end">발행기관</td>
                     <td>
                         <form:hidden path="itm01IssCoCd" />
-     
-                        <form:input type="text" class="form-control bg-light" path="itm01IssCoNm" readonly="true" 
-                          placeholder = "기관팝업에서 선택"/>
+                        <form:input type="text" class="form-control bg-light" path="itm01IssCoNm" readonly="true" />
                     </td>
                     <td><button class="btn btn-primary" id="btnPopupCorp"><i class="fa-solid fa-search"></i></button></td>
                     <td></td>
                 </tr>
             </table>
-            
-            <kfs:DisplayErrors modelAttribute="item"/>
 
             <div class="row justify-content-md-center pt-5">
                 <button type="submit" class="col col-lg-2 btn btn-primary">저장</button>
@@ -115,30 +105,18 @@ $(document).ready(function () {
         language: '/js/validation/lang/ko.json'
     });
     
-    //첫번째 입력에 focus를 준다
-    $("form input:text").first().focus();
-    
-	//form 안의 inputdp Enter key submit방지
-	$('form input').on('keydown', function(e){
-		if(e.keyCode == 13){
-			e.preventDefault();
-		}
-	})
-	
     //amt format set
     $('input.amtinput').inputMoneyFormat();
-    
+  
     $('#btnPopupCorp').on('click', function(){
         var url = '/popup/corp?corpCd=itm01IssCoCd&corpNm=itm01IssCoNm';
         var prop = {};
         var width = 720;
-        var height = 650;
+        var height = 518;
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
 });
 </script>
-
-
 </body>
 </html>

@@ -43,7 +43,8 @@ public class PopupController {
 	@GetMapping("corp")
 	public String list(String searchText
 						,@RequestParam(value="pageSize", defaultValue="10", required=false) Integer pageSize
-						, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo ,Model model) {
+						, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo 
+						, @RequestParam(value="selectCorpType", required=false) String selectCorpType, Model model) {
 		log.debug("기관정보(팝업)");
 
 		QueryAttr queryAttr = new QueryAttr(); //검색조건
@@ -55,10 +56,11 @@ public class PopupController {
 		log.debug("pageAttr{ } : pageAttr1");
 		List<Com01Corp> corpList = com01CorpService.selectList(queryAttr);
 		log.debug("pageAttr{ } : pageAttr2");
+		model.addAttribute("corpTypeList", com02CodeService.codeList(selectCorpType));
 		model.addAttribute("list", corpList);
 		model.addAttribute("pageAttr", pageAttr);
 		model.addAttribute("searchText", searchText);
-		
+	
 		return "/popup/popup_corp";
 	}
 

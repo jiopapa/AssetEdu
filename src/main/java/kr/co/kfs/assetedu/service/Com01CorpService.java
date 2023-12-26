@@ -17,6 +17,8 @@ public class Com01CorpService {
 	public List<Com01Corp> selectList(QueryAttr queryAttr){
 		return com01CorpRepository.selectList(queryAttr);
 	}
+
+	
 	public Integer insert(Com01Corp corp) {
 		return com01CorpRepository.insert(corp);
 	}
@@ -34,5 +36,6 @@ public class Com01CorpService {
 	public Long selectCount(QueryAttr queryAttr) {
 		return com01CorpRepository.selectCount(queryAttr);
 	}
+	
 	
 }

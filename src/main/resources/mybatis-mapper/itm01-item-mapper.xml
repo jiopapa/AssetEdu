@@ -92,7 +92,18 @@
    where itm01_item_cd = #{itm01ItemCd}
    </select>
    
-  
+   <update id="update" parameterType="Itm01Item">
+   update itm01_item 
+   set itm01_item_nm = #{itm01ItemNm}, itm01_item_enm = #{itm01ItemEnm} 
+   , itm01_short_cd = #{itm01ShortCd} 	, itm01_iss_type = #{itm01IssType} , itm01_stk_type = #{itm01StkType} 
+   , itm01_list_type = #{itm01ListType} , itm01_market_type = #{itm01MarketType} , itm01_par = #{itm01Par} 
+   , itm01_iss_co_cd= #{itm01IssCoCd} 
+   where itm01_item_cd = #{itm01ItemCd}
+   </update>
    
-  
+   <delete id ="delete"	parameterType="Itm01Item">
+   delete from itm01_item
+   where itm01_item_cd = #{itm01ItemCd}
+   </delete>
+ 
    </mapper>

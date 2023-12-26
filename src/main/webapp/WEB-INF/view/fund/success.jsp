@@ -12,7 +12,7 @@
 <!-- =================================================== -->
 <jsp:include page="../common/meta_css.jsp" flush="false" />
 <!-- =================================================== -->
-<title><c:out value="${pageTitle}" default="User Add Success" /></title>
+<title><c:out value="${pageTitle}" default="Fund Add Success" /></title>
 </head>
 <body>
 <!-- =================================================== -->
@@ -20,8 +20,8 @@
 <!-- =================================================== -->
 <main class="container mx-3 my-3">
 
-	<h2><i class="fa-solid fa-cube my-3"></i> 기관정보 > <c:if test="${mode eq 'insert'}">종목정보등록 완료</c:if>
-													   <c:if test="${mode eq 'update'}">종목정보수정 완료</c:if>	</h2>
+	<h2><i class="fa-solid fa-cube my-3"></i> 펀드정보관리 > 펀드정보등록 Success</h2>
+	
 	<div class="border-top border-2 p-4">
 
 		<div class="text-left py-5">
@@ -31,15 +31,15 @@
 			<table>
 			<tr>
 			<td>
-				<a href="<c:url value='/item/list'/>" class="btn btn-primary">리스트</a>
+				<a href="<c:url value='/fund/list '/>" class="btn btn-primary">리스트</a>
 			</td>
 			<td>
 				<c:if test="${mode eq 'insert'}">
-					<a href="/item/insert" class="btn btn-warning">계속입력</a>
+					<a href="/fund/insert" class="btn btn-warning">계속입력</a>
 				</c:if>
 				<c:if test="${mode eq 'update'}">
-					<form id="form1" method="GET" action="/item/update">
-						<input type="hidden" name="itm01ItemCd" value="${itemCd }"/>
+					<form id="form1" method="GET" action="/fund/update">
+						<input type="hidden" name="fnd01FundCd" value="${fundCd }"/>
 						<button type="submit" class="btn btn-warning">계속수정</button>
 					</form>
 				</c:if>

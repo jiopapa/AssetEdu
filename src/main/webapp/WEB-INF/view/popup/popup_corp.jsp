@@ -24,10 +24,15 @@
  		<input type="hidden" name="corpCd" value="${param.corpCd }"/>
  		<input type="hidden" name="corpNm" value="${param.corpNm }"/>
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
-<%--  		<input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/> --%>
+<%--    <input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/> --%>
  		<input type="hidden" name="currentPageNumber" value="1"/>
+		<div>
+ 		<select class="form-select w-25 ms-2" id="corpType" name="corpType">
+    <c:forEach var="corpType" items="${corpTypeList}">
+        <option value="${corpType.com02ComCd}">${corpType.com02CodeNm}</option>
+    </c:forEach>
+</select>
 
-        <div>
             <input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(기관코드/기관명)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
             <button class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</button>
             <button class="btn d-inline align-middle btn-success btnInit"><i class="fa-solid fa-backspace"></i> 초기화</button>
@@ -118,6 +123,13 @@ function go(pageNo){
 }
 </script>	
 <script>
+function go(corpType){
+	var searchText = $('#searchText').val();
+	AssetUtil.submitGet('/popup/corp', {searchText: searchText, currentPageNo : pageNo});
+}
+
+</script>
+<script>
   $(function() {
     $("#pageInfo").on("change", function() {
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
@@ -126,5 +138,17 @@ function go(pageNo){
     });
   });
 </script>
+
+<script>
+  $(function() {
+    $("#corpType").on("change", function() {
+      var corpType = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      AssetUtil.submitGet('/popup/corp', { searchText: searchText});
+    });
+  });
+</script>
+
+
 </body>
 </html>

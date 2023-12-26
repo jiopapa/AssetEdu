@@ -1,63 +1,52 @@
 package kr.co.kfs.assetedu.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.kfs.assetedu.model.Com01Corp;
-import kr.co.kfs.assetedu.model.Itm01Item;
+import kr.co.kfs.assetedu.model.Fnd01Fund;
 import kr.co.kfs.assetedu.model.QueryAttr;
-import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
-import kr.co.kfs.assetedu.service.Itm01ItemService;
+import kr.co.kfs.assetedu.service.Fnd01FundService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/item")
-public class ItemController {
+@RequestMapping("/fund")
+public class FundController {
 	@Autowired
-	Itm01ItemService itm01ItemService;
+	Fnd01FundService fnd01FundService;
 	@Autowired
 	Com02CodeService com02CodeService;
 
 
 	@GetMapping("list")
 	public String list(String searchText, Model model) {
-		log.debug("종목정보");
+		log.debug("펀드정보");
 
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText", searchText);
-		List<Itm01Item> itemList = itm01ItemService.selectList(queryAttr);
-		model.addAttribute("itemList", itemList);
-		return "/item/itemList";
+		List<Fnd01Fund> fundList = fnd01FundService.selectList(queryAttr);
+		model.addAttribute("fundList", fundList);
+		return "/fund/fundList";
 	}
 
 	@GetMapping("insert")
 	public String insert(Model model) {
-		log.debug("종목정보 입력페이지");
-		model.addAttribute("item", new Itm01Item());
-		model.addAttribute("stkListTypeList", com02CodeService.codeList("ListType"));
-		model.addAttribute("marketTypeList", com02CodeService.codeList("MarketType"));
-		model.addAttribute("stkTypeList", com02CodeService.codeList("StkType"));
-		
-		return "/item/insert_form";
+		log.debug("펀드정보 입력페이지");
+		model.addAttribute("fund", new Fnd01Fund());
+		model.addAttribute("fnd01FundTypeNmList", com02CodeService.codeList("FundType"));
+		model.addAttribute("PublicCodeList", com02CodeService.codeList("PublicCode"));
+		model.addAttribute("FundUnitCodeList", com02CodeService.codeList("FundUnitCode"));
+		model.addAttribute("FundParentCodeList", com02CodeService.codeList("FundParentCode"));
+		return "/fund/insert_form";
 	}
 
-	@PostMapping("insert")
+/*	@PostMapping("insert")
 	public String insert(@Valid @ModelAttribute("item") Itm01Item item, BindingResult bindingResult,
 			RedirectAttributes redirectAttr, Model model) throws UnsupportedEncodingException {
 		log.debug("종목정보등록");
@@ -127,6 +116,6 @@ public class ItemController {
 			log.debug("{}의  기관정보가 삭제되었습니다.", item.getItm01ItemNm());
 		}
 		return "redirect:/item/list";
-		}
+		}*/
 	
 	}

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Fnd01FundRepository">
+   <sql id="whereQueryAttr">
+		<!--    검색조건 -->
+		<if test="fnd01FundCd != null and fnd01FundCd != ''">
+			AND fnd01_fund_cd  = #{fnd01FundCd}
+		</if>
+		<if test="fnd01FundNm != null and fnd01FundNm != ''">
+			AND fnd01_fund_nm = #{fnd01FundNm}
+		</if>
+		<if test="fnd01FundType != null and fnd01FundType !=''">
+			AND fnd01_fund_type = #{fnd01FundType}
+		</if>
+		<if test="fnd01PublicCd != null and fnd01PublicCd !=''">
+			AND fnd01_public_cd = #{fnd01PublicCd}
+		</if>
+			<if test="fnd01UnitCd != null and fnd01UnitCd !=''">
+			AND fnd01_unit_cd = #{fnd01UnitCd}
+		</if>
+			<if test="fnd01ParentCd != null and fnd01ParentCd !=''">
+			AND fnd01_parent_cd = #{fnd01ParentCd}
+		</if>
+			<if test="fnd01ParentFundCd != null and fnd01ParentFundCd !=''">
+			AND fnd01_parent_fund_cd = #{fnd01ParentFundCd}
+		</if>
+			<if test="fnd01StartDate != null and fnd01StartDate !=''">
+			AND fnd01_start_date = #{fnd01StartDate}
+		</if>
+			<if test="fnd01EndDate != null and fnd01EndDate !=''">
+			AND fnd01_end_date = #{fnd01EndDate}
+		</if>
+			<if test="fnd01AccPeriod != null and fnd01AccPeriod !=''">
+			AND fnd01_acc_period = #{fnd01AccPeriod}
+		</if>
+			<if test="fnd01FirstCloseDate != null and fnd01FirstCloseDate !=''">
+			AND fnd01_first_close_date = #{fnd01FirstCloseDate}
+		</if>
+			<if test="fnd01CurCd != null and fnd01CurCd !=''">
+			AND fnd01_cur_cd = #{fnd01CurCd}
+		</if>
+			<if test="fnd01KsdItemCd != null and fnd01KsdItemCd !=''">
+			AND fnd01_ksd_item_cd = #{fnd01KsdItemCd}
+		</if>
+			<if test="fnd01KofiaCd != null and fnd01KofiaCd !=''">
+			AND fnd01_kofia_cd = #{fnd01KofiaCd}
+		</if>
+			<if test="fnd01KofiaClassCd != null and fnd01KofiaClassCd !=''">
+			AND fnd01_kofia_class_cd = #{fnd01KofiaClassCd}
+		</if>
+			<if test="fnd01FssCd != null and fnd01FssCd !=''">
+			AND fnd01_fss_cd = #{fnd01FssCd}
+		</if>
+			<if test="fnd01Manager != null and fnd01Manager !=''">
+			AND fnd01_manager = #{fnd01Manager}
+		</if>
+			<if test="fnd01SubManager != null and fnd01SubManager !=''">
+			AND fnd01_sub_manager = #{fnd01SubManager}
+		</if>
+			<if test="fnd01MngCoCd != null and fnd01MngCoCd !=''">
+			AND fnd01_mng_co_cd = #{fnd01MngCoCd}
+		</if>
+			<if test="fnd01TrustCoCd != null and fnd01TrustCoCd !=''">
+			AND fnd01_trust_co_cd = #{fnd01TrustCoCd}
+		</if>
+			<if test="fnd01OfficeCoCd != null and fnd01OfficeCoCd !=''">
+			AND fnd01_office_co_cd = #{fnd01OfficeCoCd}
+		</if>
+			<if test="fnd01SubOfficeCoCd != null and fnd01SubOfficeCoCd !=''">
+			AND fnd01_sub_office_co_cd = #{fnd01SubOfficeCoCd}
+		</if>
+		
+		<if test="searchText != null and  searchText != ''">
+			AND upper(concat(fnd01_fund_cd,' ', fnd01_fund_nm, ' ', fnd01_fund_type,' ', fnd01_public_cd,' ',fnd01_unit_cd,' '
+			,fnd01_parent_cd,' ',fnd01_parent_fund_cd,' ',fnd01_start_date,' ',fnd01_end_date,' ',fnd01_acc_period,' ', fnd01_first_close_date, ' '
+			,fnd01_cur_cd, ' ', fnd01_ksd_item_cd,' ',fnd01_kofia_cd,' ',fnd01_kofia_class_cd,' ',fnd01_fss_cd,' ', fnd01_manager, ' '
+			,fnd01_sub_manager,' ',fnd01_mng_co_cd,' ',fnd01_trust_co_cd,' ',fnd01_office_co_cd,' ', fnd01_sub_office_co_cd)) like upper(concat('%',#{searchText},'%'))
+		</if>
+	</sql>
+	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
+   		SELECT 
+   			count(*) as count
+   		FROM
+   			com03_date
+   		WHERE 1=1
+   			<include refid="whereQueryAttr"/>	
+   </select> 
+   
+   <select id="selectList" parameterType="Fnd01Fund" resultType="Fnd01Fund">
+   select fnd01_fund_cd as fnd01FundCd, fnd01_fund_nm as fnd01FundNm, fnd01_fund_type as fnd01FundType, fnd01_public_cd as fnd01PublicCd
+   ,	fnd01_unit_cd as fnd01UnitCd, fnd01_parent_cd as fnd01ParentCd, fnd01_parent_fund_cd as fnd01ParentFundCd, fnd01_start_date as fnd01StartDate
+   ,	fnd01_end_date as fnd01EndDate, fnd01_acc_period as fnd01AccPeriod, fnd01_first_close_date as fnd01FirstCloseDate, fnd01_cur_cd as fnd01CurCd
+   ,	fnd01_ksd_item_cd as fnd01KsdItemCd, fnd01_kofia_cd as fnd01KofiaCd, fnd01_kofia_class_cd as fnd01KofiaClassCd, fnd01_fss_cd as fnd01FssCd
+   ,	fnd01_manager as fnd01Manager, fnd01_sub_manager as fnd01SubManager, fnd01_mng_co_cd as fnd01MngCoCd, fnd01_trust_co_cd as fnd01TrustCoCd
+   ,	fnd01_office_co_cd as fnd01OfficeCoCd, fnd01_sub_office_co_cd as fnd01SubOfficeCoCd
+   ,	f_com_nm('FundType',fnd01_fund_type) as fnd01FundTypeNm
+   , f_com_nm('PublicCode',fnd01_public_cd) as fnd01PublicNm
+   , f_com_nm('FundUnitCode',fnd01_unit_cd) as fnd01UnitNm
+   , f_com_nm('FundParentCode',fnd01_parent_cd) as fnd01ParentFundNm
+   , f_corp_nm(fnd01_mng_co_cd) as fnd01MngCoNm
+   , f_corp_nm(fnd01_trust_co_cd) as fnd01TrustCoNm
+   , f_corp_nm(fnd01_office_co_cd) as fnd01OfficeCoNm
+	  from fnd01_fund
+	  where 1=1
+	  <include refid="whereQueryAttr"/>
+	  Order by fnd01_fund_cd, fnd01_fund_nm
+   </select>
+   </mapper>

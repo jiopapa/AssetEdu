@@ -27,5 +27,6 @@ public class Itm01Item{
 	private String itm01StkTypeNm;//증권종류이름
 	private String itm01ListTypeNm; //상장구분이름
 	private String itm01MarketTypeNm; //시장구분이름
+	private String itm01IssCoNm;   	  //발행기관명
 	
 }
