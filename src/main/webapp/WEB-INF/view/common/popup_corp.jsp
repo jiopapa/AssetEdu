@@ -57,11 +57,10 @@
 	  </tbody>
 	</table>
 
-	<div class="container-fluid mb-3" style="position:absolute;bottom:0;left:0">
-        <hr>
+	<div class="container-fluid mb-" style="position:absolute;bottom:0;left:0">
         <div class="row">
-            <div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination> </div>
-            <div class="col"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr"></kfs:PageInfo> </div>
+            <div class="col" style="width:30px"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination> 
+           <kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr"></kfs:PageInfo> </div>
         </div>
 
         <div class="footer-menu text-center">

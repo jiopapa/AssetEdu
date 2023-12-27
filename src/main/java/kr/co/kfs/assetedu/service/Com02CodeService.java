@@ -24,4 +24,8 @@ public class Com02CodeService {
 		queryAttr.put("com02UseYn"   , "true");
 		return com02CodeRepository.selectList(queryAttr);
 	}
+	
+	public Long selectCount(QueryAttr queryAttr) {
+		return com02CodeRepository.selectCount(queryAttr);
+	}
 }

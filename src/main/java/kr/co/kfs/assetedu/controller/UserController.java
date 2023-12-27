@@ -52,7 +52,6 @@ public class UserController {
 		
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText", searchText);
-		
 		Long totalItemCount = sys01UserService.selectCount(queryAttr);
 		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
 		queryAttr.put("pageAttr", pageAttr);

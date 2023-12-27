@@ -61,7 +61,7 @@
                     <td class="w-25">
                     	<form:select path="fnd01FundType" class="form-select">
                     		<form:option value="" />
-                    		<form:options items="${fundTypeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
+                    		<form:options items="${fnd01FundTypeNmList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
                     	</form:select>
 					</td>
                     <td style="width:50px">&nbsp;</td>
@@ -75,7 +75,7 @@
                     <td class="w-25">
 						<form:select path="fnd01PublicCd" class="form-select">
 						    <form:option value="" />
-						    <form:options items="${publicCdList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
+						    <form:options items="${PublicCodeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
 						</form:select>
                     </td>
                     <td style="width:50px">&nbsp;</td>
@@ -88,7 +88,7 @@
                     <td class="w-25">
 						<form:select path="fnd01UnitCd" class="form-select">
 						    <form:option value="" />
-						    <form:options items="${unitCdList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
+						    <form:options items="${FundUnitCodeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
 						</form:select>
                     </td>
                     <td style="width:50px">&nbsp;</td>
@@ -101,7 +101,7 @@
                     <td class="w-25">
 						<form:select path="fnd01ParentCd" class="form-select">
 						    <form:option value="" />
-						    <form:options items="${parentCdList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
+						    <form:options items="${FundParentCodeList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
 						</form:select>                    
                     </td>
                     <td style="width:50px">&nbsp;</td>

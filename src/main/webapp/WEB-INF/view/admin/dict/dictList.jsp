@@ -48,7 +48,7 @@
 	  <tbody class="table-group-divider" >
 	  	<c:forEach var="list" items="${list}" varStatus="status">
 		    <tr class="align-middle">
-		      <td scope="row" class="text-center fw-bold">${status.count}</td>
+		      <td scope="row" class="text-center fw-bold">${((pageAttr.currentPageNumber-1)*pageAttr.pageSize)+status.count}</td>
               <td class="sys02DictId text-center">${list.sys02DictId}</td>
 		      <td class="sys02KorNm">${list.sys02KorNm}</td>
 		      <td class="sys02Short">${list.sys02Short}</td>
@@ -62,6 +62,13 @@
 	    </c:forEach>
 	  </tbody>
 	</table>
+	<kfs:Pagination pageAttr="${pageAttr }" id="Pagination1" functionName="go"></kfs:Pagination>
+	<kfs:PageInfo pageAttr="${pageAttr }" id="Pagination2" ></kfs:PageInfo>
+	<kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter>
+	   <form id="form1" action="/admin/dict/list" method="GET">
+ 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
+ 		<input type="hidden" name="currentPageNumber" value="1"/>
+ 			</form>
 </main>
 
 <!-- 등록/수정 Modal -->
@@ -239,6 +246,24 @@ $(document).ready(function () {
 	});
 
 }); 
+</script>
+<script>
+function go(pageNo){
+	var searchText = $('#searchText').val();
+	var pageInfo = $('#pageInfo').val();
+	console.log("goPage");
+	AssetUtil.submitGet('/admin/dict/list', {searchText: searchText, currentPageNo : pageNo, pageSize: pageInfo} );
+}
+</script>	
+<script>
+  $(function() {
+    $("#pageInfo").on("change", function() {
+      var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      AssetUtil.submitGet('/admin/dict/list', 
+    { searchText: searchText, pageSize: pageInfo });
+    });
+  });
 </script>
 </body>
 </html>

@@ -21,6 +21,9 @@
 			AND concat(com02_code_nm,' ', com02_com_cd, ' ',
 			com02_com_cd,' ', com02_note) like concat('%',#{searchText},'%')
 		</if>
+		<if test = "selectCorpType != null and  selectCorpType == ''">
+			AND com01_corp_type = #{selectCorpType}
+		</if>
 	</sql>
 	<select id="selectCount" parameterType="QueryAttr"
 		resultType="Integer">
@@ -42,7 +45,7 @@
 		, com02_use_yn as com02UseYn
 		, com02_note as com02Note
 		from com02_code
-		where 1=1
+		where 1=1 
 		<include refid="whereQueryAttr" />
 		Order by com02_com_cd, com02_dtl_cd, com02_seq
 	</select>

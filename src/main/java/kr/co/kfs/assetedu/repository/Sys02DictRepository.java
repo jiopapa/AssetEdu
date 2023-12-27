@@ -8,7 +8,7 @@ import kr.co.kfs.assetedu.model.Sys02Dict;
 public interface Sys02DictRepository {
 	// list and totalcount
 	List<Sys02Dict> selectList(QueryAttr queryAttr);
-	Integer selectCount(QueryAttr queryAttr);
+	Long selectCount(QueryAttr queryAttr);
 	
 	String getDictId();
 	

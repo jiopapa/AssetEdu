@@ -25,7 +25,7 @@ public class Sys02DictService  {
 		return dictRepository.selectList(queryAttr);
 	}
 	
-	public Integer selectCount(QueryAttr queryAttr){
+	public Long selectCount(QueryAttr queryAttr){
 		return dictRepository.selectCount(queryAttr);
 	}
 	

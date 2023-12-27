@@ -10,7 +10,7 @@
   "equal": "This field does not match with %s field.",
   "fileMinSize": "File size cannot be less than %s bytes.",
   "fileMaxSize": "File size cannot be more than %s bytes.",
-  "number": "Please enter a number.",
+  "number": "숫자를 입력해 주세요.",
   "HTML5": {
     "valueMissing": {
       "INPUT": {

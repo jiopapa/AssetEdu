@@ -78,7 +78,7 @@
 							</form:select></td>
 						<td style="width: 50px">&nbsp;</td>
 						<td class="text-end">회계기간</td>
-						<td><form:input type="number"
+						<td><form:input type="number" pattern="\d*" title="양의 숫자만 입력하세요."
 								class="form-control w-25 text-end d-inline"
 								path="fnd01AccPeriod" /> <span class="d-inline">개월</span></td>
 						<td style="width: 50px">&nbsp;</td>
@@ -204,29 +204,26 @@ $(document).ready(function () {
     });
     
     $('#btnPopupMngCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01MngCoCd&corpNm=fnd01MngCoNm';
+        var url = '/popup/corp?corpCd=fnd01MngCoCd&corpNm=fnd01MngCoNm&selectCorpType=04';
         var prop = {};
         var width = 720;
         var height = 518;
-        var selectCorpType="04";
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
     $('#btnPopupTrustCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01TrustCoCd&corpNm=fnd01TrustCoNm';
+        var url = '/popup/corp?corpCd=fnd01TrustCoCd&corpNm=fnd01TrustCoNm&selectCorpType=02';
         var prop = {};
         var width = 720;
         var height = 518;
-        var selectCorpType="02";
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
     $('#btnPopupOfficeCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01OfficeCoCd&corpNm=fnd01OfficeCoNm';
+        var url = '/popup/corp?corpCd=fnd01OfficeCoCd&corpNm=fnd01OfficeCoNm&selectCorpType=05';
         var prop = {};
         var width = 720;
         var height = 518;
-        var selectCorpType="05";
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
@@ -234,7 +231,7 @@ $(document).ready(function () {
     $('#btnPopupFund').on('click', function(){
     	var selectedValue = document.getElementById('fnd01ParentCd').value;
     	if(selectedValue === '3'){
-        var url = '/popup/fund?fundCd=fnd01ParentFundCd&fundNm=fnd01ParentFundNm&parentYn=true';
+        var url = '/popup/fund?fundCd=fnd01ParentFundCd&fundNm=fnd01ParentFundNm&parentYn=true&fundParentCode=2';
         var prop = {};
         var width = 720;
         var height = 518;

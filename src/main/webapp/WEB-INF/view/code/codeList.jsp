@@ -153,7 +153,6 @@ $(document).ready(function () {
 	});
 	//공통코드 추가버튼
 	$('.btnCategoryInsert').on('click', function(){
-		alert('공통코드추가버튼' );
 		//1.공통코드추가 팝업을 띄운다. (참조문서: 모달 띄우는 방법)
 		var $modal = $('#newComCd');
 		$modal.modal('show');

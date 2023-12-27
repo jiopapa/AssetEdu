@@ -1,12 +1,21 @@
 package kr.co.kfs.assetedu.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.Fnd01Fund;
 import kr.co.kfs.assetedu.model.QueryAttr;
@@ -45,77 +54,65 @@ public class FundController {
 		model.addAttribute("FundParentCodeList", com02CodeService.codeList("FundParentCode"));
 		return "/fund/insert_form";
 	}
-
-/*	@PostMapping("insert")
-	public String insert(@Valid @ModelAttribute("item") Itm01Item item, BindingResult bindingResult,
-			RedirectAttributes redirectAttr, Model model) throws UnsupportedEncodingException {
-		log.debug("종목정보등록");
+	@PostMapping("insert")
+	public String insert(@Valid @ModelAttribute("fund")	Fnd01Fund fund, BindingResult bindingResult
+						, RedirectAttributes redirectAttributes, Model model)throws UnsupportedEncodingException{
+		log.debug("펀드 등록");
 		String msg;
-		// 유효성 검사//
-		Itm01Item itemCheck = itm01ItemService.selectOne(item);
-	if (itemCheck != null) {
-			log.debug("종목코드 중복.");
-			msg = String.format("\"%s\" 코드는 이미 \"%s\" 기관으로 등록되어 있습니다.", itemCheck.getItm01ItemCd()
-					,	itemCheck.getItm01ItemNm());
+		Fnd01Fund fundCheck=fnd01FundService.selectOne(fund);
+		
+		if(fundCheck != null) {
+			log.debug("펀드 중복");
+			msg = String.format("\"%s\" 코드는 이미 \"%s\" 펀드종목으로 등록되어 있습니다.", fundCheck.getFnd01FundCd()
+					,	fundCheck.getFnd01FundNm());
 			bindingResult.addError(new FieldError("", "", msg));
-			return "/item/insert_form";
-
-		} else {
-			log.debug("등록된 종목정보 : {} ", item);
-			log.debug("등록된 종목정보 : {} ", item.getItm01ListType());
-			log.debug("등록된 종목정보 : {} ", item.getItm01MarketType());
-			log.debug("등록된 종목정보 : {} ", item.getItm01StkType());
-			log.debug("등록된 종목정보 : {} ", item.getItm01IssType());
-			int affectedCount = itm01ItemService.insert(item);
-			log.debug("등록된 종목정보 : {} ", item);
-			log.debug("등록된 종목정보 숫자 : {}", affectedCount);
-			msg = String.format("\"%s\" 종목정보가 등록되었습니다", item.getItm01ItemNm());
-			redirectAttr.addAttribute("mode", "insert");
-			redirectAttr.addAttribute("msg", msg);
-			return "redirect:/item/success";
+			return "/fund/insert_form";
+		}else {
+			int insertCount = fnd01FundService.insert(fund);
+			log.debug("등록된 종목정보 : {} ", insertCount);
+			msg = String.format("\"%s\" 종목정보가 등록되었습니다", fund.getFnd01FundNm());
+			redirectAttributes.addAttribute("mode", "insert");
+			redirectAttributes.addAttribute("msg", msg);
+			return "redirect:/fund/success";
 		}
-
+		
 	}
-
 	@GetMapping("success")
-	public String success(String msg, String mode, String itemCd, Model model) {
-		model.addAttribute("pageTitle", "기관정보등록 / 수정완료");
+	public String success(String msg, String fundCd, String mode, Model model) {
+		model.addAttribute("pageTitle", "펀드등록 /수정완료");
 		model.addAttribute("msg", msg);
 		model.addAttribute("mode", mode);
-		model.addAttribute("itemCd", itemCd);
-		log.debug("기관정보완료 화면");
-		return "/item/success";
+		model.addAttribute("fundCd", fundCd);
+		log.debug("펀드 등록 및 수정 성공화면");
+		return "/fund/success";
 	}
 	@GetMapping("update")
-	public String update(@ModelAttribute("item") Itm01Item item, Model model)throws UnsupportedEncodingException {
-		log.debug("업데이트페이지로이동");
-		log.debug("등록된 종목정보 : {} ", item.getItm01ItemCd());
-		item = itm01ItemService.selectOne(item);
-		model.addAttribute("corpTypeList", com02CodeService.codeList("CorpType"));
-		model.addAttribute("stkListTypeList", com02CodeService.codeList("ListType"));
-		model.addAttribute("marketTypeList", com02CodeService.codeList("MarketType"));
-		model.addAttribute("stkTypeList", com02CodeService.codeList("StkType"));
-		model.addAttribute("item", item);
-		return "/item/update_form";
+	public String update_form(@ModelAttribute("fund")Fnd01Fund fund, Model model)throws UnsupportedEncodingException{
+		log.debug("펀드종목 수정페이지 이동");
+		fund = fnd01FundService.selectOne(fund);
+		model.addAttribute("fund", fund);
+		model.addAttribute("fnd01FundTypeNmList", com02CodeService.codeList("FundType"));
+		model.addAttribute("PublicCodeList", com02CodeService.codeList("PublicCode"));
+		model.addAttribute("FundUnitCodeList", com02CodeService.codeList("FundUnitCode"));
+		model.addAttribute("FundParentCodeList", com02CodeService.codeList("FundParentCode"));
+		return "/fund/update_form";
 	}
 	@PostMapping("update")
-	public String update_form(@ModelAttribute("item") Itm01Item item,  Model model)throws UnsupportedEncodingException {
-		log.debug("기관정보수정");
-		itm01ItemService.update(item);
+	public String update(@ModelAttribute("fund")Fnd01Fund fund, Model model)throws UnsupportedEncodingException{
+		log.debug("펀드종목정보 수정1");
+		fnd01FundService.update(fund);
 		String msg;
-		msg = String.format("\"%s\" 기관정보가 수정되었습니다", item.getItm01ItemNm());
-		log.debug("업데이트 수정 완료");
-		return "redirect:/item/success?mode=update&itemCd=" + item.getItm01ItemCd()+"&msg=" + URLEncoder.encode(msg,"UTF-8");
+		msg = String.format("\"%s\" 펀드종목의 정보가 수정되었습니다.", fund.getFnd01FundNm());
+		log.debug("펀드종목정보 수정완료");
+		return "redirect:/fund/success?mode=update&fundCd=" + fund.getFnd01FundCd()+"&msg=" + URLEncoder.encode(msg,"UTF-8");
 		
 	}
 	@GetMapping("delete")
-	public String delete(@ModelAttribute("item") Itm01Item item){
-		int deletedCount = itm01ItemService.delete(item);
- 		log.debug("삭제된 기관정보 숫자 : {}" , deletedCount);
-		if(deletedCount > 0) {
-			log.debug("{}의  기관정보가 삭제되었습니다.", item.getItm01ItemNm());
-		}
-		return "redirect:/item/list";
-		}*/
-	
+	public String delete(@ModelAttribute("fund") Fnd01Fund fund)throws UnsupportedEncodingException{
+		log.debug("펀드종목 삭제");
+		fnd01FundService.delete(fund);
+		return "redirect:/fund/list";
 	}
+	
+}
+

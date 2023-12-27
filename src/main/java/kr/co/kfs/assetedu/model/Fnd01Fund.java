@@ -13,7 +13,7 @@ public class Fnd01Fund {
 	private String fnd01ParentFundCd;
 	private String fnd01StartDate;
 	private String fnd01EndDate;
-	private String fnd01AccPeriod;
+	private Integer fnd01AccPeriod;
 	private String fnd01FirstCloseDate;
 	private String fnd01CurCd;
 	private String fnd01KsdItemCd;

@@ -5,9 +5,11 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="kfs" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="asset"  uri="/WEB-INF/asset-tags/asset.tld"%>
+
 <!DOCTYPE html>
 <html>
 <head>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- =================================================== -->
 <jsp:include page="../common/meta_css.jsp" flush="false" />
 <!-- =================================================== -->
@@ -23,15 +25,10 @@
  	<form id="form1" action="/popup/corp" method="GET">
  		<input type="hidden" name="corpCd" value="${param.corpCd }"/>
  		<input type="hidden" name="corpNm" value="${param.corpNm }"/>
+ 		<input type="hidden" name="selectCorpType" id="selectCorpType" value="${param.selectCorpType }"/>
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
-<%--    <input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/> --%>
- 		<input type="hidden" name="currentPageNumber" value="1"/>
+    	<input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/>
 		<div>
- 		<select class="form-select w-25 ms-2" id="corpType" name="corpType">
-    <c:forEach var="corpType" items="${corpTypeList}">
-        <option value="${corpType.com02ComCd}">${corpType.com02CodeNm}</option>
-    </c:forEach>
-</select>
 
             <input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(기관코드/기관명)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
             <button class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</button>
@@ -50,7 +47,7 @@
 	    </tr>
 	  </thead>
 	  <tbody class="table-group-divider" >
-	  	<c:forEach var="corp" items="${list}" varStatus="status"> 
+	  	<c:forEach var="corp" items="${corpList}" varStatus="status"> 
 		    <tr class="align-middle">
 		      <td><input type="radio" data-com01-corp-cd="${corp.com01CorpCd }" data-com01-corp-nm="${corp.com01CorpNm }" id="com01CorpCd_${status.count }" name="com01CorpCd"/></td>
               <td class="text-center"><label for="com01CorpTypeNm_${status.count }">${corp.com01CorpTypeNm }</label></td>
@@ -62,15 +59,12 @@
 	  </tbody>
 	</table>
 
-
-            <div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination> </div>
-            <div class="col"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
-           <div class="col">  <div class="col"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2"></kfs:PageInfo> </div>
-        
-	   <form id="form1" action="/popup/corp" method="GET">
- 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
- 		<input type="hidden" name="currentPageNumber" value="1"/>
- 			</form></div>
+			<div class="row">
+            <div class="col-md-12"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination>
+            <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter>
+   		    <kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+        	</div>
+	
 
         <div class="footer-menu text-center">
             <button type="button" id="btnSelect" class="btn btn-primary" >선택</button>
@@ -83,7 +77,7 @@
 <script>
 $(document).ready(function () {
 	console.log('ready...기관선택팝업');
-
+	console.log("${param.selectCorpType }");
     //테이블 클릭시 하이라이트 표시
     $('.corpTable').on('click', 'tbody tr', function(event) {
           $(this).addClass('highlight').siblings().removeClass('highlight');
@@ -118,33 +112,25 @@ $(document).ready(function () {
 </script>
 <script>
 function go(pageNo){
+	var selectCorpType = $('#selectCorpType').val();
 	var searchText = $('#searchText').val();
-	AssetUtil.submitGet('/popup/corp', {searchText: searchText, currentPageNo : pageNo});
+	var pageInfo = $('#pageInfo').val();
+	console.log("pageInfo");
+	console.log(pageInfo);
+	console.log("goPage");
+	console.log(selectCorpType); 
+	AssetUtil.submitGet('/popup/corp', 
+{searchText: searchText, currentPageNo : pageNo, selectCorpType : selectCorpType,  pageSize: pageInfo} );
 }
 </script>	
-<script>
-function go(corpType){
-	var searchText = $('#searchText').val();
-	AssetUtil.submitGet('/popup/corp', {searchText: searchText, currentPageNo : pageNo});
-}
-
-</script>
 <script>
   $(function() {
     $("#pageInfo").on("change", function() {
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
       var searchText = $('#searchText').val();
-      AssetUtil.submitGet('/popup/corp', { searchText: searchText, pageSize: pageInfo });
-    });
-  });
-</script>
-
-<script>
-  $(function() {
-    $("#corpType").on("change", function() {
-      var corpType = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
-      var searchText = $('#searchText').val();
-      AssetUtil.submitGet('/popup/corp', { searchText: searchText});
+      var selectCorpType = $('#selectCorpType').val();
+      AssetUtil.submitGet('/popup/corp', 
+    { searchText: searchText, pageSize: pageInfo , selectCorpType : selectCorpType});
     });
   });
 </script>

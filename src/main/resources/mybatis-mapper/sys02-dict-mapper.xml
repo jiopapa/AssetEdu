@@ -13,7 +13,7 @@
 	       	AND upper(concat(sys02_short,sys02_full,sys02_kor_nm,sys02_note)) like concat('%',upper(#{searchText}),'%')
 		</if>
    </sql>	
-	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
+	<select id="selectCount" parameterType="QueryAttr" resultType="Long">
    		SELECT 
    			count(*) as count
    		FROM

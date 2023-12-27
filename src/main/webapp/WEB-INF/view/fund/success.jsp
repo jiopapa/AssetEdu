@@ -19,9 +19,12 @@
 <jsp:include page="../common/header.jsp" flush="false" />
 <!-- =================================================== -->
 <main class="container mx-3 my-3">
-
-	<h2><i class="fa-solid fa-cube my-3"></i> 펀드정보관리 > 펀드정보등록 Success</h2>
-	
+	<c:if test="${mode eq 'insert'}">
+	<h2><i class="fa-solid fa-cube my-3"></i> 펀드정보관리 > 펀드정보등록 완료</h2>
+		</c:if>
+		<c:if test="${mode eq 'update'}">
+	<h2><i class="fa-solid fa-cube my-3"></i> 펀드정보관리 > 펀드정보수정 완료</h2>
+		</c:if>
 	<div class="border-top border-2 p-4">
 
 		<div class="text-left py-5">

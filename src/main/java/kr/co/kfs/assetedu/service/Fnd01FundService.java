@@ -17,4 +17,20 @@ public class Fnd01FundService {
 	public List<Fnd01Fund> selectList(QueryAttr queryAttr) {
 		return fnd01FundRepository.selectList(queryAttr);
 	}
+	public Long selectCount(QueryAttr queryAttr) {
+		return fnd01FundRepository.selectCount(queryAttr);
+	}
+	public Fnd01Fund selectOne(Fnd01Fund fund) {
+		return fnd01FundRepository.selectOne(fund);
+	}
+	
+	public Integer insert(Fnd01Fund fund) {
+		return fnd01FundRepository.insert(fund);
+	}
+	public Integer update(Fnd01Fund fund) {
+		return fnd01FundRepository.update(fund);
+	}
+	public Integer delete(Fnd01Fund fund) {
+		return fnd01FundRepository.delete(fund);
+	}
 }

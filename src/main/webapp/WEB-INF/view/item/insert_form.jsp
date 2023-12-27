@@ -129,7 +129,7 @@ $(document).ready(function () {
     $('input.amtinput').inputMoneyFormat();
     
     $('#btnPopupCorp').on('click', function(){
-        var url = '/popup/corp?corpCd=itm01IssCoCd&corpNm=itm01IssCoNm';
+        var url = '/popup/corp?corpCd=itm01IssCoCd&corpNm=itm01IssCoNm&selectCorpType=01';
         var prop = {};
         var width = 720;
         var height = 650;

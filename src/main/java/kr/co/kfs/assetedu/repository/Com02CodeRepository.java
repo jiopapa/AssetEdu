@@ -7,5 +7,5 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 
 public interface Com02CodeRepository {
 	List<Com02Code> selectList (QueryAttr queryAttr);
-	Integer selectCount(QueryAttr queryAttr);
+	Long selectCount(QueryAttr queryAttr);
 }

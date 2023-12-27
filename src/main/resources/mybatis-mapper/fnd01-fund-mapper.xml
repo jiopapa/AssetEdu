@@ -78,14 +78,15 @@
 			,fnd01_sub_manager,' ',fnd01_mng_co_cd,' ',fnd01_trust_co_cd,' ',fnd01_office_co_cd,' ', fnd01_sub_office_co_cd)) like upper(concat('%',#{searchText},'%'))
 		</if>
 	</sql>
-	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
+	<!--  <select id="selectCount" parameterType="QueryAttr" resultType="Integer">
    		SELECT 
    			count(*) as count
    		FROM
    			com03_date
    		WHERE 1=1
    			<include refid="whereQueryAttr"/>	
-   </select> 
+   </select>
+   --> 
    
    <select id="selectList" parameterType="Fnd01Fund" resultType="Fnd01Fund">
    select fnd01_fund_cd as fnd01FundCd, fnd01_fund_nm as fnd01FundNm, fnd01_fund_type as fnd01FundType, fnd01_public_cd as fnd01PublicCd
@@ -104,6 +105,71 @@
 	  from fnd01_fund
 	  where 1=1
 	  <include refid="whereQueryAttr"/>
+	  <if test="fundParentCode != null and  fundParentCode != ''">
+			AND fnd01_parent_cd = #{fundParentCode}
+   </if>
 	  Order by fnd01_fund_cd, fnd01_fund_nm
    </select>
+   
+   <select id="selectCount" parameterType="queryAttr" resultType="Long">
+   select count(*) as count
+   from fnd01_fund
+   where 1=1
+   <include refid="whereQueryAttr"/>
+ 	<if test="fundParentCode != null and  fundParentCode != ''">
+			AND fnd01_parent_cd = #{fundParentCode}
+   </if>
+   
+   <if test="pageAttr != null ">
+		OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+	</if>   
+   </select>
+   <select id="selectOne" parameterType="Fnd01Fund" resultType="Fnd01Fund">
+   select fnd01_fund_cd as fnd01FundCd, fnd01_fund_nm as fnd01FundNm, fnd01_fund_type as fnd01FundType, fnd01_public_cd as fnd01PublicCd
+   ,	fnd01_unit_cd as fnd01UnitCd, fnd01_parent_cd as fnd01ParentCd, fnd01_parent_fund_cd as fnd01ParentFundCd, fnd01_start_date as fnd01StartDate
+   ,	fnd01_end_date as fnd01EndDate, fnd01_acc_period as fnd01AccPeriod, fnd01_first_close_date as fnd01FirstCloseDate, fnd01_cur_cd as fnd01CurCd
+   ,	fnd01_ksd_item_cd as fnd01KsdItemCd, fnd01_kofia_cd as fnd01KofiaCd, fnd01_kofia_class_cd as fnd01KofiaClassCd, fnd01_fss_cd as fnd01FssCd
+   ,	fnd01_manager as fnd01Manager, fnd01_sub_manager as fnd01SubManager, fnd01_mng_co_cd as fnd01MngCoCd, fnd01_trust_co_cd as fnd01TrustCoCd
+   ,	fnd01_office_co_cd as fnd01OfficeCoCd, fnd01_sub_office_co_cd as fnd01SubOfficeCoCd
+   ,	f_com_nm('FundType',fnd01_fund_type) as fnd01FundTypeNm
+   , f_com_nm('PublicCode',fnd01_public_cd) as fnd01PublicNm
+   , f_com_nm('FundUnitCode',fnd01_unit_cd) as fnd01UnitNm
+   , f_com_nm('FundParentCode',fnd01_parent_cd) as fnd01ParentFundNm
+   , f_corp_nm(fnd01_mng_co_cd) as fnd01MngCoNm
+   , f_corp_nm(fnd01_trust_co_cd) as fnd01TrustCoNm
+   , f_corp_nm(fnd01_office_co_cd) as fnd01OfficeCoNm
+	from fnd01_fund
+	  where fnd01_fund_cd = #{fnd01FundCd}
+   </select>
+   <insert id="insert" parameterType="Fnd01Fund" >
+   insert into fnd01_fund (fnd01_fund_cd , fnd01_fund_nm , fnd01_fund_type , fnd01_public_cd 
+   ,	fnd01_unit_cd , fnd01_parent_cd , fnd01_parent_fund_cd , fnd01_start_date 
+   ,	fnd01_end_date , fnd01_acc_period , fnd01_first_close_date , fnd01_cur_cd 
+   ,	fnd01_ksd_item_cd , fnd01_kofia_cd , fnd01_kofia_class_cd , fnd01_fss_cd 
+   ,	fnd01_manager , fnd01_sub_manager , fnd01_mng_co_cd , fnd01_trust_co_cd 
+   ,	fnd01_office_co_cd , fnd01_sub_office_co_cd)
+   values (#{fnd01FundCd},#{fnd01FundNm},#{fnd01FundType},#{fnd01PublicCd},#{fnd01UnitCd}
+   		,#{fnd01ParentCd},#{fnd01ParentFundCd},#{fnd01StartDate},#{fnd01EndDate},#{fnd01AccPeriod}
+   		,#{fnd01FirstCloseDate},#{fnd01CurCd},#{fnd01KsdItemCd},#{fnd01KofiaCd},#{fnd01KofiaClassCd}
+   		,#{fnd01FssCd},#{fnd01Manager},#{fnd01SubManager},#{fnd01MngCoCd},#{fnd01TrustCoCd}
+   		,#{fnd01OfficeCoCd},#{fnd01SubOfficeCoCd})
+   </insert>
+   
+   <update id="update" parameterType="Fnd01Fund" >
+   update fnd01_fund set
+  fnd01_fund_nm = #{fnd01FundNm},fnd01_fund_type = #{fnd01FundType},fnd01_public_cd = #{fnd01PublicCd}
+   , 	fnd01_unit_cd = #{fnd01UnitCd},fnd01_parent_cd = #{fnd01ParentCd},fnd01_parent_fund_cd = #{fnd01ParentFundCd}
+   ,	fnd01_start_date = #{fnd01StartDate}, fnd01_end_date = #{fnd01EndDate},fnd01_acc_period = #{fnd01AccPeriod}
+   ,	fnd01_first_close_date = #{fnd01FirstCloseDate},fnd01_cur_cd = #{fnd01CurCd}, fnd01_ksd_item_cd = #{fnd01KsdItemCd}
+   ,	fnd01_kofia_cd = #{fnd01KofiaCd},fnd01_kofia_class_cd = #{fnd01KofiaClassCd},fnd01_fss_cd = #{fnd01FssCd}
+   ,	fnd01_manager = #{fnd01Manager},fnd01_sub_manager = #{fnd01SubManager},fnd01_mng_co_cd = #{fnd01MngCoCd}
+   ,	fnd01_trust_co_cd = #{fnd01TrustCoCd}, fnd01_office_co_cd = #{fnd01OfficeCoCd},fnd01_sub_office_co_cd = #{fnd01SubOfficeCoCd}
+  where  fnd01_fund_cd = #{fnd01FundCd}
+   </update>
+   
+   
+   <delete id="delete" parameterType="Fnd01Fund">
+   delete from fnd01_fund
+   where fnd01_fund_cd = #{fnd01FundCd}
+   </delete>
    </mapper>

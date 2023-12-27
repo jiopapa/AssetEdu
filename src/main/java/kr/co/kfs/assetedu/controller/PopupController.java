@@ -1,30 +1,21 @@
 package kr.co.kfs.assetedu.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.Com01Corp;
-import kr.co.kfs.assetedu.model.Itm01Item;
+import kr.co.kfs.assetedu.model.Fnd01Fund;
 import kr.co.kfs.assetedu.model.PageAttr;
 import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
-import kr.co.kfs.assetedu.service.Itm01ItemService;
+import kr.co.kfs.assetedu.service.Fnd01FundService;
 import kr.co.kfs.assetedu.service.Sys01UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,34 +27,56 @@ public class PopupController {
 	Com01CorpService com01CorpService;
 	
 	@Autowired
+	Fnd01FundService fnd01FundService;
+	
+	@Autowired
 	Com02CodeService com02CodeService;
+	
 	@Autowired
 	Sys01UserService sys01UserService;
+	
 
 	@GetMapping("corp")
-	public String list(String searchText
-						,@RequestParam(value="pageSize", defaultValue="10", required=false) Integer pageSize
+	public String corp(String searchText
+			,
+			@RequestParam(value = "pageSize", defaultValue = "10", required=false) Integer pageSize
 						, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo 
 						, @RequestParam(value="selectCorpType", required=false) String selectCorpType, Model model) {
 		log.debug("기관정보(팝업)");
-
+		log.debug("selectCorpType : { } " ,selectCorpType);
+		
 		QueryAttr queryAttr = new QueryAttr(); //검색조건
+		queryAttr.put("selectCorpType", selectCorpType);
 		queryAttr.put("searchText", searchText);
-		log.debug("queryAttr { } : queryAttr");
 		Long totalItemCount = com01CorpService.selectCount(queryAttr);
 		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
 		queryAttr.put("pageAttr", pageAttr);
-		log.debug("pageAttr{ } : pageAttr1");
 		List<Com01Corp> corpList = com01CorpService.selectList(queryAttr);
-		log.debug("pageAttr{ } : pageAttr2");
-		model.addAttribute("corpTypeList", com02CodeService.codeList(selectCorpType));
-		model.addAttribute("list", corpList);
+		model.addAttribute("corpList", corpList);
 		model.addAttribute("pageAttr", pageAttr);
 		model.addAttribute("searchText", searchText);
-	
+		model.addAttribute("selectCorpType", selectCorpType);
 		return "/popup/popup_corp";
 	}
-
+	@GetMapping("fund")
+	public String fund(String searchText
+						,@RequestParam(value="pageSize", defaultValue= "10", required=false) Integer pageSize
+						,@RequestParam(value="currentPageNo", defaultValue="1", required= false) Integer currentPageNo
+						,@RequestParam(value="fundParentCode",  required=false) String fundParentCode, Model model) {
+		log.debug("펀드정보(팝업)");
+		QueryAttr queryAttr = new QueryAttr(); //검색조건
+		queryAttr.put("searchText", searchText);
+		queryAttr.put("fundParentCode", fundParentCode);
+		Long totalItemCount = fnd01FundService.selectCount(queryAttr);
+		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
+		queryAttr.put("pageAttr", pageAttr);
+		List<Fnd01Fund> fundList = fnd01FundService.selectList(queryAttr);
+		model.addAttribute("fundList", fundList);
+		model.addAttribute("pageAttr", pageAttr);
+		model.addAttribute("searchText", searchText);
+		return "/popup/popup_fund";
+		
+	}
 /*	@GetMapping("insert")
 	public String insert(Model model) {
 		log.debug("종목정보 입력페이지");
