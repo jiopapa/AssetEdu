@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.Fnd01Fund;
@@ -34,7 +35,9 @@ public class FundController {
 
 
 	@GetMapping("list")
-	public String list(String searchText, Model model) {
+	public String list(String searchText, Model model
+			,@RequestParam(value="pageSize", defaultValue="10", required=false) Integer pageSize
+			, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo) {
 		log.debug("펀드정보");
 
 		QueryAttr queryAttr = new QueryAttr();

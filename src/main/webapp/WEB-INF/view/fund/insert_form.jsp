@@ -114,7 +114,7 @@
 					<tr class="align-middle">
 						<td class="text-end">모자구분</td>
 						<td class="w-25"><form:select path="fnd01ParentCd"
-								class="form-select" onchange="ParentType()">
+								class="form-select" onchange="ParentType()" id="fnd01ParentCd">
 								<option value="" selected />선택</option>
 								<form:options items="${FundParentCodeList}"
 									itemValue="com02DtlCd" itemLabel="com02CodeNm" />
@@ -130,9 +130,9 @@
 					</tr>
 					<tr class="align-middle">
 						<td class="text-end">모펀드</td>
-						<td><form:hidden path="fnd01ParentFundCd" /> <form:input
+						<td><form:hidden path="fnd01ParentFundCd" id="fnd01ParentFundCd"/> <form:input
 								type="text" class="form-control bg-light"
-								path="fnd01ParentFundNm" readonly="true" /></td>
+								path="fnd01ParentFundNm" id="fnd01ParentFundNm" readonly="true" /></td>
 						<td><button class="btn btn-primary" id="btnPopupFund">
 								<i class="fa-solid fa-search"></i>
 							</button></td>
@@ -227,18 +227,32 @@ $(document).ready(function () {
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
-    
     $('#btnPopupFund').on('click', function(){
-    	var selectedValue = document.getElementById('fnd01ParentCd').value;
-    	if(selectedValue === '3'){
-        var url = '/popup/fund?fundCd=fnd01ParentFundCd&fundNm=fnd01ParentFundNm&parentYn=true&fundParentCode=2';
-        var prop = {};
-        var width = 720;
-        var height = 518;
-        var win = AssetUtil.popupWindow(url, '펀드선택', {}, width, height);
-    	} 
-    	return false;
+        var selectedValue = document.getElementById('fnd01ParentCd').value;
+        if (selectedValue === '3') {
+            var url = '/popup/fund?fundCd=fnd01ParentFundCd&fundNm=fnd01ParentFundNm&parentYn=true&fundParentCode=2';
+            var prop = {};
+            var width = 720;
+            var height = 518;
+            var win = AssetUtil.popupWindow(url, '펀드선택', {}, width, height);
+        } else {
+            alert("'자신탁'인 경우에만 선택할 수 있습니다.");
+            return false;
+        }
+        return false;
     });
+    $('#fnd01ParentCd').change(function () {
+        var fnd01ParentFundCd = $('form input[name="fnd01ParentFundCd"]');
+        var fnd01ParentFundNm = $('form input[name="fnd01ParentFundNm"]');
+        if (this.value === '' || this.value === '1' || this.value === '2') {
+            fnd01ParentFundCd.val('');  
+            fnd01ParentFundNm.val('');  
+        }
+
+       return false;
+    });
+
+
     $('#btnPopupItem').on('click', function(){
         var url = '/popup/item?itemCd=itm01ItemCd&itemNm=itm01ItemNm';
         var prop = {};

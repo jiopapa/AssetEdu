@@ -62,9 +62,13 @@
 	    </c:forEach>
 	  </tbody>
 	</table>
-	<kfs:Pagination pageAttr="${pageAttr }" id="Pagination1" functionName="go"></kfs:Pagination>
-	<kfs:PageInfo pageAttr="${pageAttr }" id="Pagination2" ></kfs:PageInfo>
-	<kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter>
+	 <div class="row "> 
+			<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
+			<div class="col-4 text-end mt-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+		 </div>
+		 <div class="row ">
+   		   	 <div class="text-end mt-0"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
+         </div>
 	   <form id="form1" action="/admin/dict/list" method="GET">
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
  		<input type="hidden" name="currentPageNumber" value="1"/>

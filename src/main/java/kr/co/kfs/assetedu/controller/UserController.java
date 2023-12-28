@@ -61,7 +61,7 @@ public class UserController {
 		model.addAttribute("searchText", searchText);
 		
 		log.debug("pageAttr:{}", pageAttr);
-		return "/admin/user/list";
+		return "/admin/user/userList";
 	}
 	@GetMapping("insert")
 	public String Insert(Model model) {

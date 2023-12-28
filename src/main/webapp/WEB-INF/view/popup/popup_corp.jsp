@@ -58,11 +58,13 @@
 	    </c:forEach>
 	  </tbody>
 	</table>
+				<div class="row "> 
+				<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
+				<div class="col-4 d-flex align-items-end mb-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+				</div>
 
-			<div class="row">
-            <div class="col-md-12"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination>
-            <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter>
-   		    <kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+			<div class="row ">
+   		   	 <div class="text-end mt-0"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
         	</div>
 	
 
@@ -108,29 +110,22 @@ $(document).ready(function () {
         $('#form1').submit();
     });
 });
-
-</script>
-<script>
 function go(pageNo){
 	var selectCorpType = $('#selectCorpType').val();
 	var searchText = $('#searchText').val();
 	var pageInfo = $('#pageInfo').val();
-	console.log("pageInfo");
-	console.log(pageInfo);
-	console.log("goPage");
-	console.log(selectCorpType); 
-	AssetUtil.submitGet('/popup/corp', 
-{searchText: searchText, currentPageNo : pageNo, selectCorpType : selectCorpType,  pageSize: pageInfo} );
+	var corpCd = '<%=request.getParameter("corpCd")%>';
+	var corpNm = '<%=request.getParameter("corpNm")%>';
+	AssetUtil.submitGet ('/popup/corp', {searchText: searchText, currentPageNo : pageNo, selectCorpType : selectCorpType
+										,	corpCd : corpCd,  corpNm : corpNm, pageSize: pageInfo } );
 }
-</script>	
-<script>
-  $(function() {
+	$(function() {
     $("#pageInfo").on("change", function() {
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
       var searchText = $('#searchText').val();
       var selectCorpType = $('#selectCorpType').val();
       AssetUtil.submitGet('/popup/corp', 
-    { searchText: searchText, pageSize: pageInfo , selectCorpType : selectCorpType});
+    { searchText: searchText, pageSize: pageInfo , selectCorpType : selectCorpType, currentPageNo : pageNo});
     });
   });
 </script>

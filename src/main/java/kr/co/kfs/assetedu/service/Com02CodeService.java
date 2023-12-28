@@ -28,4 +28,20 @@ public class Com02CodeService {
 	public Long selectCount(QueryAttr queryAttr) {
 		return com02CodeRepository.selectCount(queryAttr);
 	}
+	
+	public Com02Code selectOne(Com02Code com02Code) {
+		return com02CodeRepository.selectOne(com02Code);
+	}
+	
+	public Integer insert(Com02Code com02Code) {
+		return com02CodeRepository.insert(com02Code);
+	}
+	
+	public Integer update(Com02Code com02Code) {
+		return com02CodeRepository.update(com02Code);
+	}
+	
+	public Integer delete(Com02Code com02Code) {
+		return com02CodeRepository.delete(com02Code);
+	}
 }

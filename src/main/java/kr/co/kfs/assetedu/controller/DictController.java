@@ -52,7 +52,7 @@ public class DictController {
 		model.addAttribute("pageAttr", pageAttr);
 		model.addAttribute("searchText", searchText);
 		
-		return "/admin/dict/list";
+		return "/admin/dict/dictList";
 	}
 
 	/**

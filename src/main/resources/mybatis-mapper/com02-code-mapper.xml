@@ -49,6 +49,43 @@
 		<include refid="whereQueryAttr" />
 		Order by com02_com_cd, com02_dtl_cd, com02_seq
 	</select>
-
-
+	<select id="selectOne" parameterType="Com02Code" resultType="Com02Code">
+	select com02_com_cd as com02ComCd
+		, com02_dtl_cd as com02DtlCd
+		, com02_code_nm as com02CodeNm
+		, com02_code_type as com02CodeType
+		, com02_seq as com02Seq
+		, com02_use_yn as com02UseYn
+		, com02_note as com02Note
+		from com02_code
+		where 1=1
+			AND com02_com_cd  = #{com02ComCd}
+	       	AND com02_dtl_cd = #{com02DtlCd}
+	</select>
+	<insert id="insert" parameterType="Com02Code">
+	insert into  com02_code (com02_com_cd, com02_dtl_cd, com02_code_nm, com02_code_type
+				, com02_seq, com02_use_yn, com02_note)
+	values (#{com02ComCd}, #{com02DtlCd}, #{com02CodeNm}, #{com02CodeType}, #{com02Seq}
+			,#{com02UseYn}, #{com02Note})
+	</insert>
+	<update id="update" parameterType="Com02Code">
+	update com02_code set
+	  com02_code_nm = #{com02CodeNm}
+	, com02_code_type = #{com02CodeType}
+	, com02_seq = #{com02Seq}
+	, com02_use_yn = #{com02UseYn} 
+	, com02_note = #{com02Note}
+	where 1=1 
+	and com02_com_cd = #{com02ComCd}
+	and com02_dtl_cd = #{com02DtlCd}
+	</update>
+	
+	<delete id="delete" parameterType="Com02Code">
+	delete from com02_code
+	where 1=1
+	and com02_com_cd = #{com02ComCd} 
+	<if test="com02DtlCd != null and com02DtlCd != ''">
+	and com02_dtl_cd = #{com02DtlCd}</if>
+	
+	</delete>
 </mapper>
