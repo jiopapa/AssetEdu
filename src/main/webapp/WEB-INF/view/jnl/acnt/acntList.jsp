@@ -34,7 +34,7 @@
 <main class="container mx-3 my-3">
 
 	<h2><i class="fa-solid fa-cube my-3"></i> 계정과목 관리</h2>
-
+<form>
 	<div class="container-lg p-3 border border-2 rounded-1">
 		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(계정코드/계정과목)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
 		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
@@ -42,7 +42,7 @@
         <a class="btn d-inline align-middle btn-success btnInsert" href="${baseUrl }/insert"><i class="fa-solid fa-backspace"></i> 등록</a>
         <a class="btn d-inline align-middle btn-warning btnExcel"  data-table-id="table1" data-excel-name="acnt" ><i class="fa-solid fa-table"></i> 엑셀</a>
 	</div>
-
+</form>
 	<table class="table table-hover table-sm mainTable mt-3" style="font-size:small" id="table1">
 	  <thead class="table-light">
 	    <tr class="text-center">

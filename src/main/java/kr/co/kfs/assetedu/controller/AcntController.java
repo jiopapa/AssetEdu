@@ -26,18 +26,20 @@ public class AcntController {
 	Com02CodeService com02CodeService;
 	
 	@GetMapping("list")
-	public String list(Model model
+	public String list(Model model, String searchText
 			, @RequestParam(value = "currentPageNumber",defaultValue = "1" ,required = false) Integer currentPageNumber
 			,	@RequestParam(value = "pageSize", defaultValue ="10" ,required = false) Integer pageSize) {
 		
 		log.debug("계정과목 리스트");
 		QueryAttr queryAttr = new QueryAttr();
-		
+		queryAttr.put("searchText",searchText);
 		com02CodeService.codeList(null);
 		Long totalItemCount = jnl10AcntService.selectCount(queryAttr);
 		PageAttr pageAttr = new PageAttr(totalItemCount, currentPageNumber, pageSize);
+		queryAttr.put("pageAttr", pageAttr);
 		List<Jnl10Acnt> list = jnl10AcntService.selectList(queryAttr);
 		model.addAttribute("list", list);
+		model.addAttribute("pageAttr", pageAttr);
 		
 		
 		return "/jnl/acnt/acntList";
