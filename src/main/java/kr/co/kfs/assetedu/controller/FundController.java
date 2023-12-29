@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.Fnd01Fund;
+import kr.co.kfs.assetedu.model.PageAttr;
 import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.service.Com02CodeService;
 import kr.co.kfs.assetedu.service.Fnd01FundService;
@@ -39,11 +40,21 @@ public class FundController {
 			,@RequestParam(value="pageSize", defaultValue="10", required=false) Integer pageSize
 			, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo) {
 		log.debug("펀드정보");
-
+		
+		
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText", searchText);
+		
+		Long totalItemCount = fnd01FundService.selectCount(queryAttr); 
+		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
+		queryAttr.put("pageAttr", pageAttr);
+		
 		List<Fnd01Fund> fundList = fnd01FundService.selectList(queryAttr);
 		model.addAttribute("fundList", fundList);
+		model.addAttribute("pageAttr", pageAttr);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("currentPageNo",currentPageNo);
+		model.addAttribute("searchText", searchText);
 		return "/fund/fundList";
 	}
 

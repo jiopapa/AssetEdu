@@ -42,6 +42,7 @@ public class DictController {
 		
 		QueryAttr queryAttr = new QueryAttr(); //검색조건
 		queryAttr.put("searchText", searchText);
+		
 		Long totalItemCount = service.selectCount(queryAttr);
 		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
 		queryAttr.put("pageAttr", pageAttr);

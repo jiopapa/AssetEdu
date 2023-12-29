@@ -26,14 +26,19 @@
 <main class="container mx-3 my-3">
 
 	<h2><i class="fa-solid fa-cube my-3"></i> 펀드정보관리</h2>
-  
+  <form id="form1" action="/fund/list" method="GET">
 	<div class="container-lg p-3 border border-2 rounded-1">
+		<input type="hidden" name="corpCd" value="${param.corpCd }"/>
+ 		<input type="hidden" name="corpNm" value="${param.corpNm }"/>
+ 		<input type="hidden" name="selectCorpType" id="selectCorpType" value="${param.selectCorpType }"/>
+ 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
+    	<input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/>
 		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(펀드코드/펀드명/펀드유형)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
 		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
         <a class="btn d-inline align-middle btn-secondary btnInit"><i class="fa-solid fa-backspace"></i> 초기화</a>
 		<a class="btn d-inline align-middle btn-success" href="/fund/insert">  <i class="fa-solid fa-pencil-alt"></i> 등록</a>
 	</div>
-
+</form>
 	<table class="mt-3 table table-sm table-hover mt-3 fundTable" style="font-size:small">
 	  <thead class="table-light">
 	    <tr class="text-center">
@@ -55,7 +60,7 @@
 	  <tbody class="table-group-divider" >
 	  	<c:forEach var="fund" items="${fundList}" varStatus="status">
 		    <tr class="align-middle">
-		      <td scope="row" class="text-center fw-bold">${status.count }</td>
+		      <td scope="row" class="text-center fw-bold">${((pageAttr.currentPageNumber-1)*pageAttr.pageSize)+status.count}</td>
 		      <td class="text-center">${fund.fnd01FundCd }</td>
 		      <td>${fund.fnd01FundNm }</td>
 		      <td>${fund.fnd01FundTypeNm }</td>
@@ -134,7 +139,7 @@ function go(pageNo){
 	var pageInfo = $('#pageInfo').val();
 	var corpCd = '<%=request.getParameter("corpCd")%>';
 	var corpNm = '<%=request.getParameter("corpNm")%>';
-	AssetUtil.submitGet ('/popup/corp', {searchText: searchText, currentPageNo : pageNo, selectCorpType : selectCorpType
+	AssetUtil.submitGet ('/fund/list', {searchText: searchText, currentPageNo : pageNo, selectCorpType : selectCorpType
 										,	corpCd : corpCd,  corpNm : corpNm, pageSize: pageInfo } );
 }
 	$(function() {
@@ -142,7 +147,7 @@ function go(pageNo){
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
       var searchText = $('#searchText').val();
       var selectCorpType = $('#selectCorpType').val();
-      AssetUtil.submitGet('/popup/corp', 
+      AssetUtil.submitGet('/fund/list', 
     { searchText: searchText, pageSize: pageInfo , selectCorpType : selectCorpType, currentPageNo : pageNo});
     });
   });

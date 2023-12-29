@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Jnl10AcntRepository">
+   <sql id="whereQueryAttr">
+		<!--    검색조건 -->
+		<if test="jnl10AcntCd != null and jnl10AcntCd != ''">
+			AND jnl10_acnt_cd  = #{jnl10AcntCd}
+		</if>
+		<if test="jnl10AcntNm != null and jnl10AcntNm != ''">
+			AND jnl10_acnt_nm = #{jnl10AcntNm}
+		</if>
+		<if test="jnl10ParentCd != null and jnl10ParentCd !=''">
+			AND jnl10_parent_cd = #{jnl10ParentCd}
+		</if>
+		<if test="jnl10Acnt_attrCd != null and  jnl10Acnt_attrCd != ''">
+			AND jnl10_acnt_attr_cd = #{jnl10Acnt_attrCd}
+		</if>
+			<if test="jnl10DrcrType != null and  jnl10DrcrType != ''">
+			AND jnl10_drcr_type = #{jnl10DrcrType}
+		</if>
+			<if test="jnl10SlipYn != null and  jnl10SlipYn != ''">
+			AND jnl10_slip_yn = #{jnl10SlipYn}
+		</if>
+			<if test="jnl10UseYn != null and  jnl10UseYn != ''">
+			AND jnl10_use_yn = #{jnl10UseYn}
+		</if>
+		<if test="searchText != null and  searchText != ''">
+			AND upper(concat(jnl10_acnt_cd,' ', jnl10_acnt_nm, ' ', jnl10_parent_cd,' ', jnl10_acnt_attr_cd, ' ', jnl10_drcr_type, ' '
+			, jnl10_slip_y, ' ', jnl10_use_yn)) like upper(concat('%',#{searchText},'%'))
+		</if>
+	</sql>
+	<select id="selectList" parameterType="QueryAttr" resultType="Jnl10Acnt">
+	select jnl10_acnt_cd as jnl10AcntCd
+			,jnl10_acnt_nm as jnl10AcntNm
+			,jnl10_parent_cd as jnl10ParentCd
+			, jnl10_acnt_attr_cd as jnl10Acnt_attrCd
+			, jnl10_drcr_type as jnl10DrcrType
+			, jnl10_slip_yn as jnl10SlipYn
+			, jnl10_use_yn as jnl10UseYn
+			, jnl10_drcr_type_Nm as jnl10DrcrTypeNm
+			, jnl10_acnt_attr_Nm as jnl10AcntAttrNm
+	from (select jnl10_acnt.* , f_com_nm('DrcrType', jnl10_drcr_type) as jnl10_drcr_type_Nm 
+			,f_com_nm('AcntAttrCode',jnl10_acnt_attr_cd) as jnl10_acnt_attr_Nm from jnl10_acnt)
+	where 1=1
+	<include refid="whereQueryAttr"/>
+	<if test="pageAttr != null ">
+	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+	</if>   
+	</select>
+	
+	<select id="selectCount" parameterType="QueryAttr" resultType="Long">
+	select count(*) as count 
+	from jnl10_acnt 
+	where 1=1
+	<include refid="whereQueryAttr"/>
+	<if test="pageAttr != null ">
+	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+	</if>   
+	
+	</select>
+	</mapper>

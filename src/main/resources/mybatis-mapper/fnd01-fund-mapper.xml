@@ -109,6 +109,9 @@
 			AND fnd01_parent_cd = #{fundParentCode}
    </if>
 	  Order by fnd01_fund_cd, fnd01_fund_nm
+	  <if test="pageAttr != null ">
+		OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+	</if>   
    </select>
    
    <select id="selectCount" parameterType="queryAttr" resultType="Long">

@@ -182,7 +182,7 @@ $(document).ready(function () {
     
 	//기관정보
 	$('#btnPopupMngCo').on('click', function(){
-		var url = '/popup/corp?corpCd=fnd01MngCoCd&corpNm=fnd01MngCoNm';
+		var url = '/popup/corp?corpCd=fnd01MngCoCd&corpNm=fnd01MngCoNm&selectCorpType=04';
 		var prop = {};
 		var width = 720;
 		var height = 518;
@@ -191,7 +191,7 @@ $(document).ready(function () {
     });
 	
     $('#btnPopupTrustCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01TrustCoCd&corpNm=fnd01TrustCoNm';
+        var url = '/popup/corp?corpCd=fnd01TrustCoCd&corpNm=fnd01TrustCoNm&selectCorpType=02';
         var prop = {};
         var width = 720;
         var height = 518;
@@ -199,7 +199,7 @@ $(document).ready(function () {
         return false;
     });
     $('#btnPopupOfficeCo').on('click', function(){
-        var url = '/popup/corp?corpCd=fnd01OfficeCoCd&corpNm=fnd01OfficeCoNm';
+        var url = '/popup/corp?corpCd=fnd01OfficeCoCd&corpNm=fnd01OfficeCoNm&selectCorpType=05';
         var prop = {};
         var width = 720;
         var height = 518;
@@ -208,12 +208,28 @@ $(document).ready(function () {
     });
     //펀드팝업
     $('#btnPopupFund').on('click', function(){
-		var url = '/popup/fund?fundCd=fnd01ParentFundCd&fundNm=fnd01ParentFundNm&parentYn=true';
-		var prop = {};
-		var width = 720;
-		var height = 518;
-    	var win = AssetUtil.popupWindow(url, '펀드선택', {}, width, height);
-    	return false;
+        var selectedValue = document.getElementById('fnd01ParentCd').value;
+        if (selectedValue === '3') {
+            var url = '/popup/fund?fundCd=fnd01ParentFundCd&fundNm=fnd01ParentFundNm&parentYn=true&fundParentCode=2';
+            var prop = {};
+            var width = 720;
+            var height = 518;
+            var win = AssetUtil.popupWindow(url, '펀드선택', {}, width, height);
+        } else {
+            alert("'자신탁'인 경우에만 선택할 수 있습니다.");
+            return false;
+        }
+        return false;
+    });
+    $('#fnd01ParentCd').change(function () {
+        var fnd01ParentFundCd = $('form input[name="fnd01ParentFundCd"]');
+        var fnd01ParentFundNm = $('form input[name="fnd01ParentFundNm"]');
+        if (this.value === '' || this.value === '1' || this.value === '2') {
+            fnd01ParentFundCd.val('');  
+            fnd01ParentFundNm.val('');  
+        }
+
+       return false;
     });
     //종목팝업
     $('#btnPopupItem').on('click', function(){
