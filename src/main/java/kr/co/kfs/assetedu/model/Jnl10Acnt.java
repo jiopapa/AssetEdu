@@ -17,7 +17,10 @@ public class Jnl10Acnt {
 	private String jnl10AcntAttrNm;
 	private String jnl10DrcrType;
 	private String jnl10DrcrTypeNm;
+	
+	@NotNull(message = "필수 입력란입니다.")
 	private String jnl10SlipYn;
 	private String jnl10UseYn;
+	private String jnl10ParentNm;
 	
 }

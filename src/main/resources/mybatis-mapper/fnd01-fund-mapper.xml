@@ -123,9 +123,7 @@
 			AND fnd01_parent_cd = #{fundParentCode}
    </if>
    
-   <if test="pageAttr != null ">
-		OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
-	</if>   
+ 
    </select>
    <select id="selectOne" parameterType="Fnd01Fund" resultType="Fnd01Fund">
    select fnd01_fund_cd as fnd01FundCd, fnd01_fund_nm as fnd01FundNm, fnd01_fund_type as fnd01FundType, fnd01_public_cd as fnd01PublicCd

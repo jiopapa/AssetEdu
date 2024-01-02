@@ -35,8 +35,15 @@ public class Jnl10AcntService {
 		return jnl10AcntRepository.update(acnt);
 	}
 	@Transactional
-	public Integer delete(Jnl10Acnt acnt) {
-		return jnl10AcntRepository.delete(acnt);
+	public Integer delete(String jnl10AcntCd) {
+		return jnl10AcntRepository.delete(jnl10AcntCd);
 	}
+	public Jnl10Acnt selectOne(String jnl10AcntCd) {
+		Jnl10Acnt jnl10Acnt = new Jnl10Acnt();
+		jnl10Acnt.setJnl10AcntCd(jnl10AcntCd);
+
+		return this.selectOne(jnl10Acnt);
+	}
+
 	
 }

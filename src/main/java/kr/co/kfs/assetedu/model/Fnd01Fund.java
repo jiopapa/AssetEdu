@@ -1,5 +1,6 @@
 package kr.co.kfs.assetedu.model;
 
+import kr.co.kfs.assetedu.servlet.converter.YmdFormat;
 import lombok.Data;
 
 @Data
@@ -11,9 +12,15 @@ public class Fnd01Fund {
 	private String fnd01UnitCd;
 	private String fnd01ParentCd;
 	private String fnd01ParentFundCd;
+	
+	@YmdFormat
 	private String fnd01StartDate;
+	
+	@YmdFormat
 	private String fnd01EndDate;
+	
 	private Integer fnd01AccPeriod;
+	@YmdFormat
 	private String fnd01FirstCloseDate;
 	private String fnd01CurCd;
 	private String fnd01KsdItemCd;

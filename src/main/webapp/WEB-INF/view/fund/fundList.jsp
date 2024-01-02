@@ -147,8 +147,7 @@ function go(pageNo){
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
       var searchText = $('#searchText').val();
       var selectCorpType = $('#selectCorpType').val();
-      AssetUtil.submitGet('/fund/list', 
-    { searchText: searchText, pageSize: pageInfo , selectCorpType : selectCorpType, currentPageNo : pageNo});
+      AssetUtil.submitGet('/fund/list', {searchText: searchText, pageSize: pageInfo, selectCorpType : selectCorpType, currentPageNo : pageNo});
     });
   });
 </script>

@@ -13,5 +13,5 @@ public interface Jnl10AcntRepository {
 	
 	Integer insert(Jnl10Acnt acnt);
 	Integer update(Jnl10Acnt acnt);
-	Integer delete(Jnl10Acnt acnt);
+	Integer delete(String jnl10AcntCd);
 }

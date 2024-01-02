@@ -21,11 +21,10 @@
 <body>
 <main class="container-fluid mt-3">
  	<form id="form1" action="/popup/jnl/acnt/${parentCode }" method="GET">
- 		<input type="hidden" name="acntCd"   value="${param.acntCd   }"/>
- 		<input type="hidden" name="acntNm"   value="${param.acntNm   }"/> 	
+ 		<input type="hidden" name="acntCd"   value="${param.acntCd }"/>
+ 		<input type="hidden" name="acntNm"   value="${param.acntNm }"/> 	
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
  		<input type="hidden" name="currentPageNumber" value="1"/>
-
         <div>
             <input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(계정코드/계정코드명)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
             <button class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</button>
@@ -54,11 +53,11 @@
 
     <div class="container-fluid mb-3" style="position:absolute;bottom:0;left:0">
         <hr>
-        <div class="row">
-            <div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination> </div>
-            <div class="col"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr"></kfs:PageInfo> </div>
-        </div>
-
+       <div class="row "> 
+			<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
+			<div class="col-4 text-end mt-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+		 </div>
+		 
         <div class="footer-menu text-center">
             <button type="button" id="btnSelect" class="btn btn-primary" >선택</button>
             <button type="button" id="btnCancel"  class="btn btn-secondary">닫기</button>
@@ -102,10 +101,30 @@ $(document).ready(function () {
     	$('#form1').submit();
     });
 });
-function goPageClick(pageNo){
-    $('#form1 input[name=currentPageNumber]').val(pageNo);
-    $('#form1').submit();
+
+</script>
+<script>
+function go(pageNo){
+	var searchText = $('#searchText').val();
+	var pageInfo = $('#pageInfo').val();
+	var acntCd = '<%=request.getParameter("acntCd")%>';
+    var acntNm = '<%=request.getParameter("acntNm")%>';
+	console.log("goPage");
+	AssetUtil.submitGet('/popup/jnl/acnt/${parentCode }', {searchText: searchText, currentPageNumber : pageNo, pageSize: pageInfo
+		, acntCd : acntCd , acntNm : acntNm});
 }
+</script>	
+<script>
+  $(function() {
+    $("#pageInfo").on("change", function() {
+      var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      var acntCd = '<%=request.getParameter("acntCd")%>';
+      var acntNm = '<%=request.getParameter("acntNm")%>';
+      AssetUtil.submitGet('/popup/jnl/acnt/${parentCode }', 
+    { searchText: searchText, pageSize: pageInfo , acntCd : acntCd ,  acntNm : acntNm });
+    });
+  });
 </script> 
 </body>
 </html>

@@ -34,12 +34,14 @@
 <main class="container mx-3 my-3">
 
 	<h2><i class="fa-solid fa-cube my-3"></i> 계정과목 관리</h2>
-<form>
+<form id="form1" action="/jnl/acnt/list" method="GET">
 	<div class="container-lg p-3 border border-2 rounded-1">
+ 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
+    	<input type="hidden" name="currentPageNo" value="${pageAttr.currentPageNumber }"/>
 		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(계정코드/계정과목)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
 		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
         <a class="btn d-inline align-middle btn-secondary btnInit"><i class="fa-solid fa-backspace"></i> 초기화</a>
-        <a class="btn d-inline align-middle btn-success btnInsert" href="${baseUrl }/insert"><i class="fa-solid fa-backspace"></i> 등록</a>
+        <a class="btn d-inline align-middle btn-success btnInsert" href="/jnl/acnt/insert"><i class="fa-solid fa-backspace"></i> 등록</a>
         <a class="btn d-inline align-middle btn-warning btnExcel"  data-table-id="table1" data-excel-name="acnt" ><i class="fa-solid fa-table"></i> 엑셀</a>
 	</div>
 </form>
@@ -60,7 +62,7 @@
 	  <tbody class="table-group-divider" >
 	  	<c:forEach var="item" items="${list}" varStatus="status">
 		    <tr class="align-middle">
-		      <td scope="col" class="text-center">${status.count }</td>
+		      <td scope="col" class="text-center">${((pageAttr.currentPageNumber-1)*pageAttr.pageSize)+status.count}</td>
 		      <td scope="col" class="text-center"><c:out value="${item.jnl10AcntCd }"/></td>
 		      <td scope="col"><c:out value="${item.jnl10AcntNm }"/></td>
 		      <td scope="col" class="text-center" ><c:out value="${item.jnl10ParentCd }"/></td>
@@ -75,7 +77,7 @@
 		    </tr>
 	    </c:forEach>
 	  </tbody>
-	</table>
+	</table>   
 	<div class="row "> 
 			<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
 			<div class="col-4 text-end mt-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
@@ -83,7 +85,8 @@
 		 <div class="row ">
    		   	 <div class="text-end mt-0"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
          </div>
-  
+
+
 </main>
 <!-- =================================================== -->
 <jsp:include page="../../common/footer.jsp" flush="false" />
@@ -127,11 +130,12 @@ $(document).ready(function () {
 	//수정 
 	$('.btnModify').on('click', function(e){
  		e.stopPropagation();
+
  		var cd = $(this).data('id');
  		var nm = $(this).data('nm');
  		var msg = nm + "(" + cd + ")";
  		var url = baseUrl + "/update/" + cd;
-		AssetUtil.submitGet(url);
+ 		AssetUtil.submitGet(url);
 	});	
 	//삭제
 	$('.btnDelete').on('click', function(e){
@@ -159,21 +163,17 @@ $(document).ready(function () {
 </script>
 <script> // 페이징처리
 function go(pageNo){
-	var selectCorpType = $('#selectCorpType').val();
 	var searchText = $('#searchText').val();
+	console.log(searchText);
 	var pageInfo = $('#pageInfo').val();
-	var corpCd = '<%=request.getParameter("corpCd")%>';
-	var corpNm = '<%=request.getParameter("corpNm")%>';
-	AssetUtil.submitGet ('/jnl/acnt/list', {searchText: searchText, currentPageNo : pageNo, selectCorpType : selectCorpType
-										,	corpCd : corpCd,  corpNm : corpNm, pageSize: pageInfo } );
+	console.log(pageNo);
+	AssetUtil.submitGet ('/jnl/acnt/list', {searchText: searchText, currentPageNumber : pageNo,	 pageSize: pageInfo });
 }
 	$(function() {
     $("#pageInfo").on("change", function() {
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
       var searchText = $('#searchText').val();
-      var selectCorpType = $('#selectCorpType').val();
-      AssetUtil.submitGet('/jnl/acnt/list', 
-    { searchText: searchText, pageSize: pageInfo , selectCorpType : selectCorpType, currentPageNo : pageNo});
+      AssetUtil.submitGet('/jnl/acnt/list',{searchText: searchText, pageSize : pageInfo});
     });
   });
 </script>

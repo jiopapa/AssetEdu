@@ -10,31 +10,28 @@
 		<if test="jnl10AcntNm != null and jnl10AcntNm != ''">
 			AND jnl10_acnt_nm = #{jnl10AcntNm}
 		</if>
-		<if test="jnl10ParentCd != null and jnl10ParentCd !=''">
-			AND jnl10_parent_cd = #{jnl10ParentCd}
-		</if>
-		<if test="jnl10Acnt_attrCd != null and  jnl10Acnt_attrCd != ''">
-			AND jnl10_acnt_attr_cd = #{jnl10Acnt_attrCd}
-		</if>
-			<if test="jnl10DrcrType != null and  jnl10DrcrType != ''">
-			AND jnl10_drcr_type = #{jnl10DrcrType}
-		</if>
-			<if test="jnl10SlipYn != null and  jnl10SlipYn != ''">
-			AND jnl10_slip_yn = #{jnl10SlipYn}
-		</if>
-			<if test="jnl10UseYn != null and  jnl10UseYn != ''">
-			AND jnl10_use_yn = #{jnl10UseYn}
+		<if test="parentCode != null and parentCode != ''">
+		<choose>
+				<when test="parentCode == 'parent'">
+				    AND COALESCE(jnl10_slip_yn,'false') = 'false'
+				</when>
+				<when test="parentCode == 'child'">
+                    AND COALESCE(jnl10_slip_yn,'false') = 'true'
+				</when>
+				<otherwise>
+					AND jnl10_parent_cd  = #{parentCode}				
+				</otherwise>
+		</choose>
 		</if>
 		<if test="searchText != null and  searchText != ''">
-			AND upper(concat(jnl10_acnt_cd,' ', jnl10_acnt_nm, ' ', jnl10_parent_cd,' ', jnl10_acnt_attr_cd, ' ', jnl10_drcr_type, ' '
-			, jnl10_slip_y, ' ', jnl10_use_yn)) like upper(concat('%',#{searchText},'%'))
+			AND upper(concat(jnl10_acnt_cd,' ', jnl10_acnt_nm)) like upper(concat('%',#{searchText},'%'))
 		</if>
 	</sql>
 	<select id="selectList" parameterType="QueryAttr" resultType="Jnl10Acnt">
 	select jnl10_acnt_cd as jnl10AcntCd
 			,jnl10_acnt_nm as jnl10AcntNm
 			,jnl10_parent_cd as jnl10ParentCd
-			, jnl10_acnt_attr_cd as jnl10Acnt_attrCd
+			, jnl10_acnt_attr_cd as jnl10AcntAttrCd
 			, jnl10_drcr_type as jnl10DrcrType
 			, jnl10_slip_yn as jnl10SlipYn
 			, jnl10_use_yn as jnl10UseYn
@@ -44,19 +41,56 @@
 			,f_com_nm('AcntAttrCode',jnl10_acnt_attr_cd) as jnl10_acnt_attr_Nm from jnl10_acnt)
 	where 1=1
 	<include refid="whereQueryAttr"/>
-	<if test="pageAttr != null ">
-	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
-	</if>   
+	order by jnl10_acnt_cd
+	<if test="pageAttr != null and pageAttr.offset != null">
+	      	OFFSET #{pageAttr.offset}
+		</if>   
+		 <if test="pageAttr != null and pageAttr.limit != null">
+		 	LIMIT #{pageAttr.limit}
+		 </if>
 	</select>
+	
 	
 	<select id="selectCount" parameterType="QueryAttr" resultType="Long">
 	select count(*) as count 
 	from jnl10_acnt 
 	where 1=1
 	<include refid="whereQueryAttr"/>
-	<if test="pageAttr != null ">
-	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
-	</if>   
-	
 	</select>
+	
+	<select id="selectOne" parameterType="Jnl10Acnt" resultType="Jnl10Acnt">
+	select jnl10_acnt_cd as jnl10AcntCd
+			,jnl10_acnt_nm as jnl10AcntNm
+			,jnl10_parent_cd as jnl10ParentCd
+			, jnl10_acnt_attr_cd as jnl10AcntAttrCd
+			, jnl10_drcr_type as jnl10DrcrType
+			, jnl10_slip_yn as jnl10SlipYn
+			, jnl10_use_yn as jnl10UseYn
+			, jnl10_drcr_type_Nm as jnl10DrcrTypeNm
+			, jnl10_acnt_attr_Nm as jnl10AcntAttrNm
+	from (select jnl10_acnt.* , f_com_nm('DrcrType', jnl10_drcr_type) as jnl10_drcr_type_Nm 
+			,f_com_nm('AcntAttrCode',jnl10_acnt_attr_cd) as jnl10_acnt_attr_Nm from jnl10_acnt)
+	where jnl10_acnt_cd = #{jnl10AcntCd}
+	</select>
+	
+	<insert id="insert" parameterType="Jnl10Acnt">
+	insert into jnl10_acnt
+	(jnl10_acnt_cd, jnl10_acnt_nm, jnl10_parent_cd, jnl10_acnt_attr_cd
+	,	jnl10_drcr_type, jnl10_slip_yn, jnl10_use_yn)
+	values(#{jnl10AcntCd},#{jnl10AcntNm},#{jnl10ParentCd},#{jnl10AcntAttrCd}
+		,#{jnl10DrcrType},#{jnl10SlipYn},#{jnl10UseYn})
+	</insert>
+	
+	<update id="update" parameterType="Jnl10Acnt">
+	update jnl10_acnt set
+	jnl10_acnt_nm = #{jnl10AcntNm},jnl10_parent_cd = #{jnl10ParentCd},jnl10_acnt_attr_cd = #{jnl10AcntAttrCd}
+	,jnl10_drcr_type = #{jnl10DrcrType},jnl10_slip_yn = #{jnl10SlipYn},jnl10_use_yn = #{jnl10UseYn}
+	where jnl10_acnt_cd = #{jnl10AcntCd}
+	</update>
+	
+	<delete id="delete" parameterType="String">
+	delete from jnl10_acnt 
+	where jnl10_acnt_cd = #{jnl10AcntCd}
+	</delete>
+	
 	</mapper>

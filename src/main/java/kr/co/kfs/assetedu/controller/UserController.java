@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,9 +53,11 @@ public class UserController {
 		
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText", searchText);
+		
 		Long totalItemCount = sys01UserService.selectCount(queryAttr);
 		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
 		queryAttr.put("pageAttr", pageAttr);
+		
 		List<Sys01User> list =sys01UserService.selectList(queryAttr);
 		model.addAttribute("user", list);
 		model.addAttribute("pageAttr", pageAttr);
