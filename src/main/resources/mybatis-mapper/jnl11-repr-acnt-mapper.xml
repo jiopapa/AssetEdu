@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Jnl11ReprAcntRepository">
+<sql id="whereQueryAttr">
+<!-- 검색 조건 (QueryAttr) -->
+	<if test = "jnl11_repr_acnt_cd != null and jnl11_repr_acnt_cd != '' ">
+	and jnl11_repr_acnt_cd = #{jnl11ReprAcntCd}
+	</if>
+	
+	<if test = "jnl11_repr_acnt_nm != null and jnl11_repr_acnt_nm != '' ">
+	and jnl11_repr_acnt_nm = #{jnl11ReprAcntNm}
+	</if>
+
+	<if test = "searchText != null and searchText != ''">
+	and upper(concat(jnl11_repr_acnt_cd, ' ', jnl11_repr_acnt_nm)) like upper(concat('%', #{searchText}, '%'))
+	</if>
+</sql>
+	
+	<select id="selectList" parameterType="QueryAttr" resultType="Jnl11ReprAcnt">
+	SELECT
+    jnl11_repr_acnt_cd AS jnl11ReprAcntCd
+    ,	jnl11_repr_acnt_nm AS jnl11ReprAcntNm
+    ,	jnl11_acnt_attribute_cd AS jnl11AcntAttributeCd
+    ,	f_com_nm('AcntAttrCode', jnl11_acnt_attribute_cd) AS jnl11AcntAttributeNm
+    ,	jnl11_tgt_repr_acnt_cd AS jnl11TgtReprAcntCd
+    ,	(SELECT jnl11_repr_acnt_nm FROM edu.jnl11_repr_acnt WHERE jnl11_repr_acnt_cd = A.jnl11_tgt_repr_acnt_cd) AS jnl11TgtReprAcntNm
+	from
+    jnl11_repr_acnt A
+    where 1=1
+	<include refid="whereQueryAttr"/>
+	<if test="pageAttr != null and pageAttr.offset != null">
+	      	OFFSET #{pageAttr.offset}
+	</if>   
+	<if test="pageAttr != null and pageAttr.limit != null">
+		 	LIMIT #{pageAttr.limit}
+	</if>
+	</select>
+	
+	<select id="selectCount" parameterType="QueryAttr"	resultType="Long">
+	select count(*) as count 
+	from jnl11_repr_acnt 
+	where 1=1
+	<include refid="whereQueryAttr"/>
+	</select>
+	
+	<select id="selectOne" parameterType="Jnl11ReprAcnt" resultType="Jnl11ReprAcnt">
+	SELECT
+	jnl11_repr_acnt_cd as jnl11ReprAcntCd
+ 	,jnl11_repr_acnt_nm AS jnl11ReprAcntNm
+    ,	jnl11_acnt_attribute_cd AS jnl11AcntAttributeCd
+    ,	jnl11_tgt_repr_acnt_cd AS jnl11TgtReprAcntCd
+    ,	f_com_nm('AcntAttrCode', jnl11_acnt_attribute_cd) AS jnl11_acnt_attribute_Nm
+    ,	(SELECT jnl11_repr_acnt_nm FROM jnl11_repr_acnt WHERE jnl11_repr_acnt_cd = A.jnl11_tgt_repr_acnt_cd) AS jnl11TgtReprAcntNm
+	FROM
+    jnl11_repr_acnt A
+    where 1=1
+    AND  jnl11_repr_acnt_cd = #{jnl11ReprAcntCd}
+	</select>
+
+	<insert id="insert" parameterType="Jnl11ReprAcnt">
+	insert into jnl11_repr_acnt
+	(jnl11_repr_acnt_cd, jnl11_repr_acnt_nm, jnl11_acnt_attribute_cd
+	,	jnl11_tgt_repr_acnt_cd )
+	values ( #{jnl11ReprAcntCd}, #{jnl11ReprAcntNm}
+	,	#{jnl11AcntAttributeCd}, #{jnl11TgtReprAcntCd} )
+	</insert>
+	
+	<update id="update" parameterType="Jnl11ReprAcnt">
+	update jnl11_repr_acnt set jnl11_repr_acnt_nm = #{jnl11ReprAcntNm}, jnl11_acnt_attribute_cd = #{jnl11AcntAttributeCd}
+								,	jnl11_tgt_repr_acnt_cd = #{jnl11TgtReprAcntCd} 
+	where 	jnl11_repr_acnt_cd = #{jnl11ReprAcntCd}						
+	</update>
+
+	<delete id="delete" parameterType="Jnl11ReprAcnt">
+	delete from  jnl11_repr_acnt
+	where jnl11_repr_acnt_cd = #{jnl11ReprAcntCd}
+	</delete>
+	
+
+
+
+
+</mapper>

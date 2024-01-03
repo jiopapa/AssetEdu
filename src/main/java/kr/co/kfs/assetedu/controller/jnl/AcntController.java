@@ -1,4 +1,4 @@
-package kr.co.kfs.assetedu.controller;
+package kr.co.kfs.assetedu.controller.jnl;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -35,11 +35,10 @@ public class AcntController {
 	Com02CodeService com02CodeService;
 	
 	@GetMapping("list")
-	public String list(Model model, String searchText
-			, @RequestParam(value = "pageSize", defaultValue ="10" ,required = false) Integer pageSize
-			,@RequestParam(value = "currentPageNumber",defaultValue = "1" ,required = false) Integer currentPageNumber
-	) {
-		
+	public String list(String searchText
+			, @RequestParam(value="pageSize", defaultValue="10", required=false) Integer pageSize
+			, @RequestParam(value="currentPageNo" ,defaultValue="1", required = false) Integer currentPageNo
+			, Model model) {
 		log.debug("계정과목 리스트");
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText",searchText);
@@ -47,7 +46,7 @@ public class AcntController {
 		com02CodeService.codeList(searchText);
 		
 		Long totalItemCount = jnl10AcntService.selectCount(queryAttr);
-		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNumber);
+		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
 		queryAttr.put("pageAttr", pageAttr);
 		log.debug("pageAttr : {} " ,pageAttr);
 		log.debug("pageAttr : {} " ,pageAttr.getOffset());
@@ -126,4 +125,5 @@ public class AcntController {
 		log.debug("삭제된 계정과목 : {} ", deleteCount);
 		return "redirect:/jnl/acnt/list";
 	}
+	
 }

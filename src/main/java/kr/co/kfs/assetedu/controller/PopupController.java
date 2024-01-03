@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Fnd01Fund;
 import kr.co.kfs.assetedu.model.Jnl10Acnt;
+import kr.co.kfs.assetedu.model.Jnl11ReprAcnt;
 import kr.co.kfs.assetedu.model.PageAttr;
 import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
 import kr.co.kfs.assetedu.service.Fnd01FundService;
 import kr.co.kfs.assetedu.service.Jnl10AcntService;
+import kr.co.kfs.assetedu.service.Jnl11ReprAcntService;
 import kr.co.kfs.assetedu.service.Sys01UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,7 +42,10 @@ public class PopupController {
 	
 	@Autowired
 	Jnl10AcntService jnl10AcntService;
-
+	
+	@Autowired
+	Jnl11ReprAcntService jnl11ReprAcntService;
+	
 	@GetMapping("corp")
 	public String corp(String searchText
 			,
@@ -105,7 +110,26 @@ public class PopupController {
 		model.addAttribute("searchText", searchText);
 		return "/popup/popup_jnl_acnt";
 	}
-
+	
+	@GetMapping("jnl/repr-anct")
+	public String reprAcnt(String searchText 
+							,@RequestParam(value="pageSize", defaultValue= "10", required=false) Integer pageSize
+							,@RequestParam(value="currentPageNumber", defaultValue="1", required= false) Integer currentPageNumber
+							,@RequestParam(value="openerCdId") String openerCdId
+							,@RequestParam(value="openerNmId") String openerNmId
+							,Model model) {
+		QueryAttr queryAttr = new QueryAttr();
+		queryAttr.put("searchText",searchText);
+		
+		long totalItemCount = jnl10AcntService.selectCount(queryAttr);
+		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNumber);
+		queryAttr.put("pageAttr", pageAttr);
+		
+		List<Jnl11ReprAcnt> list = jnl11ReprAcntService.selectList(queryAttr);
+		model.addAttribute("searchText", searchText);
+		model.addAttribute("list", list);
+		return "/popup/popup_jnl_repr_acnt";
+	}
 /*	@GetMapping("insert")
 	public String insert(Model model) {
 		log.debug("종목정보 입력페이지");

@@ -12,7 +12,7 @@
 <!-- =================================================== -->
 <jsp:include page="../../common/meta_css.jsp" flush="false" />
 <!-- =================================================== -->
-<title><c:out value="${pageTitle}" default="계정과목-리스트" /></title>
+<title><c:out value="${pageTitle}" default="대표계정코드-리스트" /></title>
 </head>
 <style>
 #frDate, #toDate {
@@ -30,32 +30,27 @@
 <!-- =================================================== -->
 <jsp:include page="../../common/header.jsp" flush="false" />
 <!-- =================================================== -->
-<c:set var="baseUrl" value="/jnl/acnt"/>
+<c:set var="baseUrl" value="/jnl/repr-acnt"/>
 <main class="container mx-3 my-3">
 
-	<h2><i class="fa-solid fa-cube my-3"></i> 계정과목 관리</h2>
-<form id="form1" action="/jnl/acnt/list" method="GET">
+	<h2><i class="fa-solid fa-cube my-3"></i> 대표계정코드 관리</h2>
+
 	<div class="container-lg p-3 border border-2 rounded-1">
- 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
-    	<input type="hidden" name="currentPageNo" value="${pageAttr.currentPageNumber }"/>
-		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(계정코드/계정과목)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
+		<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(계정코드/대표계정코드)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
 		<a class="btn d-inline align-middle btn-primary btnRetrieve"><i class="fa-solid fa-search"></i> 조회</a>
         <a class="btn d-inline align-middle btn-secondary btnInit"><i class="fa-solid fa-backspace"></i> 초기화</a>
-        <a class="btn d-inline align-middle btn-success btnInsert" href="/jnl/acnt/insert"><i class="fa-solid fa-backspace"></i> 등록</a>
-        <a class="btn d-inline align-middle btn-warning btnExcel"  data-table-id="table1" data-excel-name="acnt" ><i class="fa-solid fa-table"></i> 엑셀</a>
+        <a class="btn d-inline align-middle btn-success btnInsert" href="${baseUrl }/insert"><i class="fa-solid fa-backspace"></i> 등록</a>
 	</div>
-</form>
-	<table class="table table-hover table-sm mainTable mt-3" style="font-size:small" id="table1">
+
+	<table class="table table-hover table-sm mt-3 mainTable" style="font-size:small">
 	  <thead class="table-light">
-	    <tr class="text-center">
+	    <tr class="text-center align-middle">
 	      <th scope="col" style="width:70px">No</th>
-	      <th scope="col" style="width:100px">계정코드</th>
-	      <th scope="col">계정과목</th>
-	      <th scope="col">상위계정과목</th>
+	      <th scope="col" style="width:100px">대표계정코드</th>
+	      <th scope="col">대표계정코드명</th>
 	      <th scope="col" style="width:100px">속성</th>
-	      <th scope="col" style="width:100px">차대</th>
-	      <th scope="col" style="width:100px">전표생성</th>
-	      <th scope="col" style="width:100px">사용</th>
+	      <th scope="col" style="width:150px">상대대표계정코드</th>
+          <th scope="col">상대대표계정코드명</th>
 	      <th scope="col"></th>
 	    </tr>
 	  </thead>
@@ -63,21 +58,19 @@
 	  	<c:forEach var="item" items="${list}" varStatus="status">
 		    <tr class="align-middle">
 		      <td scope="col" class="text-center">${((pageAttr.currentPageNumber-1)*pageAttr.pageSize)+status.count}</td>
-		      <td scope="col" class="text-center"><c:out value="${item.jnl10AcntCd }"/></td>
-		      <td scope="col"><c:out value="${item.jnl10AcntNm }"/></td>
-		      <td scope="col" class="text-center" ><c:out value="${item.jnl10ParentCd }"/></td>
-		      <td scope="col" class="text-center" ><c:out value="${item.jnl10AcntAttrNm }"/></td>
-		      <td scope="col" class="text-center" ><c:out value="${item.jnl10DrcrTypeNm }"/></td>
-		      <td scope="col" class="text-center" ><c:out value="${item.jnl10SlipYn }"/></td>
-		      <td scope="col" class="text-center" ><c:out value="${item.jnl10UseYn }"/></td>
+		      <td scope="col" class="text-center"><c:out value="${item.jnl11ReprAcntCd }"/></td>
+		      <td scope="col" class="text-center"><c:out value="${item.jnl11ReprAcntNm }"/></td>
+		      <td scope="col" class="text-center"><c:out value="${item.jnl11AcntAttributeNm }"/></td>
+		      <td scope="col" class="text-center"><c:out value="${item.jnl11TgtReprAcntCd }"/></td>
+              <td scope="col" class="text-center"><c:out value="${item.jnl11TgtReprAcntNm }"/></td>
 		      <td scope="col" class="text-end">
-			      <button class="btn btn-primary btn-sm btnModify" data-id="${item.jnl10AcntCd }"><span><i class="fa-regular fa-pen-to-square"></i></span> 수정</button>
-			      <button class="btn btn-danger btn-sm btnDelete" data-id="${item.jnl10AcntCd}" data-nm="${item.jnl10AcntNm }"><span><i class="fa-regular fa-trash-can"></i></span> 삭제</button>		      
+			      <button class="btn btn-primary btn-sm btnModify" data-id="${item.jnl11ReprAcntCd }"><span><i class="fa-regular fa-pen-to-square"></i></span> 수정</button>
+			      <button class="btn btn-danger btn-sm btnDelete" data-id="${item.jnl11ReprAcntCd}" data-nm="${item.jnl11ReprAcntNm }"><span><i class="fa-regular fa-trash-can"></i></span> 삭제</button>		      
 		      </td>
 		    </tr>
 	    </c:forEach>
 	  </tbody>
-	</table>   
+	</table>
 	<div class="row "> 
 			<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
 			<div class="col-4 text-end mt-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
@@ -85,8 +78,12 @@
 		 <div class="row ">
    		   	 <div class="text-end mt-0"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
          </div>
-
-
+	
+	 <form id="form1" action="/jnl/repr-acnt/list" method="GET">
+ 		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
+    	<input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/>
+		</form>
+  
 </main>
 <!-- =================================================== -->
 <jsp:include page="../../common/footer.jsp" flush="false" />
@@ -94,8 +91,8 @@
 <script type="text/javascript" src="/js/input-format.js"></script>
 <script>
 $(document).ready(function () {
-	console.log('acnt 계정과목 리스트..');
-	const baseUrl = "/jnl/acnt";
+	console.log('acnt 대표계정코드 리스트..');
+	const baseUrl = "/jnl/repr-acnt";
 	//화면뜨면 검색창에 포커스 
 	$("#searchText").focus();
 	
@@ -130,12 +127,11 @@ $(document).ready(function () {
 	//수정 
 	$('.btnModify').on('click', function(e){
  		e.stopPropagation();
-
  		var cd = $(this).data('id');
  		var nm = $(this).data('nm');
  		var msg = nm + "(" + cd + ")";
  		var url = baseUrl + "/update/" + cd;
- 		AssetUtil.submitGet(url);
+		AssetUtil.submitGet(url);
 	});	
 	//삭제
 	$('.btnDelete').on('click', function(e){
@@ -143,35 +139,30 @@ $(document).ready(function () {
  		var cd = $(this).data('id');
  		var nm = $(this).data('nm');
  		var msg = nm + "(" + cd + ")";
- 		//debugger;
+ 		debugger;
  		var url = baseUrl + '/delete/' +cd;
  		if (confirm(msg + ' 를 삭제하시겠습니까?')){
  			
 			AssetUtil.submitGet(url);
  		}		
 	});
-	//엑셀
-	$('.btnExcel').on('click',function(e){
-		e.stopPropagation(); 
-		var tableName = $(this).data('table-id');
-		var excelName = $(this).data('excel-name') + "_" +AssetUtil.dateFormat("yyyy_MM_dd_HHmmss", new Date());
-		const table = $('#'+tableName).get(0);
-		const workbook = XLSX.utils.table_to_book(table, { sheet: excelName });
-		XLSX.writeFile(workbook, excelName +'.xlsx'); 			
-	});
 }); 
 </script>
-<script> // 페이징처리
+<script>
 function go(pageNo){
 	var searchText = $('#searchText').val();
 	var pageInfo = $('#pageInfo').val();
-	AssetUtil.submitGet ('/jnl/acnt/list', {searchText: searchText, currentPageNo : pageNo,	 pageSize: pageInfo });
+	console.log("goPage");
+	AssetUtil.submitGet('/jnl/repr-acnt/list', {searchText: searchText, currentPageNo : pageNo, pageSize: pageInfo} );
 }
-	$(function() {
+</script>	
+<script>
+  $(function() {
     $("#pageInfo").on("change", function() {
       var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
       var searchText = $('#searchText').val();
-      AssetUtil.submitGet('/jnl/acnt/list',{searchText: searchText, pageSize : pageInfo });
+      AssetUtil.submitGet('/jnl/repr-acnt/list', 
+    { searchText: searchText, pageSize: pageInfo });
     });
   });
 </script>
