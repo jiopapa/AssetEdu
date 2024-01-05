@@ -11,4 +11,5 @@ public interface Opr01ContRepository {
 	
 	
 	int insert(Opr01Cont cont);
+	int update(Opr01Cont cont);
 }

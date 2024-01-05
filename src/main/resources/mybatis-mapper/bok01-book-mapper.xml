@@ -5,6 +5,13 @@
    <select id="selectList" parameterType="QueryAttr" resultType="Bok01Book">
    
    </select>
+   
+    <select id="selectByBookId" parameterType="QueryAttr" resultType="Bok01Book">
+   	SELECT *
+   	FROM 	bok01_book
+   	WHERE 	bok01_book_id = #{bookId}
+   	AND 	bok01_hold_date = #{holdDate}
+   </select>
     
     
     
@@ -16,10 +23,30 @@
 			AND		bok01_item_cd = #{itemCode}
    </select>
    
+     <select id="getLastHoldDate" resultType="String">
+      SELECT MAX(bok01_hold_date) as bok01HoldDate
+      FROM bok01_book
+   </select>
    
+   <insert id="insertByDayBefor" parameterType="QueryAttr">
+   		INSERT 
+   		INTO bok01_book
+   		SELECT bok01_book_id
+				,#{holdDate}
+				,bok01_fund_cd
+				,bok01_item_cd
+				,bok01_hold_qty
+				,bok01_pur_amt
+				,bok01_book_amt
+				,bok01_eval_amt
+				,bok01_eval_pl
+				bok01_eval_yn
+		FROM bok01_book
+		WHERE bok01_hold_date = f_get_date(#{holdDate}, -1) 
+		AND		bok01_hold_qty <![CDATA[>]]>0
+   </insert>
    
-   
-   <insert id="insert" parameterType="Opr01Cont">
+   <insert id="insert" parameterType="Bok01Book">
    INSERT 
    INTO bok01_book
    SELECT 	 		
@@ -34,4 +61,34 @@
 				,#{bok01EvalPl}
 				,#{bok01EvalYn}
    </insert>
+   
+   <update id="upsert" parameterType="Bok01Book">
+   	WITH upsert AS (UPDATE bok01_book 
+   					SET
+							 bok01_fund_cd      =	#{bok01FundCd}
+							,bok01_item_cd      =	#{bok01ItemCd}
+							,bok01_hold_qty     =	#{bok01HoldQty}
+							,bok01_pur_amt      =	#{bok01PurAmt}
+							,bok01_book_amt     =	#{bok01BookAmt}
+							,bok01_eval_amt     =	#{bok01EvalAmt}
+							,bok01_eval_pl      =	#{bok01EvalPl}
+							,bok01_eval_yn      =	#{bok01EvalYn}
+   					WHERE    bok01_book_id 		=  #{bok01BookId}
+   					AND      bok01_hold_date    =	#{bok01HoldDate}
+   					RETURNING * 
+   		) INSERT
+   			INTO bok01_book
+   			SELECT #{bok01FundCd}    
+				,	#{bok01ItemCd}    
+				,	#{bok01HoldQty}   
+				,	#{bok01PurAmt}    
+				,	#{bok01BookAmt}   
+				,	#{bok01EvalAmt}   
+				,	#{bok01EvalPl}    
+				,	#{bok01EvalYn}    
+				,	#{bok01BookId}     
+				,	#{bok01HoldDate}  
+			WHERE NOT EXISTS (SELECT * FROM upsert )
+					   
+   </update>
    </mapper>

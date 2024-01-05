@@ -123,7 +123,9 @@ public class TrMapController {
 	@ResponseBody
 	@PostMapping("jnl13insert")
 	public String insert(@Valid @RequestBody Jnl13TrMap jnl13TrMap) {
+		log.debug("jnl : {} ", jnl13TrMap);
 		Jnl13TrMap checkJnl13 = jnl13TrMapService.selectOne(jnl13TrMap);
+		
 		ApiData apiData = new ApiData();
 		if(checkJnl13 != null ) {
 			apiData.put("result", "False");

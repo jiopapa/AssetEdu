@@ -30,7 +30,7 @@
 		FROM 
 			jnl13_tr_map
 		
-			1=1
+		where	1=1
 		<include refid="whereQueryAttr" />
 	</select>
 
@@ -38,7 +38,7 @@
 	<select id="selectOne" parameterType="Jnl13TrMap"
 		resultType="Jnl13TrMap">
 		SELECT 
-			jnl13_tr_cd as jnl13TrCd, jnl13_seq as jnl13Seq
+				jnl13_tr_cd as jnl13TrCd, jnl13_seq as jnl13Seq
 			,	jnl13_repr_acnt_cd as jnl13ReprAcntCd
 			, 	jnl13_drcr_type as jnl13DrcrType, jnl13_formula as jnl13Formula
 		FROM

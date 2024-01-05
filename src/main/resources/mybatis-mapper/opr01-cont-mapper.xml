@@ -67,4 +67,27 @@
 					,#{opr01BookAmt}
 					,#{opr01StatusCd}
    </insert>
+   
+   <update id="update" parameterType="Opr01Cont">
+   	UPDATE opr01_cont
+   	SET 
+		  opr01_fund_cd      =    #{opr01FundCd}          
+		, opr01_item_cd      =    #{opr01ItemCd}          
+		, opr01_cont_date    =    #{opr01ContDate}        
+		, opr01_tr_cd        =    #{opr01TrCd}            
+		, opr01_qty          =    #{opr01Qty}             
+		, opr01_price        =    #{opr01Pric}            
+		, opr01_cont_amt     =    #{opr01ContAmt}         
+		, opr01_tr_pl        =    #{opr01TrPl}            
+		, opr01_fee          =    #{opr01Fee}             
+		, opr01_tax          =    #{opr01Tax}             
+		, opr01_settle_amt   =    #{opr01SettleAmt}       
+		, opr01_settle_date  =    #{opr01SettleDate}      
+		, opr01_tr_co_cd     =    #{opr01TrCoCd}          
+		, opr01_book_id      =    #{opr01BookId}          
+		, opr01_book_amt     =    #{opr01BookAmt}         
+		, opr01_status_cd    =    #{opr01StatusCd}        
+   WHERE
+   		 opr01_cont_id       =    #{opr01ContId}				
+   </update>
    </mapper>

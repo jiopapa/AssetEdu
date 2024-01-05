@@ -1,65 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.kfs.assetedu.repository.Jnl12TrRepository">
-<sql id="whereQueryAttr">
-<!-- 검색 조건 (QueryAttr) -->
-<if test= "jnl12TrCd != null and jnl12TrCd != '' ">
-and jnl12_tr_cd = #{jnl12TrCd}
-</if>
-<if test= "jnl12TrNm != null and jnl12TrNm != '' ">
-and jnl12_tr_nm = #{jnl12TrNm}
-</if>
-<if test="jnl12InOutType != null and jnl12InOutType != '' ">
-and jnl12_in_out_type = #{jnl12InOutType}
-</if>
-<if test="jnl12UsePageType != null and jnl12UsePageType != '' ">
-and jnl12_use_page_type = #{jnl12UsePageType}
-</if>
-<if test = "jnl12UseYn != null and jnl12UseYn != '' ">
-and jnl12_use_yn = #{jnl12UseYn}
-</if>
-<if test = "searchText != null and searchText != '' ">
-and upper(concat(jnl12_tr_cd , ' ' , jnl12_tr_nm)) like upper(concat('%', searchText, '%'))
-</if>
-</sql>
+<mapper
+	namespace="kr.co.kfs.assetedu.repository.Jnl12TrRepository">
+	<sql id="whereQueryAttr">
+		<!-- 검색 조건 (QueryAttr) -->
+		<if test="jnl12TrCd != null and jnl12TrCd != '' ">
+			and jnl12_tr_cd = #{jnl12TrCd}
+		</if>
+		<if test="jnl12TrNm != null and jnl12TrNm != '' ">
+			and jnl12_tr_nm = #{jnl12TrNm}
+		</if>
+		<if test="jnl12InOutType != null and jnl12InOutType != '' ">
+			and jnl12_in_out_type = #{jnl12InOutType}
+		</if>
+		<if test="jnl12UsePageType != null and jnl12UsePageType != '' ">
+			and jnl12_use_page_type = #{jnl12UsePageType}
+		</if>
+		<if test="jnl12UseYn != null and jnl12UseYn != '' ">
+			and jnl12_use_yn = #{jnl12UseYn}
+		</if>
+		<if test="searchText != null and searchText != '' ">
+			and upper(concat(jnl12_tr_cd , ' ' , jnl12_tr_nm)) like
+			upper(concat('%', searchText, '%'))
+		</if>
+	</sql>
 
-<select id="selectList" parameterType="QueryAttr" resultType="Jnl12Tr">
-select jnl12_tr_cd as jnl12TrCd, jnl12_tr_nm as jnl12TrNm, jnl12_in_out_type as jnl12InOutType
-	,	jnl12_use_page_type as jnl12UsePageType, jnl12_use_yn as jnl12UseYn
-	, f_com_nm('BookInOutType', jnl12_in_out_type) AS jnl12InOutTypeNm
-from jnl12_tr
-where 1=1
-<include refid="whereQueryAttr"/>
-</select>
-	
-<select id="selectOne" parameterType="Jnl12Tr" resultType="Jnl12Tr">
-select jnl12_tr_cd as jnl12TrCd, jnl12_tr_nm as jnl12TrNm, jnl12_in_out_type as jnl12InOutType
-	,	jnl12_use_page_type as jnl12UsePageType, jnl12_use_yn as jnl12UseYn
-	, f_com_nm('BookInOutType', jnl12_in_out_type) AS jnl12InOutTypeNm
-from jnl12_tr
-where jnl12_tr_cd =#{jnl12TrCd}
-</select>
+	<select id="selectList" parameterType="QueryAttr"
+		resultType="Jnl12Tr">
+		SELECT
+		jnl12_tr_cd AS jnl12TrCd
+		, jnl12_tr_nm AS jnl12TrNm
+		, jnl12_in_out_type AS jnl12InOutType
+		, jnl12_use_page_type AS jnl12UsePageType
+		, jnl12_use_yn AS jnl12UseYn
+		, f_com_nm('BookInOutType', jnl12_in_out_type) AS jnl12InOutTypeNm
+		from jnl12_tr
+		where 1=1
+		<include refid="whereQueryAttr" />
+	</select>
 
-<insert id="insert" parameterType="Jnl12Tr">
-insert into jnl12_tr
-(jnl12_tr_cd, jnl12_tr_nm, jnl12_in_out_type, jnl12_use_page_type, jnl12_use_yn)
-values 
-(#{jnl12TrCd},#{jnl12TrNm},#{jnl12InOutType}
-,#{jnl12UsePageType},#{jnl12UseYn})
-</insert>
+	<select id="selectByTrCd" parameterType="String" resultType="Jnl12Tr">
+	SELECT  *
+	FROM	jnl12_tr
+	WHERE	jnl12_tr_cd = #{trCd}
+	</select>
 
-<update id="update" parameterType="Jnl12Tr">
-update jnl12_tr set
-jnl12_tr_nm = #{jnl12TrNm}, jnl12_in_out_type = #{jnl12InOutType}, jnl12_use_page_type = #{jnl12UsePageType}
-,jnl12_tr_cd = #{jnl12UseYn}
-where jnl12_tr_cd = #{jnl12TrCd}
+	<select id="selectOne" parameterType="Jnl12Tr"
+		resultType="Jnl12Tr">
+		select jnl12_tr_cd as jnl12TrCd, jnl12_tr_nm as jnl12TrNm, jnl12_in_out_type
+		as jnl12InOutType
+		, jnl12_use_page_type as jnl12UsePageType, jnl12_use_yn as jnl12UseYn
+		, f_com_nm('BookInOutType', jnl12_in_out_type) AS jnl12InOutTypeNm
+		from jnl12_tr
+		where jnl12_tr_cd =#{jnl12TrCd}
+	</select>
 
-</update>
-<delete id="delete" parameterType="String">
-delete from jnl12_tr
-where jnl12_tr_cd = #{jnl12TrCd}
-</delete>
+	<insert id="insert" parameterType="Jnl12Tr">
+		insert into jnl12_tr
+		(jnl12_tr_cd, jnl12_tr_nm, jnl12_in_out_type, jnl12_use_page_type, jnl12_use_yn)
+		values
+		(#{jnl12TrCd},#{jnl12TrNm},#{jnl12InOutType}
+		,#{jnl12UsePageType},#{jnl12UseYn})
+	</insert>
+
+	<update id="update" parameterType="Jnl12Tr">
+		update jnl12_tr set
+		jnl12_tr_nm = #{jnl12TrNm}, jnl12_in_out_type = #{jnl12InOutType},
+		jnl12_use_page_type = #{jnl12UsePageType}
+		,jnl12_tr_cd = #{jnl12UseYn}
+		where jnl12_tr_cd = #{jnl12TrCd}
+
+	</update>
+	<delete id="delete" parameterType="String">
+		delete from jnl12_tr
+		where jnl12_tr_cd = #{jnl12TrCd}
+	</delete>
 
 
 </mapper>

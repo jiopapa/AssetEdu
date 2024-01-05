@@ -28,6 +28,7 @@ public class Jnl13TrMapService {
 		return jnl13TrMapRepository.insert(trmap);
 	}
 	public Jnl13TrMap selectOne(Jnl13TrMap trmap) {
+		trmap.setJnl13TrCd(null);
 		return jnl13TrMapRepository.selectOne(trmap);
 	}
 

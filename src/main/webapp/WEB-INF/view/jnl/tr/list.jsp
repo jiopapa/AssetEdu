@@ -133,7 +133,7 @@
   </div>
 </div>
 
-<!-- 상세코드추가화면 -->
+<!-- Jnl13Tr 추가화면 -->
 <div class="modal fade" id="newJnl13Cd"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 	<div class="modal-content">
@@ -145,7 +145,7 @@
 			</div>
 			<div class="modal-body">
 	          <div class="mb-3">
-	            <input type="hidden" id="jnl13TrCd" name="jnl13TrCd"/>
+	            <input type="hidden" id="jnl13TrCd" name="jnl13TrCd" value="${item.jnl12TrCd }" />
 	          </div>	
 	          <div class="mb-3">
 	            <label for="jnl13Seq" class="form-label fw-bold" >순번</label>
@@ -154,8 +154,8 @@
 	          <div class="mb-3">
 	            <label for="jnl13ReprAcntCd" class="form-label fw-bold">대표계정코드</label>
      			<button class="btn btn-outline-secondary btn-sm text-warning bg-secondary" type="button" id="jnl13ReprAcntCdPopup"><i class="fa-solid fa-search"></i></button>
-	            <input type="hidden" id="jnl13ReprAcntCd" name="jnl13ReprAcntCd" value="" />
-	            <input type="text" id="jnl13ReprAcntNm" name="jnl13ReprAcntNm" value=""  readonly="true" style="background-color:#F5F5F5"/>
+	            <input type="hidden" id="jnl13ReprAcntCd" name="jnl13ReprAcntCd"  />
+	            <input type="text" id="jnl13ReprAcntNm" name="jnl13ReprAcntNm"   readonly="true" style="background-color:#F5F5F5"/>
 	          </div>
 	           <div class="mb-3">
 	            <label for="jnl13DrcrType" class="form-label align-top fw-bold">차대구분</label>
@@ -166,8 +166,8 @@
     			</select>
 	          </div>
 	          <div class="mb-3 align-middle">
-	            <label for="jnl13Fomula" class="form-label fw-bold">계산식</label>&nbsp;
-	           	<input type="text" class="form-control" name="jnl13Fomula"   />
+	            <label for="jnl13Formula" class="form-label fw-bold">계산식</label>&nbsp;
+	           	<input type="text" class="form-control" name="jnl13Formula"   />
 	          </div>
 			</div>
 			<div class="modal-footer d-flex justify-content-center">
@@ -370,11 +370,11 @@ $(document).ready(function () {
         var $modal = $('#newJnl13Cd');
         $modal.find('#formNewJnl13_mode').val('insert');
         $modal.find('.modal-title').html('<b>[</b>' + comCd + ': 거래코드 <b>] 분개매핑 추가</b>');
-        $('#formNewJnl13 input[name=jnl13TrCd]').val(jnl13TrCd);
+        $('#formNewJnl13 input[name=jnl13TrCd]').val(comCd);
+        
 
         //각 필드 초기화
         var $tr = $(this).closest('tr');
-        $modal.find('input[name=jnl13TrCd]').val('').attr('readonly', false);
         $modal.find('input[name=jnl13Seq]').val('');
         $modal.find('input[name=jnl13ReprAcntCd]').val('');
         $modal.find('input[name=jnl13DrcrType]').val('');
@@ -418,7 +418,7 @@ $(document).ready(function () {
 		$modal.modal('show');
  	});
  	
- 	//상세코드 삭제
+ 	//Jnl13 삭제
  	$('#detail-code-area').on('click', '.btnDetailDelete', function(e){
  		e.stopPropagation();
  		var comCd = $('#detail-code-area').find('#selectedComCd').val();
@@ -431,9 +431,8 @@ $(document).ready(function () {
  		}
  	});
 
- 	//상세코드 추가 또는 수정 submit
+ 	//Jnl13 추가 또는 수정 submit
  	$('#btnInsertJnl13TrCd').on('click', function(){
- 		alert("제출");
  		console.log("제출");
 		var $modal = $('#newJnl13Cd');
 		var $form = $('#formNewJnl13');
@@ -468,7 +467,7 @@ $(document).ready(function () {
  		
  	});
  	
- 	//공통코드가 선택시 상세코드리스트를 테이블로 만들어서 보여준다.
+ 	//jnl12 선택시 jnl13리스트를 테이블로 만들어서 보여준다.
  	function makeTable(response){
  		console.log(response);
  		var rawTemplate = $('#detail-table-template').html();

@@ -24,6 +24,7 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
 import kr.co.kfs.assetedu.service.Opr01ContService;
+import kr.co.kfs.assetedu.servlet.exception.AssetException;
 import kr.co.kfs.assetedu.utils.AssetUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -84,7 +85,6 @@ public class OprController {
 	public String insert(@Valid @ModelAttribute("cont") Opr01Cont cont, BindingResult bindingResult,
 			RedirectAttributes redirectAttr, Model model) throws UnsupportedEncodingException {
 		log.debug("매수운용지시 등록");
-		String msg;
 
 		if (bindingResult.hasErrors()) {
 				model.addAttribute("trCdList", codeService.trCodeList("BUY"));
@@ -92,8 +92,17 @@ public class OprController {
 		}
 		String msg;
 		String resultMsg;
+		
+		try {
 		resultMsg = contService.insert(cont);
-
+		}
+		catch(AssetException e) {
+			resultMsg = e.getMessage();
+		}
+		catch(Exception e) {
+			resultMsg = e.getMessage();
+		}
+		return resultMsg;
 	}
 //
 //	@GetMapping("success")
@@ -106,5 +115,5 @@ public class OprController {
 //		log.debug("기관정보완료 화면");
 //		return "/item/success";
 //	}
-	
+
 	}
