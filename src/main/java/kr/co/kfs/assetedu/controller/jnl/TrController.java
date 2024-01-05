@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/jnl/trmap")
+@RequestMapping("/jnl/trma2p")
 public class TrController {
 	@Autowired
 	Jnl12TrService jnl12TrService;
@@ -42,20 +43,18 @@ public class TrController {
 		com02CodeService.codeList(searchText);
 		List<Jnl12Tr> list = jnl12TrService.selectList(queryAttr);
 		model.addAttribute("list12", list);
-		return "jnl/tr/trList";
+		return "jnl/tr/list";
 		
 	}
 	@ResponseBody
 	@GetMapping("find")
 	public String selectList(@RequestParam(value="jnl12TrCd") String jnl12TrCd ){
 		log.debug("{}",jnl12TrCd );
-		Jnl13TrMap jnl13TrMap = new Jnl13TrMap();
-		jnl13TrMap.setJnl13TrCd(jnl12TrCd);
 		
 		QueryAttr queryAttr = new QueryAttr();
-		queryAttr.putClass(jnl13TrMap);
+		queryAttr.putClass(jnl12TrCd);
 		
-		List<Jnl12Tr> list = jnl13TrMapService.selectList(queryAttr);
+		List<Jnl12Tr> list = jnl12TrService.selectList(queryAttr);
 		
 		ApiData apiData = new ApiData();
 		apiData.put("list",list);
@@ -73,6 +72,28 @@ public class TrController {
 		log.debug("{}",trCodeNm);
 		
 		apiData.put("codeNm", trCodeNm.getJnl12TrNm());
+		
+		String json = apiData.toJson();
+		return json;
+	}
+	@GetMapping("/jnl13/{jnl13TrCd}")
+	public String listJnl13(@PathVariable("jnl13TrCd") String jnl13TrCd) {
+		log.debug("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
+		log.debug("jnl13 리스트  id : {}",jnl13TrCd);
+		log.debug("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
+		Jnl13TrMap jnl13TrMap = new Jnl13TrMap();
+		jnl13TrMap.setJnl13TrCd(jnl13TrCd);
+		QueryAttr queryAttr = new QueryAttr();
+		queryAttr.put("jnl13TrCd", jnl13TrCd);
+		log.debug("queryAttr : {}", queryAttr);
+		log.debug("jnl13TrCd : {}", jnl13TrCd);
+
+		List<Jnl13TrMap> list = jnl13TrMapService.selectList(queryAttr);
+		
+		ApiData apiData = new ApiData();
+		apiData.put("list", list);
+		apiData.put("jnl13TrCd", jnl13TrCd);
+
 		
 		String json = apiData.toJson();
 		return json;

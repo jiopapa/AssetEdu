@@ -101,7 +101,7 @@ $(document).ready(function () {
     
 	//상대 대표계정코드 팝업
     $('.btnPopupParentCode').on('click', function(){
-        var url = '/popup/jnl/repr-anct?openerCdId=jnl11TgtReprAcntCd&openerNmId=jnl11TgtReprAcntNm';
+        var url = '/popup/jnl/repr-acnt?openerCdId=jnl11TgtReprAcntCd&openerNmId=jnl11TgtReprAcntNm';
         var prop = {};
         var width = 720;
         var height = 518;

@@ -25,17 +25,17 @@ public class Jnl12TrService {
 
 	
 	@Transactional
-	public Integer insert(Jnl12Tr tr) {
-		return jnl12TrRepository.insert(tr);
+	public Integer insert(Jnl12Tr jnl12Tr) {
+		return jnl12TrRepository.insert(jnl12Tr);
 	}
-	public Jnl12Tr selectOne(Jnl12Tr tr) {
-		return jnl12TrRepository.selectOne(tr);
+	public Jnl12Tr selectOne(Jnl12Tr jnl12Tr) {
+		return jnl12TrRepository.selectOne(jnl12Tr);
 	}
 
 	
 	@Transactional
-	public Integer update(Jnl12Tr tr) {
-		return jnl12TrRepository.update(tr);
+	public Integer update(Jnl12Tr jnl12Tr) {
+		return jnl12TrRepository.update(jnl12Tr);
 	}
 	@Transactional
 	public Integer delete(String jnl12TrCd) {

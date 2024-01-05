@@ -6,45 +6,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kr.co.kfs.assetedu.model.Jnl11ReprAcnt;
-import kr.co.kfs.assetedu.model.Jnl12Tr;
+import kr.co.kfs.assetedu.model.Jnl13TrMap;
 import kr.co.kfs.assetedu.model.QueryAttr;
-import kr.co.kfs.assetedu.repository.Jnl12TrRepository;
+import kr.co.kfs.assetedu.repository.Jnl13TrMapRepository;
 
 @Service
 public class Jnl13TrMapService {
 	@Autowired
-	Jnl12TrRepository jnl12TrRepository ;
+	Jnl13TrMapRepository jnl13TrMapRepository ;
 	
-	public List<Jnl12Tr> selectList(QueryAttr queryAttr){
-		return jnl12TrRepository.selectList(queryAttr);
+	public List<Jnl13TrMap> selectList(QueryAttr queryAttr){
+		return jnl13TrMapRepository.selectList(queryAttr);
 	}
 	public Long selectCount(QueryAttr queryAttr) {
-		return jnl12TrRepository.selectCount(queryAttr);
+		return jnl13TrMapRepository.selectCount(queryAttr);
 	}
 
 	
 	@Transactional
-	public Integer insert(Jnl12Tr tr) {
-		return jnl12TrRepository.insert(tr);
+	public Integer insert(Jnl13TrMap trmap) {
+		return jnl13TrMapRepository.insert(trmap);
 	}
-	public Jnl12Tr selectOne(Jnl12Tr tr) {
-		return jnl12TrRepository.selectOne(tr);
+	public Jnl13TrMap selectOne(Jnl13TrMap trmap) {
+		return jnl13TrMapRepository.selectOne(trmap);
 	}
 
 	
 	@Transactional
-	public Integer update(Jnl12Tr tr) {
-		return jnl12TrRepository.update(tr);
+	public Integer update(Jnl13TrMap trmap) {
+		return jnl13TrMapRepository.update(trmap);
 	}
 	@Transactional
-	public Integer delete(String jnl12TrCd) {
-		return jnl12TrRepository.delete(jnl12TrCd);
+	public Integer delete(String jnl13TrCd) {
+		return jnl13TrMapRepository.delete(jnl13TrCd);
 	}
-  public Jnl11ReprAcnt selectOne(String jnl12TrCd) {
-	  Jnl12Tr tr = new Jnl12Tr();
-	  tr.setJnl12TrCd(jnl12TrCd);
-		return this.selectOne(jnl12TrCd);
+  public Jnl13TrMap selectOne(String jnl13TrCd) {
+	  Jnl13TrMap tr = new Jnl13TrMap();
+	  tr.setJnl13TrCd(jnl13TrCd);
+		return this.selectOne(jnl13TrCd);
 		}
 		
 	

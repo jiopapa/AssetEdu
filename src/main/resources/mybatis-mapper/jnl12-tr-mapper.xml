@@ -4,19 +4,19 @@
 <mapper namespace="kr.co.kfs.assetedu.repository.Jnl12TrRepository">
 <sql id="whereQueryAttr">
 <!-- 검색 조건 (QueryAttr) -->
-<if test= "jnl12_tr_cd != null and jnl12_tr_cd != '' ">
+<if test= "jnl12TrCd != null and jnl12TrCd != '' ">
 and jnl12_tr_cd = #{jnl12TrCd}
 </if>
-<if test= "jnl12_tr_nm != null and jnl12_tr_nm != '' ">
+<if test= "jnl12TrNm != null and jnl12TrNm != '' ">
 and jnl12_tr_nm = #{jnl12TrNm}
 </if>
-<if test="jnl12_in_out_type != null and jnl12_in_out_type != '' ">
+<if test="jnl12InOutType != null and jnl12InOutType != '' ">
 and jnl12_in_out_type = #{jnl12InOutType}
 </if>
-<if test="jnl12_use_page_type != null and jnl12_use_page_type != '' ">
+<if test="jnl12UsePageType != null and jnl12UsePageType != '' ">
 and jnl12_use_page_type = #{jnl12UsePageType}
 </if>
-<if test = "jnl12_use_yn != null and jnl12_use_yn != '' ">
+<if test = "jnl12UseYn != null and jnl12UseYn != '' ">
 and jnl12_use_yn = #{jnl12UseYn}
 </if>
 <if test = "searchText != null and searchText != '' ">
@@ -39,7 +39,27 @@ select jnl12_tr_cd as jnl12TrCd, jnl12_tr_nm as jnl12TrNm, jnl12_in_out_type as 
 	, f_com_nm('BookInOutType', jnl12_in_out_type) AS jnl12InOutTypeNm
 from jnl12_tr
 where jnl12_tr_cd =#{jnl12TrCd}
-
 </select>
+
+<insert id="insert" parameterType="Jnl12Tr">
+insert into jnl12_tr
+(jnl12_tr_cd, jnl12_tr_nm, jnl12_in_out_type, jnl12_use_page_type, jnl12_use_yn)
+values 
+(#{jnl12TrCd},#{jnl12TrNm},#{jnl12InOutType}
+,#{jnl12UsePageType},#{jnl12UseYn})
+</insert>
+
+<update id="update" parameterType="Jnl12Tr">
+update jnl12_tr set
+jnl12_tr_nm = #{jnl12TrNm}, jnl12_in_out_type = #{jnl12InOutType}, jnl12_use_page_type = #{jnl12UsePageType}
+,jnl12_tr_cd = #{jnl12UseYn}
+where jnl12_tr_cd = #{jnl12TrCd}
+
+</update>
+<delete id="delete" parameterType="String">
+delete from jnl12_tr
+where jnl12_tr_cd = #{jnl12TrCd}
+</delete>
+
 
 </mapper>

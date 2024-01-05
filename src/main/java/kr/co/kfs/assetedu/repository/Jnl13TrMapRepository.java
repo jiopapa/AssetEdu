@@ -4,15 +4,16 @@ import java.util.List;
 
 import kr.co.kfs.assetedu.model.Jnl11ReprAcnt;
 import kr.co.kfs.assetedu.model.Jnl12Tr;
+import kr.co.kfs.assetedu.model.Jnl13TrMap;
 import kr.co.kfs.assetedu.model.QueryAttr;
 
 public interface Jnl13TrMapRepository {
-	List<Jnl12Tr> selectList (QueryAttr queryAttr);
+	List<Jnl13TrMap> selectList (QueryAttr queryAttr);
 	Long selectCount(QueryAttr queryAttr);
-	Jnl12Tr selectOne(Jnl12Tr tr);
+	Jnl13TrMap selectOne(Jnl13TrMap trMap);
 	
 	
-	Integer insert(Jnl12Tr tr);
-	Integer update(Jnl12Tr tr);
-	Integer delete(String jnl12TrCd);
+	Integer insert(Jnl13TrMap trMap);
+	Integer update(Jnl13TrMap trMap);
+	Integer delete(String jnl13TrCd);
 }

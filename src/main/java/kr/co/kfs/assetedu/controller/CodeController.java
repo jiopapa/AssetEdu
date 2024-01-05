@@ -17,8 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.kfs.assetedu.model.ApiData;
 import kr.co.kfs.assetedu.model.Com02Code;
+import kr.co.kfs.assetedu.model.Jnl12Tr;
 import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.service.Com02CodeService;
+import kr.co.kfs.assetedu.service.Jnl12TrService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller

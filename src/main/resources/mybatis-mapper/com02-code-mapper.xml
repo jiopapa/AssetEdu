@@ -62,6 +62,14 @@
 			AND com02_com_cd  = #{com02ComCd}
 	       	AND com02_dtl_cd = #{com02DtlCd}
 	</select>
+	
+	<select id = "selectTrList" parameterType="String" resultType="Com02Code">
+	SELECT 		jnl12_tr_cd AS com02_dtl_cd
+			,	jnl12_tr_nm	AS com02_code_nm
+		FROM jnl12_tr
+		WHERE jnl12_use_page_type = #{trType}
+		AND jnl12_use_yn = 'true'
+	</select>
 	<insert id="insert" parameterType="Com02Code">
 	insert into  com02_code (com02_com_cd, com02_dtl_cd, com02_code_nm, com02_code_type
 				, com02_seq, com02_use_yn, com02_note)

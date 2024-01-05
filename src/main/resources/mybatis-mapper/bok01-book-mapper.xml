@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Bok01BookRepository">
+   <select id="selectList" parameterType="QueryAttr" resultType="Bok01Book">
+   
+   </select>
+    
+    
+    
+    <select id="getBookId" parameterType="QueryAttr" resultType="String">
+   			SELECT	bok01_book_id
+   			FROM	bok01_book
+   			WHERE	bok01_hold_date = #{holdDate}
+			AND		bok01_fund_cd = #{fundCode}
+			AND		bok01_item_cd = #{itemCode}
+   </select>
+   
+   
+   
+   
+   <insert id="insert" parameterType="Opr01Cont">
+   INSERT 
+   INTO bok01_book
+   SELECT 	 		
+   				 #{bok01BookId}
+				,#{bok01HoldDate}
+				,#{bok01FundCd}
+				,#{bok01ItemCd}
+				,#{bok01HoldQty}
+				,#{bok01PurAmt}
+				,#{bok01BookAmt}
+				,#{bok01EvalAmt}
+				,#{bok01EvalPl}
+				,#{bok01EvalYn}
+   </insert>
+   </mapper>

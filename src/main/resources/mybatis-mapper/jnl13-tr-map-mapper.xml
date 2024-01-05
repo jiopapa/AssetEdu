@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="kr.co.kfs.assetedu.repository.Jnl13TrMapRepository">
+	<sql id="whereQueryAttr">
+		<!-- 검색 조건 (QueryAttr) -->
+		<if test="jnl13TrCd != null and jnl13TrCd != '' ">
+			AND jnl13_tr_cd = #{jnl13TrCd}
+		</if>
+		<if test="jnl13ReprAcntCd != null and jnl13ReprAcntCd != '' ">
+			AND jnl13_repr_acnt_cd = #{jnl13ReprAcntCd}
+		</if>
+		<if test="jnl13ReprAcntNm != null and jnl13ReprAcntNm != '' ">
+			AND jnl13_repr_acnt_Nm = #{jnl13ReprAcntNm}
+		</if>
+		<if test="searchText != null and searchText != '' ">
+			AND upper(concat(jnl13_tr_cd , ' ' , jnl13_repr_acnt_cd, ' ',
+			jnl13_repr_acnt_Nm)) like upper(concat('%', searchText, '%'))
+		</if>
+	</sql>
+
+	<select id="selectList" parameterType="QueryAttr"
+		resultType="Jnl13TrMap">
+		SELECT 
+			jnl13_tr_cd as jnl13TrCd, jnl13_seq as jnl13Seq
+			,jnl13_repr_acnt_cd as jnl13ReprAcntCd
+			, jnl13_drcr_type as jnl13DrcrType, jnl13_formula as jnl13Formula
+		
+		FROM 
+			jnl13_tr_map
+		
+			1=1
+		<include refid="whereQueryAttr" />
+	</select>
+
+
+	<select id="selectOne" parameterType="Jnl13TrMap"
+		resultType="Jnl13TrMap">
+		SELECT 
+			jnl13_tr_cd as jnl13TrCd, jnl13_seq as jnl13Seq
+			,	jnl13_repr_acnt_cd as jnl13ReprAcntCd
+			, 	jnl13_drcr_type as jnl13DrcrType, jnl13_formula as jnl13Formula
+		FROM
+			 jnl13_tr_map
+		WHERE
+			 1=1
+		<if test="jnl13TrCd != null and jnl13TrCd == ''">
+			And jnl13_tr_cd = #{jnl13TrCd}
+		</if>
+		<if test="jnl13Seq != null and jnl13Seq == ''">
+			And jnl13_seq = #{jnl13Seq}
+		</if>
+	</select>
+	<insert id="insert" parameterType="Jnl13TrMap">
+		INSERT
+			 into jnl13_tr_map
+			(jnl13_tr_cd, jnl13_seq, jnl13_repr_acnt_cd, jnl13_drcr_type, jnl13_formula)
+		VALUES
+			(#{jnl13TrCd}, #{jnl13Seq}, #{jnl13ReprAcntCd}, #{jnl13DrcrType} , #{jnl13Formula})
+	</insert>
+</mapper>

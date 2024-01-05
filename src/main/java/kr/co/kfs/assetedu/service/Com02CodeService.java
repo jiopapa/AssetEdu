@@ -25,6 +25,10 @@ public class Com02CodeService {
 		return com02CodeRepository.selectList(queryAttr);
 	}
 	
+	public List<Com02Code> trCodeList(String trType){
+		return com02CodeRepository.selectTrList(trType);
+	}
+	
 	public Long selectCount(QueryAttr queryAttr) {
 		return com02CodeRepository.selectCount(queryAttr);
 	}

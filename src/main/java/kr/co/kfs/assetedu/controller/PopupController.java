@@ -111,7 +111,7 @@ public class PopupController {
 		return "/popup/popup_jnl_acnt";
 	}
 	
-	@GetMapping("jnl/repr-anct")
+	@GetMapping("jnl/repr-acnt")
 	public String reprAcnt(String searchText 
 							,@RequestParam(value="pageSize", defaultValue= "10", required=false) Integer pageSize
 							,@RequestParam(value="currentPageNumber", defaultValue="1", required= false) Integer currentPageNumber

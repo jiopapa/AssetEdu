@@ -13,4 +13,6 @@ public interface Com02CodeRepository {
 	Integer insert(Com02Code com02Code); 
 	Integer update(Com02Code com02Code);
 	Integer delete(Com02Code com02Code);
+
+	List<Com02Code> selectTrList (String trType);
 }

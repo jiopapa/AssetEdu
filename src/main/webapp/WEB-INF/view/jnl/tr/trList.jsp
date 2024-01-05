@@ -270,7 +270,8 @@ $(document).ready(function () {
         }
 	});	
 	$('.clickableRow').on('click', function(){
-		var code = $(this).find('c\\:out').text();
+		var code = $(this).find('td').text();
+		console.log("Clicked, code:", code);
  		AssetUtil.ajax('/jnl/trmap/find', { jnl12TrCd: code},{ success : makeTable})
  		
  	});
