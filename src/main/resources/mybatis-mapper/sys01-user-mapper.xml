@@ -22,8 +22,6 @@
    			sys01_user
    		WHERE 1=1
    			<include refid="whereQueryAttr"/>	
-   			
-
    </select> 
    
    <select id="selectList" parameterType="QueryAttr" resultType="Sys01User">

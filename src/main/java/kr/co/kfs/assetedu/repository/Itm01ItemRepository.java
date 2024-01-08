@@ -9,7 +9,7 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 
 public interface Itm01ItemRepository {
 	List<Itm01Item> selectList (QueryAttr queryAttr);
-	Integer selectCount(QueryAttr queryAttr);
+	Long selectCount(QueryAttr queryAttr);
 	Itm01Item selectOne(Itm01Item item);
 	
 	

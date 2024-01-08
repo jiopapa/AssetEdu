@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper	namespace="kr.co.kfs.assetedu.repository.Jnl02JournalTmpRepository">
+
+	<select id="selectByContId" parameterType="String" resultType="Jnl02JournalTmp">
+		SELECT *
+		  FROM jnl02_journal_tmp
+		 WHERE jnl02_cont_id = #{contId}
+		 ORDER BY jnl02_drcr_type DESC, jnl02_seq ASC
+	</select>
+
+	<delete id="deleteByContId" parameterType="String">
+		DELETE 
+		FROM jnl02_journal_tmp
+		WHERE jnl02_cont_id = #{contId}
+	</delete>
+	
+	<insert id="insert" parameterType="Jnl02JournalTmp">
+		INSERT
+		INTO	 jnl02_journal_tmp
+		SELECT #{jnl02ContId}
+				,#{jnl02Seq}
+				,#{jnl02DrcrType}
+				,#{jnl02ReprAcntCd}
+				,#{jnl02Amt}
+	</insert>
+	
+	<select id="selectDiffAmt" parameterType="String" resultType="Long">
+	SELECT SUM(CASE WHEN jnl02_drcr_type = 'D' THEN jnl02_amt ELSE 0 END)
+         - SUM(CASE WHEN jnl02_drcr_type = 'C' THEN jnl02_amt ELSE 0 END)
+	FROM  jnl02_journal_type
+	WHERE jnl02_cont_id = #{contId}</select>
+</mapper>

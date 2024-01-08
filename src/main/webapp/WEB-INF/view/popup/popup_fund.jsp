@@ -70,7 +70,7 @@
 			style="position: absolute; bottom: 0; left: 0">
 			<hr>
 			<div class="row">
-				<div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination></div>
+				<div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr" functionName="go"></kfs:Pagination></div>
 				<div class="col"><kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
 				<div class="col"><kfs:PageInfo pageAttr="${pageAttr }"  id= "pageAttr"></kfs:PageInfo></div>
 			</div>
@@ -118,10 +118,29 @@ $(document).ready(function () {
     	$('#form1').submit();
     });
 });
+</script>
+	<script>
 function go(pageNo){
-    $('#form1 input[name=currentPageNumber]').val(pageNo);
-    $('#form1').submit();
+	var searchText = $('#searchText').val();
+	var pageInfo = $('#pageInfo').val();
+	 var fundCd = '<%=request.getParameter("fundCd")%>';
+     var fundNm = '<%=request.getParameter("fundNm")%>';
+	console.log("goPage");
+	AssetUtil.submitGet('/popup/fund', {searchText: searchText, currentPageNo : pageNo, pageSize: pageInfo
+		, fundCd : fundCd, fundNm : fundNm} );
 }
+</script>	
+<script>
+  $(function() {
+    $("#pageInfo").on("change", function() {
+      var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      var fundCd = '<%=request.getParameter("fundCd")%>';
+      var fundNm = '<%=request.getParameter("fundNm")%>';
+      AssetUtil.submitGet('/popup/fund', 
+    { searchText: searchText, pageSize: pageInfo, fundCd : fundCd, fundNm : fundNm });
+    });
+  });
 </script>
 </body>
 </html>

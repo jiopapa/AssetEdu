@@ -24,8 +24,7 @@
  		<input type="hidden" name="itemCd" value="${param.itemCd }"/>
  		<input type="hidden" name="itemNm" value="${param.itemNm }"/>
  		<input type="hidden" name="pageSize" value="${pageAttr.pageSize }"/>
-<%--  		<input type="hidden" name="currentPageNumber" value="${pageAttr.currentPageNumber }"/> --%>
- 		<input type="hidden" name="currentPageNumber" value="1"/>
+    	<input type="hidden" name="currentPageNumber" value="1" />
  		
  		<div>
 			<input type="text" class="form-control w-50 d-inline align-middle" placeholder="검색어(종목코드/종목명)를 입력하세요" id="searchText" name="searchText" value="${param.searchText}">
@@ -52,19 +51,23 @@
 	    </c:forEach>
 	  </tbody>
 	</table>
+		<div class="row "> 
+			<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
+			<div class="col-4 text-end mt-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+		 </div>
+		 <div class="row ">
+   		   	 <div class="text-end mt-0"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
+         </div>
 
     <div class="container-fluid mb-3" style="position:absolute;bottom:0;left:0">
         <hr>
-	    <div class="row">
-	        <div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination> </div>
-	        <div class="col"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr"></kfs:PageInfo> </div>
-	    </div>
-
 	    <div class="footer-menu text-center">
 	        <button type="button" id="btnSelect" class="btn btn-primary" >선택</button>
 	        <button type="button" id="btnCancel"  class="btn btn-secondary">닫기</button>
 	    </div> 
 	</div>
+	
+	
 </main>
 <!-- =================================================== -->
 <jsp:include page="../common/footer.jsp" flush="false" />
@@ -103,10 +106,29 @@ $(document).ready(function () {
     	$('#form1').submit();
     });
 });
-function goPageClick(pageNo){
-	$('#form1 input[name=currentPageNumber]').val(pageNo);
-	$('#form1').submit();
+</script>	
+	<script>
+function go(pageNo){
+	var searchText = $('#searchText').val();
+	var pageInfo = $('#pageInfo').val();
+	 var itemCd = '<%=request.getParameter("itemCd")%>';
+     var itemNm = '<%=request.getParameter("itemNm")%>';
+	console.log("goPage");
+	AssetUtil.submitGet('/popup/item', {searchText: searchText, currentPageNo : pageNo, pageSize: pageInfo
+		, itemCd : itemCd, itemNm : itemNm} );
 }
 </script>	
+<script>
+  $(function() {
+    $("#pageInfo").on("change", function() {
+      var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      var itemCd = '<%=request.getParameter("itemCd")%>';
+      var itemNm = '<%=request.getParameter("itemNm")%>';
+      AssetUtil.submitGet('/popup/item', 
+    { searchText: searchText, pageSize: pageInfo, itemCd : itemCd, itemNm : itemNm });
+    });
+  });
+</script>
 </body>
 </html>

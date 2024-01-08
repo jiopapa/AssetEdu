@@ -23,7 +23,7 @@
 					,opr01_book_amt
 					,opr01_status_cd
 					,fnd01_fund_nm 								as opr01_fund_nm
-					,itm01_item_nm							    as opr01_item_nm
+					,itm01_item_nm							as opr01_item_nm
 					,f_corp_nm(opr01_tr_co_cd)  				as opr01_tr_co_nm
 					,f_com_nm('TrStatusCode', opr01_status_cd)  as opr01_status_nm
 					,jnl12_tr_nm								as opr01_tr_nm
@@ -34,14 +34,44 @@
 			WHERE  opr01_cont_date BETWEEN #{frDate} AND #{toDate}
 			AND		jnl12_use_page_type = #{pageType}
 			AND		opr01_status_cd != '9'								 /*9:취소 */ 
-			) t
+			) AS t
 			
-			WHERE  UPPER(CONCAT(opr01_fund_cd, opr01_fund_nm, opr01_item_cd, itm01_item_nm, opr01_tr_co_nm)) 
-					LIKE('%' , UPPER(#{searchText}),'%')
+			WHERE UPPER(CONCAT(opr01_fund_cd, opr01_fund_nm, opr01_item_cd, opr01_item_nm, opr01_tr_co_nm))
+    LIKE '%' || UPPER(#{searchText}) || '%'
    </select>
    
+   <select id="selectOne" parameterType="String" resultType="Opr01Cont">
+   SELECT *
+   		FROM(
+   			SELECT	opr01_cont_id							
+					,opr01_fund_cd
+					,opr01_item_cd
+					,opr01_cont_date
+					,opr01_tr_cd
+					,opr01_qty
+					,opr01_price
+					,opr01_cont_amt
+					,opr01_tr_pl
+					,opr01_fee
+					,opr01_tax
+					,opr01_settle_amt
+					,opr01_settle_date
+					,opr01_tr_co_cd
+					,opr01_book_id
+					,opr01_book_amt
+					,opr01_status_cd
+					,fnd01_fund_nm 								as opr01_fund_nm
+					,itm01_item_nm							    as opr01_item_nm
+					,f_corp_nm(opr01_tr_co_cd)  				as opr01_tr_co_nm
+					,f_com_nm('TrStatusCode', opr01_status_cd)  as opr01_status_nm
+					,jnl12_tr_nm								as opr01_tr_nm
+			FROM opr01_cont
+					INNER JOIN fnd01_fund ON fnd01_fund_cd = opr01_fund_cd
+					INNER JOIN itm01_item ON itm01_item_cd = opr01_item_cd
+					INNER JOIN jnl12_tr	ON jnl12_tr_cd = opr01_tr_cd
+			WHERE opr01_cont_id = #{contId}
    
-   
+   </select>
    <select id="getNewSeq"  resultType="String">
    SELECT f_seq()
    </select>
@@ -90,4 +120,6 @@
    WHERE
    		 opr01_cont_id       =    #{opr01ContId}				
    </update>
+   
+  
    </mapper>

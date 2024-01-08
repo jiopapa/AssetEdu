@@ -2,11 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper	namespace="kr.co.kfs.assetedu.repository.Jnl01JournalRepository">
-
-	<select id="selectList" parameterType="QueryAttr" resultType="Jnl01Journal">
+	<select id="selectOne" parameterType="Jnl01Journal" resultType="Jnl01Journal">
+	SELECT 
+	FROM	jnl01_journal 
+	WHERE	jnl01_cont_id = #{jnl01ContId}
+	AND		jnl01_seq     = #{jnl01Seq}
 	
 	</select>
+	
+	<delete id="deleteByContId" parameterType="String">
+		DELETE 
+		FROM jnl01_journal
+		WHERE jnl01_cont_id = #{contId}
+	</delete>
 
-
-
+	<select id="getAmt" parameterType="QueryAttr" resultType="Long">
+		SELECT f_get_journalamt(#{formula}, #{contId})
+	</select>
+	
+	
+	<insert id="insert" parameterType="Jnl01Journal">
+	INSERT
+	INTO 	jnl01_journal
+	SELECT  #{jnl01ContId}         
+			,#{jnl01Seq}              
+ 			,#{jnl01DrAcntCd}
+			,#{jnl01DrAmt}            
+ 			,#{jnl01CrAcntCd}       
+			,#{jnl01CrAmt}            
+	</insert>
+	<update id="update" parameterType="Jnl01Journal">
+	UPDATE jnl01_journal
+	SET 	jnl01_dr_acnt_cd = #{jnl01DrAcntCd}
+			,jnl01_dr_amt    = #{jnl01DrAmt}
+			,jnl01_cr_acnt_cd = #{jnl01CrAcntCd}
+			,jnl01_cr_amt    = #{jnl01CrAmt}
+	WHERE  jnl01_cont_id     = #{jnl01ContId}
+	AND		jnl01_seq = #{jnl01Seq}
+	</update>
 </mapper>

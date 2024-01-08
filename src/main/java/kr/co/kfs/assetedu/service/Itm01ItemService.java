@@ -22,6 +22,9 @@ public class Itm01ItemService {
 	public List<Itm01Item> selectList(QueryAttr queryAttr){
 		return itm01ItemRepository.selectList(queryAttr);
 	}
+	public Long selectCount(QueryAttr queryAttr) {
+		return itm01ItemRepository.selectCount(queryAttr);
+	}
 	
 	
 	public List<Com02Code> corpTypeList(String com02Cd){

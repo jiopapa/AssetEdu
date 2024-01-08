@@ -8,9 +8,10 @@ import kr.co.kfs.assetedu.model.Jnl13TrMap;
 import kr.co.kfs.assetedu.model.QueryAttr;
 
 public interface Jnl13TrMapRepository {
-	List<Jnl13TrMap> selectList (QueryAttr queryAttr);
-	Long selectCount(QueryAttr queryAttr);
-	Jnl13TrMap selectOne(Jnl13TrMap trMap);
+	List<Jnl13TrMap> 			selectList (QueryAttr queryAttr);
+	Long 						selectCount(QueryAttr queryAttr);
+	Jnl13TrMap 					selectOne(Jnl13TrMap trMap);
+	List<Jnl13TrMap> 			selectByTrCd(String trCd);
 	
 	
 	Integer insert(Jnl13TrMap trMap);

@@ -8,7 +8,7 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 public interface Opr01ContRepository {
 	List<Opr01Cont> selectList (QueryAttr queryAttr);
 	String getNewSeq();
-	
+	Opr01Cont selectOne(String contId);
 	
 	int insert(Opr01Cont cont);
 	int update(Opr01Cont cont);

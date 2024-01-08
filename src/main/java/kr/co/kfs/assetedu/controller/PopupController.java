@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Fnd01Fund;
+import kr.co.kfs.assetedu.model.Itm01Item;
 import kr.co.kfs.assetedu.model.Jnl10Acnt;
 import kr.co.kfs.assetedu.model.Jnl11ReprAcnt;
 import kr.co.kfs.assetedu.model.PageAttr;
@@ -19,6 +20,7 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
 import kr.co.kfs.assetedu.service.Fnd01FundService;
+import kr.co.kfs.assetedu.service.Itm01ItemService;
 import kr.co.kfs.assetedu.service.Jnl10AcntService;
 import kr.co.kfs.assetedu.service.Jnl11ReprAcntService;
 import kr.co.kfs.assetedu.service.Sys01UserService;
@@ -46,6 +48,9 @@ public class PopupController {
 	@Autowired
 	Jnl11ReprAcntService jnl11ReprAcntService;
 	
+	@Autowired
+	Itm01ItemService itemService;
+	
 	@GetMapping("corp")
 	public String corp(String searchText
 			,
@@ -72,13 +77,16 @@ public class PopupController {
 	public String fund(String searchText
 						,@RequestParam(value="pageSize", defaultValue= "10", required=false) Integer pageSize
 						,@RequestParam(value="currentPageNo", defaultValue="1", required= false) Integer currentPageNo
-						,@RequestParam(value="fundParentCode",  required=false) String fundParentCode, Model model) {
+						,@RequestParam(value="fundParentCode",  required=false) String fundParentCode, Model model
+						,@RequestParam(value="fundCd") String fundCd
+						,@RequestParam(value="fundNm") String fundNm) {
 		log.debug("펀드정보(팝업)");
 		QueryAttr queryAttr = new QueryAttr(); //검색조건
 		queryAttr.put("searchText", searchText);
 		queryAttr.put("fundParentCode", fundParentCode);
 		Long totalItemCount = fnd01FundService.selectCount(queryAttr);
 		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
+		
 		queryAttr.put("pageAttr", pageAttr);
 		List<Fnd01Fund> fundList = fnd01FundService.selectList(queryAttr);
 		model.addAttribute("fundList", fundList);
@@ -130,6 +138,32 @@ public class PopupController {
 		model.addAttribute("list", list);
 		return "/popup/popup_jnl_repr_acnt";
 	}
+	
+	@GetMapping("item")
+	public String item(String searchText
+						,@RequestParam(value="pageSize", defaultValue= "10", required=false) Integer pageSize
+						,@RequestParam(value="currentPageNo", defaultValue="1", required= false) Integer currentPageNo
+						,@RequestParam(value="itemCd") String itemCd
+						,@RequestParam(value="itemNm") String itemNm
+						,Model model
+						) {
+		QueryAttr queryAttr = new QueryAttr();
+		queryAttr.put("searchText",searchText);
+		
+		long totalItemCount = itemService.selectCount(queryAttr);
+		PageAttr pageAttr = new PageAttr(totalItemCount, pageSize, currentPageNo);
+		queryAttr.put("pageAttr", pageAttr);
+		log.debug("asdf : {}" , pageAttr);
+		
+		List<Itm01Item>list = itemService.selectList(queryAttr);
+		model.addAttribute("list", list);
+		model.addAttribute("pageAttr", pageAttr);
+		model.addAttribute("searchText", searchText);
+		
+		
+		return "/popup/popup_item";
+	}
+						
 /*	@GetMapping("insert")
 	public String insert(Model model) {
 		log.debug("종목정보 입력페이지");

@@ -19,7 +19,15 @@
 			jnl13_repr_acnt_Nm)) like upper(concat('%', searchText, '%'))
 		</if>
 	</sql>
-
+	
+	<select id="selectByTrCd" parameterType="String" resultType="Jnl13TrMap">
+	SELECT  *
+	FROM	jnl13_tr_map
+	WHERE	jnl13_tr_cd = #{trCd}
+	ORDER BY jnl13_seq asc
+	</select>
+	
+	
 	<select id="selectList" parameterType="QueryAttr"
 		resultType="Jnl13TrMap">
 		SELECT 

@@ -39,14 +39,6 @@
 			,itm01_stk_type,' ',itm01_list_type,' ',itm01_market_type,' ',itm01_par,' ',itm01_iss_co_cd)) like upper(concat('%',#{searchText},'%'))
 		</if>
 	</sql>
-	<select id="selectCount" parameterType="QueryAttr" resultType="Integer">
-   		SELECT 
-   			count(*) as count
-   		FROM
-   			com03_date
-   		WHERE 1=1
-   			<include refid="whereQueryAttr"/>	
-   </select> 
    
    <select id="selectList" parameterType="QueryAttr" resultType="Itm01Item">
 	  select itm01_item_cd as itm01ItemCd 
@@ -65,8 +57,20 @@
 	  from itm01_item
 	  where 1=1
 	  <include refid="whereQueryAttr"/>
-	  Order by itm01_item_cd, itm01ItemNm
+	  Order by itm01_item_cd
+	  	<if test="pageAttr != null ">
+	      	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+		</if>  
    </select>
+   
+   <select id="selectCount" parameterType="QueryAttr" resultType="Long">
+   		SELECT 
+   			count(*) as count
+   		FROM
+   			itm01_item
+   		WHERE 1=1
+   			<include refid="whereQueryAttr"/>	
+   </select> 
    
    <insert id="insert" parameterType="Itm01Item">
    insert into itm01_item(itm01_item_cd, itm01_item_nm, itm01_item_enm, itm01_short_cd

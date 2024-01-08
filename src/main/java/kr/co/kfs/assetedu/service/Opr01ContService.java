@@ -31,6 +31,9 @@ public class Opr01ContService {
 	public List<Opr01Cont> selectList(QueryAttr queryAttr){
 		return contRepository.selectList(queryAttr);
 	}
+	public Opr01Cont selectOne(String contId) {
+		return contRepository.selectOne(contId);
+	}
 	@Transactional
 	public String insert(Opr01Cont cont) throws Exception{
 		
@@ -126,4 +129,6 @@ public class Opr01ContService {
 		return resultMsg;
 		
 	}
+	
+	
 }

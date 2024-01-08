@@ -7,4 +7,14 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 
 public interface Jnl01JournalRepository {
 	List<Jnl01Journal> 		selectList (QueryAttr queryAttr);
+	Jnl01Journal selectOne(Jnl01Journal jnl01Journal);
+	
+	
+	Long getAmt(QueryAttr amtCondition);
+	
+	
+	int insert(Jnl01Journal jnl01Journal);
+	int update(Jnl01Journal jnl01Journal);
+	int deleteByContId(String contId);
+
 }

@@ -1,7 +1,6 @@
 package kr.co.kfs.assetedu.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,10 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.kfs.assetedu.model.Com01Corp;
 import kr.co.kfs.assetedu.model.Opr01Cont;
 import kr.co.kfs.assetedu.model.QueryAttr;
-import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
 import kr.co.kfs.assetedu.service.Opr01ContService;
 import kr.co.kfs.assetedu.servlet.exception.AssetException;
@@ -34,33 +31,33 @@ import lombok.extern.slf4j.Slf4j;
 public class OprController {
 	@Autowired
 	Opr01ContService contService;
-	
+
 	@Autowired
 	Com02CodeService codeService;
 
 	@GetMapping("buy_list")
-	public String list(String frDate, String toDate, String searchText, Model model) {
+	public String buyList(String frDate, String toDate, String searchText, Model model) {
 		log.debug("매수 운용지시 리스트");
-		
+
 		model.addAttribute("pageTitle", "매수운용지시 - 리스트");
-		
-		if(Objects.isNull(frDate)) {
+
+		if (Objects.isNull(frDate)) {
 			frDate = AssetUtil.today();
-		}else {
+		} else {
 			frDate = AssetUtil.removeDash(frDate);
 		}
-		if(Objects.isNull(toDate)) {
+		if (Objects.isNull(toDate)) {
 			toDate = AssetUtil.today();
-		}else {
+		} else {
 			toDate = AssetUtil.removeDash(toDate);
 		}
-		
+
 		QueryAttr queryAttr = new QueryAttr();
 		queryAttr.put("searchText", searchText);
 		queryAttr.put("frDate", frDate);
 		queryAttr.put("toDate", toDate);
 		queryAttr.put("pageType", "BUY");
-		
+
 		List<Opr01Cont> list = contService.selectList(queryAttr);
 		model.addAttribute("list", list);
 		model.addAttribute("frDate", AssetUtil.displayYmd(frDate));
@@ -69,51 +66,108 @@ public class OprController {
 	}
 
 	@GetMapping("buy_insert")
-	public String insert(Model model) {
+	public String buyInsert(Model model) {
 		log.debug("매수 운용지시 등록 폼");
 		Opr01Cont cont = new Opr01Cont();
-		cont.setOpr01ContDate(AssetUtil.today());//체결일자 초기 set = today
+		cont.setOpr01ContDate(AssetUtil.today());// 체결일자 초기 set = today
 
 		model.addAttribute("pageTitle", "매수운용지시 - 리스트");
 		model.addAttribute("cont", cont);
 		model.addAttribute("trCdLIst", codeService.trCodeList("BUY"));
-		
-		return "/Opr/buy_insert";
+		return "/opr/buy_insert_form";
 	}
 
 	@PostMapping("buy_insert")
-	public String insert(@Valid @ModelAttribute("cont") Opr01Cont cont, BindingResult bindingResult,
+	public String buyInsert(@Valid @ModelAttribute("cont") Opr01Cont cont, BindingResult bindingResult,
 			RedirectAttributes redirectAttr, Model model) throws UnsupportedEncodingException {
 		log.debug("매수운용지시 등록");
 
 		if (bindingResult.hasErrors()) {
-				model.addAttribute("trCdList", codeService.trCodeList("BUY"));
-				return "/opr/buy_insert";
+			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			return "/opr/buy_insert";
 		}
 		String msg;
 		String resultMsg;
-		
+
 		try {
-		resultMsg = contService.insert(cont);
-		}
-		catch(AssetException e) {
+			resultMsg = contService.insert(cont);
+		} catch (AssetException e) {
+			resultMsg = e.getMessage();
+		} catch (Exception e) {
 			resultMsg = e.getMessage();
 		}
-		catch(Exception e) {
-			resultMsg = e.getMessage();
+		if (!"Y".equals(resultMsg)) {
+			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			bindingResult.addError(new FieldError("", "", resultMsg));
+			return "/opr/buy_insert";
+		} else {
+			msg = String.format("\"%s %s주\" 매수처리가 완료되었습니다.", cont.getOpr01ItemNm(), cont.getOpr01Qty());
+			redirectAttr.addAttribute("mode", "insert");
+			redirectAttr.addAttribute("msg", msg);
+			return "redirect:/opr/buy_success";
 		}
-		return resultMsg;
-	}
-//
-//	@GetMapping("success")
-//	public String success(String msg, String mode, String itemCd, Model model) {
-	
-//		model.addAttribute("pageTitle", "기관정보등록 / 수정완료");
-//		model.addAttribute("msg", msg);
-//		model.addAttribute("mode", mode);
-//		model.addAttribute("itemCd", itemCd);
-//		log.debug("기관정보완료 화면");
-//		return "/item/success";
-//	}
 
 	}
+
+//	@GetMapping("update")
+//	public String update(@ModelAttribute("item") Itm01Item item, Model model) throws UnsupportedEncodingException {
+//
+//	}
+
+	@GetMapping("buy_delete")
+	public String buyDelete(@ModelAttribute("cont") Opr01Cont cont, Model model) throws UnsupportedEncodingException {
+		cont = contService.selectOne(cont.getOpr01ContId());
+		model.addAttribute("cont", cont);
+		return "/opr/buy_delete";
+
+	}
+
+	@PostMapping("buy_delete")
+	public String buyDelete(@ModelAttribute("cont") Opr01Cont cont, BindingResult bindingResult,
+			RedirectAttributes redirectAttr, Model model) throws UnsupportedEncodingException {
+		log.debug("매수운용지시 취소처리");
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			return "/opr/buy_insert";
+		}
+		String msg;
+		String resultMsg = "";
+
+		try {
+			// resultMsg = contService.delete(cont);
+		} catch (AssetException e) {
+			resultMsg = e.getMessage();
+		} catch (Exception e) {
+			resultMsg = e.getMessage();
+
+		}
+		if (!"Y".equals(resultMsg)) {
+			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			bindingResult.addError(new FieldError("", "", resultMsg));
+			return "/opr/buy_delete";
+		} else {
+			msg = String.format("\"%s %s주\" 매수 취소처리가 완료되었습니다.", cont.getOpr01ItemNm(), cont.getOpr01Qty());
+			redirectAttr.addAttribute("mode", "delete");
+			redirectAttr.addAttribute("msg", msg);
+			return "redirect:/opr/buy_success";
+		}
+
+	}
+
+
+
+	@GetMapping("buy_success")
+	public String buySuccess(String msg, String mode, String contId, Model model) {
+		log.debug("매수 운용지시 성공화면 ");
+		model.addAttribute("pageTitle", "매수처리");
+		model.addAttribute("msg", msg);
+		model.addAttribute("mode", mode);
+		model.addAttribute("contId", contId);
+		
+		return "/opr/buy_success";
+	}
+}
+
+//
+//	

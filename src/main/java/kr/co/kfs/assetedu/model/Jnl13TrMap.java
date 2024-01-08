@@ -9,7 +9,7 @@ public class Jnl13TrMap {
 	@NotNull(message = "거래 코드를 입력해 주세요.")
 	private String jnl13TrCd;
 	@NotNull(message = "거래순번을 입력해 주세요.")
-	private Integer jnl13Seq;
+	private Long jnl13Seq;
 	
 	private String jnl13ReprAcntCd;
 	private String jnl13ReprAcntNm;
