@@ -25,6 +25,7 @@
     <div class="border-top border-2 p-4">
 
         <form:form action="/opr/buy_delete" method="POST" modelAttribute="cont" class="validcheck" >
+        <input type="hidden" path="opr01BookId" value="${opr01BookId }"/>
             <table class="table table-sm table-borderless">
                 <tr class="align-middle">
                     <td class="text-end" style="width:130px">거래구분</td>

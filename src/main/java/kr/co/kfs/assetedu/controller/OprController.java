@@ -84,26 +84,38 @@ public class OprController {
 
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
-			return "/opr/buy_insert";
+			model.addAttribute("pageTitle", "매수운용지시 - 리스트");
+			model.addAttribute("cont", cont);
+			log.debug("에러1");
+			return "/opr/buy_insert_form";
 		}
-		String msg;
-		String resultMsg;
+		String resultMsg = "";
 
 		try {
 			resultMsg = contService.insert(cont);
+			log.debug(resultMsg);
 		} catch (AssetException e) {
+			log.debug("err----------AssetException");
 			resultMsg = e.getMessage();
+			log.debug(resultMsg);
 		} catch (Exception e) {
+			log.debug("err---------Exception");
 			resultMsg = e.getMessage();
+			if(resultMsg == null || resultMsg.length()< 1) {
+				resultMsg = e.toString();
+			}
+			log.debug(resultMsg);
+			
 		}
 		if (!"Y".equals(resultMsg)) {
 			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
-			bindingResult.addError(new FieldError("", "", resultMsg));
-			return "/opr/buy_insert";
+			bindingResult.addError(new FieldError("", "", resultMsg+""));
+			return "/opr/buy_insert_form";
 		} else {
-			msg = String.format("\"%s %s주\" 매수처리가 완료되었습니다.", cont.getOpr01ItemNm(), cont.getOpr01Qty());
+			String msg = String.format("\"%s %s주\" 매수처리가 완료되었습니다.", cont.getOpr01ItemNm(), cont.getOpr01Qty());
 			redirectAttr.addAttribute("mode", "insert");
 			redirectAttr.addAttribute("msg", msg);
+			log.debug("완료페이지이동");
 			return "redirect:/opr/buy_success";
 		}
 
@@ -116,9 +128,9 @@ public class OprController {
 
 	@GetMapping("buy_delete")
 	public String buyDelete(@ModelAttribute("cont") Opr01Cont cont, Model model) throws UnsupportedEncodingException {
-		cont = contService.selectOne(cont.getOpr01ContId());
+		cont = contService.selectOne(cont);
 		model.addAttribute("cont", cont);
-		return "/opr/buy_delete";
+		return "/opr/buy_delete_form";
 
 	}
 
@@ -131,11 +143,11 @@ public class OprController {
 			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
 			return "/opr/buy_insert";
 		}
-		String msg;
 		String resultMsg = "";
 
 		try {
-			// resultMsg = contService.delete(cont);
+		 cont = contService.selectOne(cont);
+		 resultMsg = contService.delete(cont);
 		} catch (AssetException e) {
 			resultMsg = e.getMessage();
 		} catch (Exception e) {
@@ -147,7 +159,7 @@ public class OprController {
 			bindingResult.addError(new FieldError("", "", resultMsg));
 			return "/opr/buy_delete";
 		} else {
-			msg = String.format("\"%s %s주\" 매수 취소처리가 완료되었습니다.", cont.getOpr01ItemNm(), cont.getOpr01Qty());
+			String msg = String.format("\"%s %s주\" 매수 취소처리가 완료되었습니다.", cont.getOpr01ItemNm(), cont.getOpr01Qty());
 			redirectAttr.addAttribute("mode", "delete");
 			redirectAttr.addAttribute("msg", msg);
 			return "redirect:/opr/buy_success";
@@ -160,6 +172,7 @@ public class OprController {
 	@GetMapping("buy_success")
 	public String buySuccess(String msg, String mode, String contId, Model model) {
 		log.debug("매수 운용지시 성공화면 ");
+		log.debug(msg);
 		model.addAttribute("pageTitle", "매수처리");
 		model.addAttribute("msg", msg);
 		model.addAttribute("mode", mode);

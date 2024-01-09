@@ -10,9 +10,10 @@ public interface Bok01BookRepository {
 	String 				getBookId(QueryAttr queryAttr);
 	String 				getLastHoldDate();
 	Bok01Book 			selectByBookId(QueryAttr queryAttr);
-	
+	Bok01Book  			selectByItemCode(QueryAttr queryAttr);
 	int insert(Bok01Book book);
 	int insertByDayBefor(QueryAttr dateCondition);
 	int upsert(Bok01Book book);
+	int deleteByHoldDate(QueryAttr queryAttr);
 	
 }

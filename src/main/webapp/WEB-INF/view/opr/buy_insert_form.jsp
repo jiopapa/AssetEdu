@@ -136,7 +136,7 @@ $(document).ready(function () {
     });
 
     $('#btnPopupCorp').on('click', function(){
-        var url = '/popup/corp?corpCd=opr01TrCoCd&corpNm=opr01TrCoNm';
+        var url = '/popup/corp?corpCd=opr01TrCoCd&corpNm=opr01TrCoNm&selectCorpType=03';
         var prop = {};
         var width = 720;
         var height = 518;

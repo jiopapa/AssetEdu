@@ -12,6 +12,25 @@
    	WHERE 	bok01_book_id = #{bookId}
    	AND 	bok01_hold_date = #{holdDate}
    </select>
+   
+   <select id="selectByItemCode" parameterType="QueryAttr" resultType="Bok01Book">
+        SELECT bok01_book_id   as bok01BookId   /** 원장id */ 
+             , bok01_hold_date as bok01HoldDate /** 보유일자 */ 
+             , bok01_fund_cd   as bok01FundCd   /** 펀드코드 */ 
+             , bok01_item_cd   as bok01ItemCd   /** 종목코드 */ 
+             , bok01_hold_qty  as bok01HoldQty  /** 보유수량 */ 
+             , bok01_pur_amt   as bok01PurAmt   /** 취득금액 */ 
+             , bok01_book_amt  as bok01BookAmt  /** 장부금액 */ 
+             , bok01_eval_amt  as bok01EvalAmt  /** 평가금액 */ 
+             , bok01_eval_pl   as bok01EvalPl   /** 평가손익 */
+             , bok01_eval_yn   as bok01EvalYn   /** 평가여부 */
+          FROM bok01_book
+         WHERE bok01_hold_date  = #{holdDate}
+           AND bok01_fund_cd    = #{fundCode} 
+           AND bok01_item_cd    = #{itemCode}
+   </select>
+    
+   
     
     
     
@@ -62,6 +81,22 @@
 				,#{bok01EvalYn}
    </insert>
    
+     <insert id="reInsert" parameterType="Bok01Book">
+   INSERT 
+   INTO bok01_book
+   SELECT 	 		
+   				 #{bok01BookId}
+				,#{bok01HoldDate}
+				,#{bok01FundCd}
+				,#{bok01ItemCd}
+				,#{bok01HoldQty}
+				,#{bok01PurAmt}
+				,#{bok01BookAmt}
+				,#{bok01EvalAmt}
+				,#{bok01EvalPl}
+				,#{bok01EvalYn}
+   </insert>
+   
    <update id="upsert" parameterType="Bok01Book">
    	WITH upsert AS (UPDATE bok01_book 
    					SET
@@ -78,17 +113,23 @@
    					RETURNING * 
    		) INSERT
    			INTO bok01_book
-   			SELECT #{bok01FundCd}    
-				,	#{bok01ItemCd}    
-				,	#{bok01HoldQty}   
-				,	#{bok01PurAmt}    
-				,	#{bok01BookAmt}   
-				,	#{bok01EvalAmt}   
-				,	#{bok01EvalPl}    
-				,	#{bok01EvalYn}    
-				,	#{bok01BookId}     
-				,	#{bok01HoldDate}  
+   			SELECT #{bok01BookId}
+               , #{bok01HoldDate}
+               , #{bok01FundCd}
+               , #{bok01ItemCd}
+               , #{bok01HoldQty}
+               , #{bok01PurAmt}
+               , #{bok01BookAmt}
+               , #{bok01EvalAmt}
+               , #{bok01EvalPl}
+               , #{bok01EvalYn}
 			WHERE NOT EXISTS (SELECT * FROM upsert )
 					   
    </update>
+   
+   <delete id="deleteByHoldDate" parameterType="QueryAttr">
+   DELETE FROM BOK01_BOOK
+   WHERE bok01_hold_date = #{holdDate}
+   AND	bok01_book_id = #{bookId}
+   </delete>
    </mapper>

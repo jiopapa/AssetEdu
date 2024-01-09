@@ -29,6 +29,6 @@
 	<select id="selectDiffAmt" parameterType="String" resultType="Long">
 	SELECT SUM(CASE WHEN jnl02_drcr_type = 'D' THEN jnl02_amt ELSE 0 END)
          - SUM(CASE WHEN jnl02_drcr_type = 'C' THEN jnl02_amt ELSE 0 END)
-	FROM  jnl02_journal_type
+	FROM  jnl02_journal_tmp
 	WHERE jnl02_cont_id = #{contId}</select>
 </mapper>

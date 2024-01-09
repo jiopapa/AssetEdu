@@ -92,7 +92,10 @@ public class Jnl01JournalService {
 		
 		//차대차익금액 확인 (매수 , 평가 => 에러처리 , 매도 => 처분손익 생성)
 		Long diffAmt = jnlTmpRepository.selectDiffAmt(cont.getOpr01ContId());
-		if(diffAmt != 0) {
+		if(diffAmt == null) {
+			diffAmt = 0l;
+		}
+		if(diffAmt != 0 ) {
 			if(!"2001".equals(cont.getOpr01TrCd()) &&
 				!"2002".equals(cont.getOpr01TrCd())) {
 				resultMsg = "차/대 금액이 다릅니다.";

@@ -37,8 +37,12 @@ public class Bok01BookService {
 	
 	@Transactional
 	public String createBook(Opr01Cont cont) throws Exception {
+		
+		System.out.println("############### createBook IN!!!!");
+		
 		String resultMsg = "Y";
 		int procCnt; 
+		
 		//보유원장 GET
 		QueryAttr bookCondition = new QueryAttr();
 		bookCondition.put("bookId", cont.getOpr01BookId());
@@ -56,39 +60,57 @@ public class Bok01BookService {
 			book.setBok01EvalPl(0l);
 			book.setBok01EvalYn("false");
 		}
+		
 		//거래유형정보 GET ( jnl12 inoutType)
 		Jnl12Tr trInfo = trRepository.selectByTrCd(cont.getOpr01TrCd());
 		if(trInfo.getJnl12InOutType()==null) {
 			resultMsg = "원장입출고구분 값이 없습니다. 분개맵핑 정보를 확인하세요.";
 			throw new AssetException(resultMsg);
 		}
+		
 		//--------------------------
 		//1:입고 데이터 set 
 		//--------------------------
 		if("1".equals(trInfo.getJnl12InOutType())) {
+			
+			System.out.println("########### 입고!!!!");
+			
 			cont.setOpr01BookAmt(cont.getOpr01ContAmt());
+
+			System.out.println("########### 입고!!!!  11111");
 			
 			//보유수량
 			Long holdQty = 0l;
-			if(book.getBok01HoldQty() == null) {
+			System.out.println("########### 입고!!!!  11111-1");
+			
+			if(book.getBok01HoldQty() != null) {
+				System.out.println("########### 입고!!!!  11111-2");
 				holdQty = book.getBok01HoldQty();
 			}
+			System.out.println("########### 입고!!!!  11111-3");
+			
 			book.setBok01HoldQty(holdQty + cont.getOpr01Qty());
+
+			System.out.println("########### 입고!!!!  22222");
 			
 			Long bookAmt = 0l;
-			if(book.getBok01BookAmt() == null) {
+			if(book.getBok01BookAmt() != null) {
 				bookAmt = book.getBok01BookAmt();
 			}
 			book.setBok01BookAmt(bookAmt + cont.getOpr01BookAmt());
+
+			System.out.println("########### 입고!!!!  333333");
 			
 			Long purAmt = 0l;
-			if(book.getBok01PurAmt() == null) {
+			if(book.getBok01PurAmt() != null) {
 				purAmt = book.getBok01PurAmt();
 			}
 			book.setBok01PurAmt(purAmt + cont.getOpr01BookAmt());
+			
+
+			System.out.println("########### 입고!!!!  44444");
+			
 		}
-
-
 		//--------------------------
 		//2:출고
 		//--------------------------
@@ -106,6 +128,12 @@ public class Bok01BookService {
 			resultMsg = "정해지지 않은 처리코드입니다. 관리팀에 문의하세요.";
 			throw new AssetException(resultMsg);
 		}
+		
+
+		System.out.println("########### 입고!!!!  5555");
+		
+		
+		
 		//원장 반영 insert update
 		procCnt = bookRepository.upsert(book);
 		

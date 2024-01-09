@@ -36,44 +36,67 @@
 			AND		opr01_status_cd != '9'								 /*9:취소 */ 
 			) AS t
 			
-			WHERE UPPER(CONCAT(opr01_fund_cd, opr01_fund_nm, opr01_item_cd, opr01_item_nm, opr01_tr_co_nm))
-    LIKE '%' || UPPER(#{searchText}) || '%'
+			WHERE UPPER(CONCAT(opr01_fund_cd, ' ' , opr01_fund_nm, ' ', opr01_item_cd, ' ', opr01_item_nm
+			,  ' ', opr01_tr_co_nm))
+    	LIKE CONCAT('%',UPPER(#{searchText}),'%')
    </select>
    
-   <select id="selectOne" parameterType="String" resultType="Opr01Cont">
-   SELECT *
-   		FROM(
-   			SELECT	opr01_cont_id							
-					,opr01_fund_cd
-					,opr01_item_cd
-					,opr01_cont_date
-					,opr01_tr_cd
-					,opr01_qty
-					,opr01_price
-					,opr01_cont_amt
-					,opr01_tr_pl
-					,opr01_fee
-					,opr01_tax
-					,opr01_settle_amt
-					,opr01_settle_date
-					,opr01_tr_co_cd
-					,opr01_book_id
-					,opr01_book_amt
-					,opr01_status_cd
-					,fnd01_fund_nm 								as opr01_fund_nm
-					,itm01_item_nm							    as opr01_item_nm
-					,f_corp_nm(opr01_tr_co_cd)  				as opr01_tr_co_nm
-					,f_com_nm('TrStatusCode', opr01_status_cd)  as opr01_status_nm
-					,jnl12_tr_nm								as opr01_tr_nm
-			FROM opr01_cont
+   <select id="selectOne" parameterType="Opr01Cont" resultType="Opr01Cont">
+   	SELECT	opr01_cont_id							as opr01ContId					
+			,opr01_fund_cd							as opr01FundCd		
+			,opr01_item_cd 							as opr01ItemCd		
+			,opr01_cont_date						as opr01ContDate		
+			,opr01_tr_cd                            as opr01TrCd		
+			,opr01_qty                              as opr01Qty		
+			,opr01_price                            as opr01Price		
+			,opr01_cont_amt                         as opr01ContAmt		
+			,opr01_tr_pl                            as opr01TrPl		
+			,opr01_fee                              as opr01Fee		
+			,opr01_tax                              as opr01Tax		
+			,opr01_settle_amt                       as opr01SettleAmt		
+			,opr01_settle_date                      as opr01SettleDate		
+			,opr01_tr_co_cd                         as opr01TrCoCd		
+			,opr01_book_id                          as opr01BookId		
+			,opr01_book_amt                         as opr01BookAmt		
+			,opr01_status_cd                        as opr01StatusCd		
+			,fnd01_fund_nm 								as opr01FundNm
+			,itm01_item_nm							    as opr01ItemNm
+			,jnl12_tr_nm								as opr01TrNm
+			,f_corp_nm(opr01_tr_co_cd)  				as opr01TrCoNm
+			,f_com_nm('TrStatusCode', opr01_status_cd)  as opr01StatusNm
+			, to_char(now(),'yyyymmdd')					 as opr01BizDate
+			FROM 	opr01_cont
 					INNER JOIN fnd01_fund ON fnd01_fund_cd = opr01_fund_cd
 					INNER JOIN itm01_item ON itm01_item_cd = opr01_item_cd
 					INNER JOIN jnl12_tr	ON jnl12_tr_cd = opr01_tr_cd
-			WHERE opr01_cont_id = #{contId}
-   
+			WHERE opr01_cont_id = #{opr01ContId}
    </select>
    <select id="getNewSeq"  resultType="String">
    SELECT f_seq()
+   </select>
+   
+   <select id="selectByOtherCont" parameterType="QueryAttr" resultType="Opr01Cont">
+   SELECT 	opr01_cont_id							as opr01ContId		
+			,opr01_fund_cd							as opr01FundCd		
+			,opr01_item_cd 							as opr01ItemCd		
+			,opr01_cont_date						as opr01ContDate	
+			,opr01_tr_cd                            as opr01TrCd		
+			,opr01_qty                              as opr01Qty		    
+			,opr01_price                            as opr01Price		
+			,opr01_cont_amt                         as opr01ContAmt		
+			,opr01_tr_pl                            as opr01TrPl		
+			,opr01_fee                              as opr01Fee		    
+			,opr01_tax                              as opr01Tax		    
+			,opr01_settle_amt                       as opr01SettleAmt	
+			,opr01_settle_date                      as opr01SettleDate	
+			,opr01_tr_co_cd                         as opr01TrCoCd		
+			,opr01_book_id                          as opr01BookId		
+			,opr01_book_amt                         as opr01BookAmt		
+			,opr01_status_cd                        as opr01StatusCd	
+   FROM opr01_cont
+   WHERE    opr01_cont_date = #{contDate}
+   AND	    opr01_cont_id = #{bookId}
+   AND      opr01_status_cd = '1'
    </select>
    
    <insert id="insert" parameterType="Opr01Cont">
@@ -85,7 +108,7 @@
 					,#{opr01ContDate}
 					,#{opr01TrCd}
 					,#{opr01Qty}
-					,#{opr01Pric}
+					,#{opr01Price}
 					,#{opr01ContAmt}
 					,#{opr01TrPl}
 					,#{opr01Fee}
@@ -106,7 +129,7 @@
 		, opr01_cont_date    =    #{opr01ContDate}        
 		, opr01_tr_cd        =    #{opr01TrCd}            
 		, opr01_qty          =    #{opr01Qty}             
-		, opr01_price        =    #{opr01Pric}            
+		, opr01_price        =    #{opr01Price}            
 		, opr01_cont_amt     =    #{opr01ContAmt}         
 		, opr01_tr_pl        =    #{opr01TrPl}            
 		, opr01_fee          =    #{opr01Fee}             
@@ -121,5 +144,11 @@
    		 opr01_cont_id       =    #{opr01ContId}				
    </update>
    
+   
+   <update id="statusChange9" parameterType="Opr01Cont">
+   UPDATE opr01_cont
+   SET opr01_status_cd = #{opr01StatusCd}
+   WHERE opr01_cont_id = #{opr01ContId}
+   </update>
   
    </mapper>
