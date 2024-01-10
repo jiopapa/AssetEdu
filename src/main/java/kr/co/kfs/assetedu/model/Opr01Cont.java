@@ -19,6 +19,7 @@ public class Opr01Cont {
 	private String opr01TrCoNm; 
 	private String opr01StatusNm;
 	private String opr01TrNm;
+	private String opr01HoldQty;
 	
 	private String  opr01BizDate;
 	

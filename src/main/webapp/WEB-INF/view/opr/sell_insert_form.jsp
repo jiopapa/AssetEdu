@@ -30,7 +30,7 @@
                     <td class="text-end" style="width:130px">거래구분</td>
                     <td class="w-25">
                         <form:select path="opr01TrCd" class="form-select" required="true" tabindex="10">
-                            <form:options items="${trCdList}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
+                            <form:options items="${trCdLIst}" itemValue="com02DtlCd" itemLabel="com02CodeNm"/> 
                         </form:select>
                     </td>
                     <td colspan=3></td>
@@ -150,10 +150,10 @@ $(document).ready(function () {
     });
 
     $('#btnPopupCorp').on('click', function(){
-        var url = '/popup/corp?corpCd=opr01TrCoCd&corpNm=opr01TrCoNm';
+        var url = '/popup/corp?corpCd=opr01TrCoCd&corpNm=opr01TrCoNm&selectCorpType=03';
         var prop = {};
         var width = 720;
-        var height = 518;
+        var height = 550;
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
@@ -168,7 +168,7 @@ $(document).ready(function () {
 
         var prop = {};
         var width = 720;
-        var height = 518;
+        var height = 550;
         var win = AssetUtil.popupWindow(url, '보유종목선택', {}, width, height);
         return false;
     });    	

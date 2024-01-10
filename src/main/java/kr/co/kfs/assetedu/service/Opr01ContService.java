@@ -79,6 +79,7 @@ public class Opr01ContService {
 	@Transactional
 	public String delete(Opr01Cont cont)throws Exception{
 		
+		// 프로세스 메인 호출 보유원장 정리
 		String resultMsg = this.procMain("C", cont);
 		return resultMsg;
 		
@@ -149,14 +150,14 @@ public class Opr01ContService {
 			log.debug("cont : {} ", cont);
 			cont.setOpr01StatusCd("9");
 			cont.setOpr01ContId(cont.getOpr01ContId());
-			opr01ContRepository.statusChange9(cont);
+			procCnt = opr01ContRepository.statusChange9(cont);
 			
 			//보유일자 = 오늘  조건 
 			QueryAttr setHoldDateSetId =new QueryAttr();
 			log.debug("cont : {} ", cont);
 			setHoldDateSetId.put("holdDate", cont.getOpr01ContDate());
 			setHoldDateSetId.put("bookId", cont.getOpr01BookId());
-			log.debug("보유일자 = 오늘   조건에 넣음");
+			log.debug("(보유일자 = 오늘)   조건에 넣음");
 			
 			//금일 보유 원장 삭제
 			int dltCnt = bookRepository.deleteByHoldDate(setHoldDateSetId);
@@ -164,9 +165,9 @@ public class Opr01ContService {
 			
 			//취소했던 ID의 원장 다시 이월 
 			int insertCnt = bookRepository.insertByDayBefor(setHoldDateSetId);
-			log.debug("취소ID 원장 다시 이월 : {}",insertCnt);
+			log.debug("취소했던ID 원장 다시 이월(취소분 제외하고) : {}",insertCnt);
 			
-			//보유 ID의 다른거래도 처리 ( 처리 한번 했던 것들 
+			//보유 ID의 다른거래도 처리 ( 처리 한번 했던 것들 )
 			QueryAttr setOtherId = new QueryAttr();
 			setOtherId.put("bookId", cont.getOpr01BookId());
 			setOtherId.put("contDate", cont.getOpr01ContDate());

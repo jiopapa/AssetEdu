@@ -54,9 +54,9 @@
 		    <tr class="align-middle">
 		      <td>
 		      	<input type="radio" data-bok01-book-id="${book.bok01BookId }" 
-		      		                data-bok01-fund-cd="${book.fnd01FundCd }"
+		      		                data-bok01-fund-cd="${book.bok01FundCd }"
 		      		                data-bok01-fund-nm="${book.fnd01FundNm }"
-		      		                data-bok01-item-cd="${book.itm01ItemCd }"
+		      		                data-bok01-item-cd="${book.bok01ItemCd }"
 		      		                data-bok01-item-nm="${book.itm01ItemNm }"
 		      		                data-bok01-hold-qty="${book.bok01HoldQty }"
 		      		                id="bok01bookId_${status.count }" name="bok01bookId"/>
@@ -73,11 +73,13 @@
 	
     <div class="container-fluid mb-3" style="position:absolute;bottom:0;left:0">
         <hr>
-        <div class="row">
-            <div class="col"><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr"></kfs:Pagination> </div>
-            <div class="col"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr"></kfs:PageInfo> </div>
-        </div>
-
+        <div class="row "> 
+			<div class="col-8 "><kfs:Pagination pageAttr="${pageAttr }" id="pageAttr1" functionName="go"></kfs:Pagination></div>
+			<div class="col-4 text-end mt-0"><kfs:PageInfo pageAttr="${pageAttr }" id="pageAttr2" ></kfs:PageInfo> </div>
+		 </div>
+		 <div class="row ">
+   		   	 <div class="text-end mt-0"> <kfs:PageSizeSetter pageAttr="${pageAttr }" id="pageInfo" ></kfs:PageSizeSetter></div>
+         </div>
         <div class="footer-menu text-center">
             <button type="button" id="btnSelect" class="btn btn-primary" >선택</button>
             <button type="button" id="btnCancel"  class="btn btn-secondary">닫기</button>
@@ -134,10 +136,34 @@ $(document).ready(function () {
 		$('#form1').submit();
 	});
 });
-function goPageClick(pageNo){
-	$('#form1 input[name=currentPageNumber]').val(pageNo);
-	$('#form1').submit();
+
+</script>	
+	<script>
+function go(pageNo){
+	var searchText = $('#searchText').val();
+	var pageInfo = $('#pageInfo').val();
+	var fundCd  = '<%=request.getParameter("fundCd")%>';
+	var fundNm  = '<%=request.getParameter("fundNm")%>';
+	var itemCd = '<%=request.getParameter("itemCd")%>';
+    var itemNm = '<%=request.getParameter("itemNm")%>';
+	console.log("goPage");
+	AssetUtil.submitGet('/popup/book', {searchText: searchText, currentPageNo : pageNo, pageSize: pageInfo
+		, itemCd : itemCd, itemNm : itemNm, fundCd : fundCd, fundNm : fundNm} );
 }
 </script>	
+<script>
+  $(function() {
+    $("#pageInfo").on("change", function() {
+      var pageInfo = $(this).val(); // pageInfo에 값을 할당하는 부분 추가
+      var searchText = $('#searchText').val();
+      var fundCd  = '<%=request.getParameter("fundCd")%>';
+  	  var fundNm  = '<%=request.getParameter("fundNm")%>';
+      var itemCd = '<%=request.getParameter("itemCd")%>';
+      var itemNm = '<%=request.getParameter("itemNm")%>';
+      AssetUtil.submitGet('/popup/book', 
+    { searchText: searchText, pageSize: pageInfo, itemCd : itemCd, itemNm : itemNm , fundCd : fundCd, fundNm : fundNm });
+    });
+  });
+</script>
 </body>
 </html>

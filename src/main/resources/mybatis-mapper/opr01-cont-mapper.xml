@@ -97,6 +97,7 @@
    WHERE    opr01_cont_date = #{contDate}
    AND	    opr01_cont_id = #{bookId}
    AND      opr01_status_cd = '1'
+   ORDER BY opr01_cont_id
    </select>
    
    <insert id="insert" parameterType="Opr01Cont">

@@ -2,6 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper	namespace="kr.co.kfs.assetedu.repository.Jnl14RealAcntMapRepository">
+<select id="selectList" parameterType="QueryAttr"
+		resultType="Jnl14RealAcntMap">
+		SELECT 		jnl14_repr_acnt_cd							AS    jnl14ReprAcntCd   
+				,   jnl11_repr_acnt_nm							AS    jnl14ReprAcntNm
+				,	jnl14_list_type                    			AS    jnl14ListType
+				,	jnl14_market_type                 		    AS    jnl14MarketType   
+				,	jnl14_real_acnt_cd                		    AS    jnl14RealAcntCd   
+				,   f_com_nm('ListType',jnl14_list_type)        AS    jnl14ListTypeNm
+				,   f_com_nm('MarketType',jnl14_market_type)    AS    jnl14MarketTypeNm
+				,   
+		FROM    jnl14_real_acnt_map
+		INNER JOIN jnl11_repr_acnt 								ON	  jnl11_repr_acnt_cd = jnl14_repr_acnt_cd
+		INNER JOIN jnl10_acnt									ON    jnl10_acnt_cd = jnl14_real_acnt_cd
+		WHERE 	1=1
+	</select>
+
+<select id="selectCount" parameterType="QueryAttr"	resultType="Long">
+	select count(*) as count 
+	from jnl14_real_acnt_map 
+	where 1=1
+	</select>
+
 <select id="selectByReprAcntCd" parameterType="QueryAttr" resultType="String">
 SELECT jnl14_real_acnt_cd
 	FROM jnl14_real_acnt_map

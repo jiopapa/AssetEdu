@@ -1,5 +1,6 @@
 package kr.co.kfs.assetedu.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 import kr.co.kfs.assetedu.servlet.converter.YmdFormat;
@@ -9,10 +10,14 @@ import lombok.Data;
 public class Bok01Book {
 	private String bok01BookId;
 	
-
+	@DateTimeFormat(pattern = "yyyyMMdd")
 	private String bok01HoldDate;
 	
 	private String bok01FundCd;
+	private String fnd01FundNm;
+	private String itm01MarketTypeNm;
+	private String itm01ItemNm;
+	
 	private String bok01ItemCd;
 	@NumberFormat
 	private Long bok01HoldQty;
@@ -25,4 +30,7 @@ public class Bok01Book {
 	@NumberFormat
 	private Long bok01EvalPl;
 	private String bok01EvalYn;
+	
+	
+	
 }

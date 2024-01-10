@@ -16,4 +16,6 @@ public interface Bok01BookRepository {
 	int upsert(Bok01Book book);
 	int deleteByHoldDate(QueryAttr queryAttr);
 	
+	Long selectCount(QueryAttr queryAttr);
+	
 }

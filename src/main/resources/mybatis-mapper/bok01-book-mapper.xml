@@ -2,10 +2,64 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.kfs.assetedu.repository.Bok01BookRepository">
+	
+	<sql id="whereQueryAttr">
+	<if test="fnd01FundNm != null and fnd01FundNm != ''">
+	AND fnd01_fund_nm = #{fnd01FundNm}
+	</if>
+	<if test="itm01ItemNm != null and itm01ItemNm != ''">
+	AND itm01_item_nm = #{itm01ItemNm}
+	</if>
+	<if test="bok01BookId != null and bok01BookId != ''">
+	AND bok01_book_id = #{bok01BookId}
+	</if>
+	<if test="searchText != null and searchText != ''">
+	AND UPPER(CONCAT(fnd01_fund_nm , ' ' , itm01_item_nm , ' ', bok01_book_id , ' ')) LIKE UPPER(CONCAT('%' , #{searchText} , '%' ))
+	</if>
+	<if test="frHoldDate != null and frHoldDate != ''">
+	AND bok01_hold_date <![CDATA[>=]]> #{frHoldDate}
+	</if>
+	<if test="toHoldDate != null and toHoldDate != ''">
+	AND bok01_hold_date <![CDATA[<=]]> #{toHoldDate}
+	</if>
+	<if test="holdDate != null and holdDate != ''">
+	AND bok01_hold_date = #{holdDate}
+	</if>
+	</sql>
+
    <select id="selectList" parameterType="QueryAttr" resultType="Bok01Book">
-   
+   SELECT	 bok01_book_id            AS    bok01BookId
+			,bok01_hold_date          AS	bok01HoldDate
+			,bok01_fund_cd            AS 	bok01FundCd
+			,bok01_item_cd            AS 	bok01ItemCd
+			,bok01_hold_qty           AS 	bok01HoldQty
+			,bok01_pur_amt            AS 	bok01PurAmt
+			,bok01_book_amt           AS 	bok01BookAmt
+			,bok01_eval_amt           AS 	bok01EvalAmt
+			,bok01_eval_pl            AS 	bok01EvalPl
+			,bok01_eval_yn            AS 	bok01EvalYn
+			,fnd01_fund_nm            AS    fnd01FundNm
+			,itm01_item_nm            AS    itm01ItemNm
+			,f_com_nm('MarketType' ,itm01_market_type) as itm01MarketTypeNm
+   FROM bok01_book
+   INNER JOIN fnd01_fund 			  ON    fnd01_fund_cd = bok01_fund_cd
+   INNER JOIN itm01_item              ON    itm01_item_cd = bok01_item_cd
+   WHERE 1=1
+   <include refid="whereQueryAttr"/>
+   ORDER BY bok01_hold_date ASC, bok01_fund_cd ASC
+    	<if test="pageAttr != null ">
+	      	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
+		</if>  
    </select>
    
+   <select id="selectCount" parameterType="QueryAttr" resultType="Long">
+   	SELECT 
+   			count(*) as count
+   		FROM
+   			bok01_book
+   		WHERE 1=1
+   <include refid="whereQueryAttr"/>	
+   </select> 
     <select id="selectByBookId" parameterType="QueryAttr" resultType="Bok01Book">
    	SELECT *
    	FROM 	bok01_book
@@ -63,6 +117,9 @@
 		FROM bok01_book
 		WHERE bok01_hold_date = f_get_date(#{holdDate}, -1) 
 		AND		bok01_hold_qty <![CDATA[>]]>0
+		<if test="bookId != null">
+		AND bok01_book_id = #{bookId}
+		</if>
    </insert>
    
    <insert id="insert" parameterType="Bok01Book">
