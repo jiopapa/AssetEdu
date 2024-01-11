@@ -46,7 +46,7 @@
    INNER JOIN itm01_item              ON    itm01_item_cd = bok01_item_cd
    WHERE 1=1
    <include refid="whereQueryAttr"/>
-   ORDER BY bok01_hold_date ASC, bok01_fund_cd ASC
+   ORDER BY bok01_hold_date ASC, bok01_book_id ASC
     	<if test="pageAttr != null ">
 	      	OFFSET ${pageAttr.offset} LIMIT ${pageAttr.limit}
 		</if>  

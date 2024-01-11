@@ -11,7 +11,7 @@
 				,	jnl14_real_acnt_cd                		    AS    jnl14RealAcntCd   
 				,   f_com_nm('ListType',jnl14_list_type)        AS    jnl14ListTypeNm
 				,   f_com_nm('MarketType',jnl14_market_type)    AS    jnl14MarketTypeNm
-				,   
+				,   jnl10_acnt_nm								AS    jnl14RealAcntNm
 		FROM    jnl14_real_acnt_map
 		INNER JOIN jnl11_repr_acnt 								ON	  jnl11_repr_acnt_cd = jnl14_repr_acnt_cd
 		INNER JOIN jnl10_acnt									ON    jnl10_acnt_cd = jnl14_real_acnt_cd
@@ -24,11 +24,11 @@
 	where 1=1
 	</select>
 
-<select id="selectByReprAcntCd" parameterType="QueryAttr" resultType="String">
+<select id="selectByRealAcntCd" parameterType="QueryAttr" resultType="String"> 
 SELECT jnl14_real_acnt_cd
 	FROM jnl14_real_acnt_map
 	WHERE jnl14_repr_acnt_cd = #{reprAcntCd}
-	AND		jnl14_list_typ = #{listType}
+	AND		jnl14_list_type = #{listType}
 	AND 	jnl14_market_type = #{marketType}
 	</select>
 

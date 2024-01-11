@@ -17,6 +17,7 @@ import kr.co.kfs.assetedu.repository.Jnl01JournalRepository;
 import kr.co.kfs.assetedu.repository.Jnl02JournalTmpRepository;
 import kr.co.kfs.assetedu.repository.Jnl13TrMapRepository;
 import kr.co.kfs.assetedu.repository.Jnl14RealAcntMapRepository;
+import kr.co.kfs.assetedu.repository.Opr01ContRepository;
 import kr.co.kfs.assetedu.servlet.exception.AssetException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +28,9 @@ public class Jnl01JournalService {
 	Jnl01JournalRepository jnlRepository ;
 	@Autowired
 	Jnl02JournalTmpRepository jnlTmpRepository;
+	@Autowired
+	Opr01ContRepository contRepository;
+	
 	Jnl02JournalTmp jnlTmpModel;
 	
 	@Autowired
@@ -39,7 +43,9 @@ public class Jnl01JournalService {
 	public List<Jnl01Journal> selectList(QueryAttr queryAttr){
 		return jnlRepository.selectList(queryAttr);
 	}
-	
+	public Long selectCount(QueryAttr queryAttr) {
+		return jnlRepository.selectCount(queryAttr);
+	}
 	@Transactional
 	public String createJournal(Opr01Cont cont) throws Exception{
 		
@@ -56,7 +62,7 @@ public class Jnl01JournalService {
 	
 		
 		//거래코드별 분개map get
-		List<Jnl13TrMap> trMapList = jnl13TrMapRepository.selectByTrCd(cont.getOpr01ContId());
+		List<Jnl13TrMap> trMapList = jnl13TrMapRepository.selectByTrCd(cont.getOpr01TrCd());
 		for(Jnl13TrMap trMapModel : trMapList){
 			jnlTmpModel = new Jnl02JournalTmp();									
 			jnlTmpModel.setJnl02ContId(cont.getOpr01ContId());						//체결ID
@@ -82,12 +88,13 @@ public class Jnl01JournalService {
 			      Long amt = jnlRepository.getAmt(amtCondition);
 			      jnlTmpModel.setJnl02Amt(amt);
 			      
-			      log.debug("-------sql : {}"+ amt);
+			      log.debug("-------매도금액 : {}"+ amt);
 			      
 			      if(amt != 0) {
 			    	  procCnt=jnlTmpRepository.insert(jnlTmpModel);
-			    	  lastSeq = jnlTmpModel.getJnl02Seq();
+			    	 
 			      }
+			      lastSeq = jnlTmpModel.getJnl02Seq();
 		}
 		
 		//차대차익금액 확인 (매수 , 평가 => 에러처리 , 매도 => 처분손익 생성)
@@ -104,26 +111,30 @@ public class Jnl01JournalService {
 			
 			//처분손익 생성
 			jnlTmpModel = new Jnl02JournalTmp();
-			jnlTmpModel.setJnl02ContId(cont.getOpr01TrCd());
+			jnlTmpModel.setJnl02ContId(cont.getOpr01ContId());
 			jnlTmpModel.setJnl02Seq(lastSeq + 1);
 			
 		
 			//차이금액 > 0       처분이익 발생 
 			if(diffAmt > 0) {
-			jnlTmpModel.setJnl02ReprAcntCd("4100");//4100 처분이익
-			jnlTmpModel.setJnl02DrcrType("C"); //대변
-			jnlTmpModel.setJnl02Amt(diffAmt);
-			procCnt = jnlTmpRepository.insert(jnlTmpModel);
-			}
-			
-			//차이금액 < 0       처분손실 발생
-			else {
+				jnlTmpModel.setJnl02ReprAcntCd("4100");//4100 처분이익
+				jnlTmpModel.setJnl02DrcrType("C"); //대변
+				jnlTmpModel.setJnl02Amt(diffAmt);
+				log.debug("-------처분이익 : {}"+ diffAmt);
+				procCnt = jnlTmpRepository.insert(jnlTmpModel);
+				
+				
+			}else {//차이금액 < 0       처분손실 발생
 				jnlTmpModel.setJnl02ReprAcntCd("5100");//5100 처분손실
 				jnlTmpModel.setJnl02DrcrType("D"); //차변
 				jnlTmpModel.setJnl02Amt(diffAmt * -1);
-		
+				log.debug("-------처분손실 : {}"+ diffAmt);
+				procCnt = jnlTmpRepository.insert(jnlTmpModel);
 			}
-			procCnt = jnlTmpRepository.insert(jnlTmpModel);
+
+			cont.setOpr01TrPl(diffAmt);
+			procCnt = contRepository.update(cont);
+			
 		}
 		/////
 		//실 분개장 생성
@@ -148,14 +159,12 @@ public class Jnl01JournalService {
 		realAcntCondition.put("listType", itmInfo.getItm01ListType());
 		realAcntCondition.put("marketType", itmInfo.getItm01MarketType());
 		
-		
 		//임시분개장
 		Long drSeq=0l;
 		Long crSeq=0l;
 		String dmlType = "I";
 		Jnl01Journal jnlModel;
-		
-		List<Jnl02JournalTmp> jnlTmpList = jnlTmpRepository.selectByContId(cont.getOpr01TrCd());
+		List<Jnl02JournalTmp> jnlTmpList = jnlTmpRepository.selectByContId(cont.getOpr01ContId());
 		for(Jnl02JournalTmp jnlTmp : jnlTmpList) {
 			
 			jnlModel = new Jnl01Journal();
@@ -168,7 +177,6 @@ public class Jnl01JournalService {
 				resultMsg = "실계정 과목을 가져올 수 없습니다. 관리팀에 문의하세요.";
 					throw new AssetException(resultMsg);
 			}
-			
 			//차변 대변 자리 맞춰서 실분개장 생성
 			if("D".equals(jnlTmp.getJnl02DrcrType())) {
 				drSeq++;
@@ -181,6 +189,7 @@ public class Jnl01JournalService {
 			else {
 				crSeq++;
 				jnlModel.setJnl01Seq(crSeq);
+				
 				if(drSeq >= crSeq) {
 					dmlType = "U";
 					jnlModel = jnlRepository.selectOne(jnlModel);
@@ -198,21 +207,7 @@ public class Jnl01JournalService {
 				procCnt = jnlRepository.update(jnlModel);
 					
 				}
-				
-				
-				
-			
-			
-			
-			
-			
-			
-		
-		
 		}
-		
-		
-		
 		return resultMsg;
 		
 	}

@@ -48,6 +48,5 @@ public class Opr01Cont {
 	private Long opr01BookAmt;
 	
 	
-	String contId;
 	
 }

@@ -22,124 +22,60 @@
 <%-- 	<h1><c:out value="${title }"/></h1> --%>
 <!-- 	<img src="image/screen1.png" alt="교육내용소개"/> -->
 <%-- 	<a href="${gitSourceUrl }" target="_blank"> Git Source Url</a> --%>
-
-    <p class="text-start fs-3 mt-5 mx-5" style="color:#5B5959;">
-        <i class="fa-solid fa-paper-plane mx-2"></i> IT관련 SITE
+   <p class="text-start fs-3 mt-5 mx-5" style="color:#5B5959;">
+        <i class="fa-solid fa-paper-plane mx-2"></i>학습관련 SITE(사용 후 로그아웃 하세요.)
     </p>
-
-    <div class="row mt-3 mx-5">
-        <!-- bootstrap -->
+   <div class="row mt-2 mx-5 mb-5">
+        <!-- 챗GPT -->
         <div class="col-sm-2">
-            <a href="https://getbootstrap.com/docs/5.2" target="_blank" style="text-decoration-line:none; color:black;">
-		    <div class="card">
-                <img src="image/card_bootstrap4.jpg" class="card-img-top">
-		        <div class="card-body">
-		            <h5 class="card-title text-start">Bootstrap v5.2 Docs</h5>
-                    <p class="card-text text-start">Build fast, responsive sites with Bootstrap</p>
-		        </div>
-		    </div>
-		    </a>
-        </div>
-
-        <!-- postgresql -->
-        <div class="col-sm-2">
-            <a href="https://www.postgresql.org/" target="_blank" style="text-decoration-line:none; color:black;">
             <div class="card">
-                <img src="image/card_postgresql4.jpg" class="card-img-top">
+                <a href="https://chat.openai.com/" target="_blank">
+                    <img src="image/card_chatGPT.jpg" class="card-img-top" width="100" height="100">
+                </a>
                 <div class="card-body">
-                    <h5 class="card-title text-start">PostgreSQL</h5>
-                    <p class="card-text text-start">The World's Most Advanced Open Source Relational Database</p>
+                <p class="card-text text-middle">챗GPT</p>
                 </div>
             </div>
-            </a>
         </div>
-   
-        <!-- JQuery -->
+        <!-- 깃허브 -->
         <div class="col-sm-2">
-            <a href="https://jquery.com/" target="_blank" style="text-decoration-line:none; color:black;">
             <div class="card">
-                <img src="image/card_jquery.jpg" class="card-img-top">
+                <a href="https://github.com/" target="_blank">
+                    <img src="image/card_GitHub.png" class="card-img-top" width="100" height="100">
+                </a>
                 <div class="card-body">
-                    <h5 class="card-title text-start">jQuery</h5>
-                    <p class="card-text text-start">jQuery is a fast, small, and feature-rich JavaScript library</p>
+                <p class="card-text text-middle">GitHub</p>
                 </div>
             </div>
-            </a>
         </div>
-    
-        <!-- HandleBar -->
+         <!-- 구글엑셀 -->
         <div class="col-sm-2">
-            <a href="https://handlebarsjs.com/" target="_blank" style="text-decoration-line:none; color:black;">
             <div class="card">
-                <img src="image/card_handlebars.jpg" class="card-img-top">
+                <a href="https://docs.google.com/spreadsheets/u/0/" target="_blank">
+                    <img src="image/card_Excel.png" class="card-img-top" width="100" height="100">
+                </a>
                 <div class="card-body">
-                    <h5 class="card-title text-start">handlebars</h5>
-                    <p class="card-text text-start">Minimal templating on steroids</p>
+                <p class="card-text text-middle">GoogleExcel</p>
                 </div>
             </div>
-            </a>
         </div>
+         <!-- 깃허브 -->
+  <!--        <div class="col-sm-2">
+            <div class="card">
+                <a href="https://github.com/" target="_blank">
+                    <img src="image/card_GitHub.png" class="card-img-top" width="100" height="100">
+                </a>
+                <div class="card-body">
+                <p class="card-text text-middle">GitHub</p>
+                </div>
+            </div>
+        </div>		
+  -->
     </div>
     
-    <div class="row mt-2 mx-5">
-        <!-- maven repository -->
-        <div class="col-sm-2">
-            <a href="https://mvnrepository.com/" target="_blank" style="text-decoration-line:none; color:black;">
-            <div class="card">
-                <img src="image/card_mavenRepository.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title text-start">Maven Repository</h5>
-                    <p class="card-text text-start">Librarys Repository</p>
-                </div>
-            </div>
-            </a>
-        </div>
-
-	    <!-- spring boot -->
-        <div class="col-sm-2">
-            <a href="https://spring.io/projects/spring-boot" target="_blank" style="text-decoration-line:none; color:black;">
-            <div class="card">
-                <img src="image/card_springboot.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title text-start">Spring Boot</h5>
-                    <p class="card-text text-start">Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run"</p>
-                </div>
-            </div>
-            </a>
-        </div>
-	    
-	    <!-- dbeaver -->
-        <div class="col-sm-2">
-            <a href="https://dbeaver.io/" target="_blank" style="text-decoration-line:none; color:black;">
-            <div class="card">
-                <img src="image/card_dbeaver.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title text-start">DBeaver</h5>
-                    <p class="card-text text-start">Free Universal Database Tool</p>
-                </div>
-            </div>
-            </a>
-        </div>
-	    
-	    <!-- gradle -->
-        <div class="col-sm-2">
-            <a href="https://docs.gradle.org/current/userguide/about_manual.html" target="_blank" style="text-decoration-line:none; color:black;">
-            <div class="card">
-                <img src="image/card_gradle.jpg" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title text-start">Gradle</h5>
-                    <p class="card-text text-start">Gradle Build Tool is a fast, dependable, and adaptable open-source build automation tool with an elegant and extensible declarative build language.</p>
-<!--                     <a href="https://docs.gradle.org/current/userguide/about_manual.html" target="_blank" class="btn btn-primary w-25">Go</a> -->
-                </div>
-            </div>
-            </a>
-        </div>
-    </div>
-
-    <p class="text-start fs-3 mt-5 mx-5" style="color:#5B5959;">
+   <p class="text-start fs-3 mt-5 mx-5" style="color:#5B5959;">
         <i class="fa-solid fa-paper-plane mx-2"></i>업무관련 SITE
     </p>
-
     <div class="row mt-3 mx-5">
         <!-- 예탁결제원 -->
         <div class="col-sm-2">
@@ -253,6 +189,121 @@
             </div>
         </div>
     </div>
+    
+    <p class="text-start fs-3 mt-5 mx-5" style="color:#5B5959;">
+        <i class="fa-solid fa-paper-plane mx-2"></i> IT관련 SITE
+    </p>
+
+    <div class="row mt-3 mx-5">
+        <!-- bootstrap -->
+        <div class="col-sm-2">
+            <a href="https://getbootstrap.com/docs/5.2" target="_blank" style="text-decoration-line:none; color:black;">
+		    <div class="card">
+                <img src="image/card_bootstrap4.jpg" class="card-img-top">
+		        <div class="card-body">
+		            <h5 class="card-title text-start">Bootstrap v5.2 Docs</h5>
+                    <p class="card-text text-start">Build fast, responsive sites with Bootstrap</p>
+		        </div>
+		    </div>
+		    </a>
+        </div>
+
+        <!-- postgresql -->
+        <div class="col-sm-2">
+            <a href="https://www.postgresql.org/" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_postgresql4.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">PostgreSQL</h5>
+                    <p class="card-text text-start">The World's Most Advanced Open Source Relational Database</p>
+                </div>
+            </div>
+            </a>
+        </div>
+   
+        <!-- JQuery -->
+        <div class="col-sm-2">
+            <a href="https://jquery.com/" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_jquery.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">jQuery</h5>
+                    <p class="card-text text-start">jQuery is a fast, small, and feature-rich JavaScript library</p>
+                </div>
+            </div>
+            </a>
+        </div>
+    
+        <!-- HandleBar -->
+        <div class="col-sm-2">
+            <a href="https://handlebarsjs.com/" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_handlebars.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">handlebars</h5>
+                    <p class="card-text text-start">Minimal templating on steroids</p>
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="row mt-2 mx-5">
+        <!-- maven repository -->
+        <div class="col-sm-2">
+            <a href="https://mvnrepository.com/" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_mavenRepository.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">Maven Repository</h5>
+                    <p class="card-text text-start">Librarys Repository</p>
+                </div>
+            </div>
+            </a>
+        </div>
+
+	    <!-- spring boot -->
+        <div class="col-sm-2">
+            <a href="https://spring.io/projects/spring-boot" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_springboot.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">Spring Boot</h5>
+                    <p class="card-text text-start">Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications that you can "just run"</p>
+                </div>
+            </div>
+            </a>
+        </div>
+	    
+	    <!-- dbeaver -->
+        <div class="col-sm-2">
+            <a href="https://dbeaver.io/" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_dbeaver.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">DBeaver</h5>
+                    <p class="card-text text-start">Free Universal Database Tool</p>
+                </div>
+            </div>
+            </a>
+        </div>
+	    
+	    <!-- gradle -->
+        <div class="col-sm-2">
+            <a href="https://docs.gradle.org/current/userguide/about_manual.html" target="_blank" style="text-decoration-line:none; color:black;">
+            <div class="card">
+                <img src="image/card_gradle.jpg" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title text-start">Gradle</h5>
+                    <p class="card-text text-start">Gradle Build Tool is a fast, dependable, and adaptable open-source build automation tool with an elegant and extensible declarative build language.</p>
+<!--                     <a href="https://docs.gradle.org/current/userguide/about_manual.html" target="_blank" class="btn btn-primary w-25">Go</a> -->
+                </div>
+            </div>
+            </a>
+        </div>
+    </div>
+
+ 
 
 </main>
 <!-- =================================================== -->

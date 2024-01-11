@@ -41,7 +41,7 @@ public class Opr01ContService {
 	}
 	@Transactional
 	public String insert(Opr01Cont cont) throws Exception{
-		
+
 		// 체결ID SET
 		cont.setOpr01ContId(contRepository.getNewSeq());
 		
@@ -63,7 +63,7 @@ public class Opr01ContService {
 		
 		// 체결상태 SET
 		cont.setOpr01StatusCd("0"); // 미처리 :0
-		
+		System.out.println("처리상태 미처리로 변환!@!@!@#!");
 		// 체결내역 INSERT
 		int insertCnt = contRepository.insert(cont);
 		log.debug("인서트카운트 : { }" , insertCnt);
@@ -140,6 +140,7 @@ public class Opr01ContService {
 				//처리상태 '완료' Update
 				cont.setOpr01StatusCd("1"); //1 = 처리완료\
 				procCnt = contRepository.update(cont);
+				System.out.println("처리상태 완료로 변환!@!@!@#!");
 			}
 		}
 		//------------------

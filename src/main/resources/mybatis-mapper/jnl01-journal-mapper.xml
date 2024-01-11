@@ -2,12 +2,67 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper	namespace="kr.co.kfs.assetedu.repository.Jnl01JournalRepository">
+	<sql id="whereQueryAttr">
+	<if test="opr01TrNm != null and opr01TrNm !=''">
+	AND jnl12_tr_nm = #{opr01TrNm}	
+	</if>
+	<if test="opr01TrNm != null and opr01TrNm !=''">
+	AND jnl12_tr_nm = #{opr01TrNm}	
+	</if>
+	<if test="fnd01FundNm != null and fnd01FundNm !=''">
+	AND fnd01_fund_nm = #{fnd01FundNm}	
+	</if>
+	<if test="itm01ItemNm != null and itm01ItemNm !=''">
+	AND itm01_item_nm = #{itm01ItemNm}	
+	</if>
+	<if test="searchText != null and searchText !=''">
+	AND UPPER(CONCAT(jnl12_tr_nm, ' ', fnd01_fund_nm, ' ', itm01_item_nm, ' ')) LIKE UPPER(CONCAT('%', #{searchText}, '%'))
+	</if>
+	<if test="frDate != null and frDate != ''">
+	AND opr01_cont_date <![CDATA[ >=]]> #{frDate}
+	</if>
+	<if test="toDate != null and toDate != ''">
+	AND opr01_cont_date <![CDATA[ <=]]> #{toDate}
+	</if>
+	</sql>
 	<select id="selectOne" parameterType="Jnl01Journal" resultType="Jnl01Journal">
-	SELECT 
+	SELECT  *
 	FROM	jnl01_journal 
 	WHERE	jnl01_cont_id = #{jnl01ContId}
 	AND		jnl01_seq     = #{jnl01Seq}
+	</select>
 	
+	<select id="selectCount" parameterType="QueryAttr" resultType="Long">
+	select count(*) as count 
+	from jnl01_journal 
+	where 1=1
+	</select>
+	
+	<select id="selectList" parameterType="QueryAttr" resultType="Jnl01Journal">
+	SELECT 	jnl01_cont_id				AS      jnl01ContId
+			,jnl01_seq                  AS      jnl01Seq
+			,jnl01_dr_acnt_cd           AS      jnl01DrAcntCd
+			,jnl01_dr_amt               AS      jnl01DrAmt
+			,jnl01_cr_acnt_cd           AS      jnl01CrAcntCd
+			,jnl01_cr_amt               AS      jnl01CrAmt
+			,opr01_cont_date 			AS		opr01ContDate
+			,jnl12_tr_nm				AS		opr01TrNm
+			,fnd01_fund_nm				AS		fnd01FundNm
+			,itm01_item_nm				AS		itm01ItemNm
+			,dr.jnl10_acnt_nm			AS 		drJnl10AcntNm
+			,cr.jnl10_acnt_nm			AS 		crJnl10AcntNm
+			,dr.jnl10_acnt_cd			AS		drJnl10AcntCd
+			,cr.jnl10_acnt_cd			AS		crJnl10AcntCd
+	FROM jnl01_journal AS j
+	INNER JOIN opr01_cont 				ON		opr01_cont_id = j.jnl01_cont_id
+	INNER JOIN jnl12_tr					ON      jnl12_tr_cd   = opr01_tr_cd
+	INNER JOIN fnd01_fund				ON		fnd01_fund_cd = opr01_fund_cd
+	INNER JOIN itm01_item				ON      itm01_item_cd = opr01_item_cd
+	LEFT OUTER JOIN jnl10_acnt AS dr			ON  	jnl01_dr_acnt_cd = dr.jnl10_acnt_cd  
+	LEFT OUTER JOIN JNL10_acnt AS cr			ON 		jnl01_cr_acnt_cd = cr.jnl10_acnt_cd
+	WHERE 1=1
+	<include refid="whereQueryAttr"></include>
+	ORDER BY jnl01_cont_id ASC , jnl01_seq ASC 
 	</select>
 	
 	<delete id="deleteByContId" parameterType="String">
@@ -17,7 +72,7 @@
 	</delete>
 
 	<select id="getAmt" parameterType="QueryAttr" resultType="Long">
-		SELECT f_get_journalamt(#{formula}, #{contId})
+		SELECT f_get_journalAmt(#{formula}, #{contId})
 	</select>
 	
 	

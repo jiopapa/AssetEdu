@@ -108,7 +108,7 @@ public class OprController {
 			
 		}
 		if (!"Y".equals(resultMsg)) {
-			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			model.addAttribute("trCdLIst", codeService.trCodeList("BUY"));
 			bindingResult.addError(new FieldError("", "", resultMsg+""));
 			return "/opr/buy_insert_form";
 		} else {
@@ -256,8 +256,7 @@ public class OprController {
 			
 		}
 		if (!"Y".equals(resultMsg)) {
-			model.addAttribute("trCdList", codeService.trCodeList("SELL"));
-			model.addAttribute("cont", cont);
+			model.addAttribute("trCdLIst", codeService.trCodeList("SELL"));
 			bindingResult.addError(new FieldError("", "", resultMsg+""));
 			return "/opr/sell_insert_form";
 		} else {
@@ -292,7 +291,7 @@ public class OprController {
 		log.debug("매도운용지시 - 취소처리");
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			model.addAttribute("trCdList", codeService.trCodeList("SELL"));
 			return "/opr/sell_delete";
 		}
 		String resultMsg = "";
@@ -307,7 +306,7 @@ public class OprController {
 
 		}
 		if (!"Y".equals(resultMsg)) {
-			model.addAttribute("trCdList", codeService.trCodeList("BUY"));
+			model.addAttribute("trCdList", codeService.trCodeList("SELL"));
 			bindingResult.addError(new FieldError("", "", resultMsg));
 			return "/opr/buy_delete";
 		} else {

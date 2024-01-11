@@ -2,43 +2,67 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.kfs.assetedu.repository.Opr01ContRepository">
+
+	<sql id="whereQueryAttr">
+	<if test="opr01FundNm != null and opr01FundNm != ''">
+	AND fnd01_fund_nm = #{opr01FundNm}
+	</if>
+	<if test="opr01ItemNm != null and opr01ItemNm != ''">
+	AND itm01_item_nm = #{opr01ItemNm}
+	</if>
+	<if test="opr01TrCoNm != null and opr01TrCoNm != ''">
+	AND opr01_tr_co_nm = #{opr01TrCoNm}
+	</if>
+	<if test="opr01TrNm != null and opr01TrNm != ''">
+	AND jnl12_tr_nm = #{opr01TrNm}
+	</if>
+	<if test="searchText != null and searchText != ''">
+	AND UPPER(CONCAT(opr01_fund_cd, ' ' , opr01_fund_nm, ' ', opr01_item_cd, ' ', opr01_item_nm
+						,  ' ', opr01_tr_co_nm)) LIKE UPPER(CONCAT('%', #{searchText}, '%'))
+	</if>
+	<if test="frDate != null and frDate != ''">
+	AND opr01_cont_date <![CDATA[>=]]> #{frDate}
+	</if>
+	<if test="toDate != null and toDate != ''">
+	AND opr01_cont_date <![CDATA[<=]]> #{toDate}
+	</if>
+	<if test="trType != null">
+    AND 			((#{trType} = 'BUY'  AND opr01_tr_cd IN ('1001','1002')) 
+    OR              (#{trType} = 'SELL'  AND opr01_tr_cd IN ('2001','2002')))
+    </if>
+	</sql>
+
+
    <select id="selectList" parameterType="QueryAttr" resultType="Opr01Cont">
-   	SELECT *
-   		FROM(
-   			SELECT	opr01_cont_id							
-					,opr01_fund_cd
-					,opr01_item_cd
-					,opr01_cont_date
-					,opr01_tr_cd
-					,opr01_qty
-					,opr01_price
-					,opr01_cont_amt
-					,opr01_tr_pl
-					,opr01_fee
-					,opr01_tax
-					,opr01_settle_amt
-					,opr01_settle_date
-					,opr01_tr_co_cd
-					,opr01_book_id
-					,opr01_book_amt
-					,opr01_status_cd
-					,fnd01_fund_nm 								as opr01_fund_nm
-					,itm01_item_nm							as opr01_item_nm
-					,f_corp_nm(opr01_tr_co_cd)  				as opr01_tr_co_nm
-					,f_com_nm('TrStatusCode', opr01_status_cd)  as opr01_status_nm
-					,jnl12_tr_nm								as opr01_tr_nm
-			FROM opr01_cont
-					INNER JOIN fnd01_fund ON fnd01_fund_cd = opr01_fund_cd
-					INNER JOIN itm01_item ON itm01_item_cd = opr01_item_cd
-					INNER JOIN jnl12_tr	ON jnl12_tr_cd = opr01_tr_cd
-			WHERE  opr01_cont_date BETWEEN #{frDate} AND #{toDate}
-			AND		jnl12_use_page_type = #{pageType}
-			AND		opr01_status_cd != '9'								 /*9:취소 */ 
-			) AS t
-			
-			WHERE UPPER(CONCAT(opr01_fund_cd, ' ' , opr01_fund_nm, ' ', opr01_item_cd, ' ', opr01_item_nm
-			,  ' ', opr01_tr_co_nm))
-    	LIKE CONCAT('%',UPPER(#{searchText}),'%')
+   	SELECT 	opr01_cont_id							   AS   opr01ContId
+			,opr01_fund_cd                             AS   opr01FundCd
+			,opr01_item_cd                             AS   opr01ItemCd
+			,opr01_cont_date                           AS   opr01ContDate
+			,opr01_tr_cd                               AS   opr01TrCd
+			,opr01_qty                                 AS   opr01Qty
+			,opr01_price                               AS   opr01Price
+			,opr01_cont_amt                            AS   opr01ContAmt
+			,opr01_tr_pl                               AS   opr01TrPl
+			,opr01_fee                                 AS   opr01Fee
+			,opr01_tax                                 AS   opr01Tax
+			,opr01_settle_amt                          AS   opr01SettleAmt
+			,opr01_settle_date                         AS   opr01SettleDate 
+			,opr01_tr_co_cd                            AS   opr01TrCoCd
+			,opr01_book_id                             AS   opr01BookId
+			,opr01_book_amt                            AS   opr01BookAmt
+			,opr01_status_cd                           AS   opr01StatusCd
+			,fnd01_fund_nm 							   AS   opr01FundNm
+			,itm01_item_nm							   AS   opr01ItemNm
+			,f_corp_nm(opr01_tr_co_cd)  			   AS   opr01TrCoNm
+			,f_com_nm('TrStatusCode', opr01_status_cd) AS   opr01StatusNm
+			,jnl12_tr_nm							   AS   opr01TrNm
+	FROM 	opr01_cont
+	INNER JOIN fnd01_fund ON fnd01_fund_cd = opr01_fund_cd
+    INNER JOIN itm01_item ON itm01_item_cd = opr01_item_cd
+	INNER JOIN jnl12_tr	ON jnl12_tr_cd = opr01_tr_cd
+	WHERE   jnl12_use_page_type = #{pageType}
+	AND		opr01_status_cd != '9'								 /*9:취소 */ 
+	<include refid="whereQueryAttr"/>
    </select>
    
    <select id="selectOne" parameterType="Opr01Cont" resultType="Opr01Cont">
@@ -71,8 +95,13 @@
 					INNER JOIN jnl12_tr	ON jnl12_tr_cd = opr01_tr_cd
 			WHERE opr01_cont_id = #{opr01ContId}
    </select>
-   <select id="getNewSeq"  resultType="String">
+   <select id="getNewSeq1"  resultType="String">
    SELECT f_seq()
+   </select>
+   <select id="getNewSeq"  resultType="String">
+   SELECT  seq from (
+    select to_char(now(),'yyyymmdd')||lpad(cast(nextval('asset_seq') as varchar),5,'0') as seq
+    ) A
    </select>
    
    <select id="selectByOtherCont" parameterType="QueryAttr" resultType="Opr01Cont">
@@ -103,29 +132,22 @@
    <insert id="insert" parameterType="Opr01Cont">
    INSERT 
    INTO opr01_cont
-   SELECT 	 		#{opr01ContId}							
-					,#{opr01FundCd}
-					,#{opr01ItemCd}
-					,#{opr01ContDate}
-					,#{opr01TrCd}
-					,#{opr01Qty}
-					,#{opr01Price}
-					,#{opr01ContAmt}
-					,#{opr01TrPl}
-					,#{opr01Fee}
-					,#{opr01Tax}
-					,#{opr01SettleAmt}
-					,#{opr01SettleDate}
-					,#{opr01TrCoCd}
-					,#{opr01BookId}
-					,#{opr01BookAmt}
-					,#{opr01StatusCd}
+   	 	(opr01_cont_id, 	opr01_fund_cd, 		opr01_item_cd, 		opr01_cont_date
+   	 	,opr01_tr_cd , 		opr01_qty,			 opr01_price, 		opr01_cont_amt
+   	 	,opr01_tr_pl ,	 	opr01_fee, 			opr01_tax, 			opr01_settle_amt
+   	 	,opr01_settle_date, opr01_tr_co_cd,     opr01_book_id,      opr01_book_amt
+   	 	,opr01_status_cd)   
+   VALUES(#{opr01ContId},	#{opr01FundCd},		#{opr01ItemCd},		#{opr01ContDate}
+   		 ,#{opr01TrCd},		#{opr01Qty}, 		#{opr01Price},		#{opr01ContAmt}
+   		 ,#{opr01TrPl},		#{opr01Fee},		#{opr01Tax},		#{opr01SettleAmt}
+		 ,#{opr01SettleDate},#{opr01TrCoCd},	#{opr01BookId},		#{opr01BookAmt}
+		 ,#{opr01StatusCd})
    </insert>
    
    <update id="update" parameterType="Opr01Cont">
    	UPDATE opr01_cont
-   	SET 
-		  opr01_fund_cd      =    #{opr01FundCd}          
+   	SET   opr01_cont_id      =    #{opr01ContId}	
+		, opr01_fund_cd      =    #{opr01FundCd}          
 		, opr01_item_cd      =    #{opr01ItemCd}          
 		, opr01_cont_date    =    #{opr01ContDate}        
 		, opr01_tr_cd        =    #{opr01TrCd}            
@@ -141,8 +163,8 @@
 		, opr01_book_id      =    #{opr01BookId}          
 		, opr01_book_amt     =    #{opr01BookAmt}         
 		, opr01_status_cd    =    #{opr01StatusCd}        
-   WHERE
-   		 opr01_cont_id       =    #{opr01ContId}				
+   WHERE 1=1
+   AND	 opr01_cont_id       =    #{opr01ContId}				
    </update>
    
    

@@ -153,7 +153,7 @@ $(document).ready(function () {
         var url = '/popup/corp?corpCd=opr01TrCoCd&corpNm=opr01TrCoNm&selectCorpType=03';
         var prop = {};
         var width = 720;
-        var height = 550;
+        var height = 600;
         var win = AssetUtil.popupWindow(url, '기관선택', {}, width, height);
         return false;
     });
@@ -168,7 +168,7 @@ $(document).ready(function () {
 
         var prop = {};
         var width = 720;
-        var height = 550;
+        var height = 650;
         var win = AssetUtil.popupWindow(url, '보유종목선택', {}, width, height);
         return false;
     });    	

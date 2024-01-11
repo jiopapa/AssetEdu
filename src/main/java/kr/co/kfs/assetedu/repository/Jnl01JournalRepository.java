@@ -11,7 +11,7 @@ public interface Jnl01JournalRepository {
 	
 	
 	Long getAmt(QueryAttr amtCondition);
-	
+	Long selectCount(QueryAttr queryAttr);
 	
 	int insert(Jnl01Journal jnl01Journal);
 	int update(Jnl01Journal jnl01Journal);
