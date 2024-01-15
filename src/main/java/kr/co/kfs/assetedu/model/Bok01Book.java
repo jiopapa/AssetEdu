@@ -30,6 +30,9 @@ public class Bok01Book {
 	@NumberFormat
 	private Long bok01EvalPl;
 	private String bok01EvalYn;
+	private Long bok01EvalPrice;
+	private String bok01EvalYnStr;
+	private String bok01ContId;
 	
 	
 	

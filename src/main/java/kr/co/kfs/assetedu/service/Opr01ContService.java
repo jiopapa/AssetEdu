@@ -17,6 +17,7 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 import kr.co.kfs.assetedu.repository.Bok01BookRepository;
 import kr.co.kfs.assetedu.repository.Com03DateRepository;
 import kr.co.kfs.assetedu.repository.Opr01ContRepository;
+import kr.co.kfs.assetedu.servlet.exception.AssetException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,8 +31,6 @@ public class Opr01ContService {
 	Com03DateRepository dateRepository;
 	@Autowired
 	Bok01BookService bookService;
-	@Autowired
-	Opr01ContRepository opr01ContRepository;
 	
 	public List<Opr01Cont> selectList(QueryAttr queryAttr){
 		return contRepository.selectList(queryAttr);
@@ -61,6 +60,7 @@ public class Opr01ContService {
 		}
 		cont.setOpr01BookId(bookId);
 		
+		
 		// 체결상태 SET
 		cont.setOpr01StatusCd("0"); // 미처리 :0
 		System.out.println("처리상태 미처리로 변환!@!@!@#!");
@@ -75,7 +75,77 @@ public class Opr01ContService {
 		
 		return resultMsg;
 	}
+
+	@Transactional
+	public String eval(String procType, String evalDate)throws Exception{
+		//평가리스트 가져오기
+		int resultCnt = 0;
+		String resultMsg = "Y";
+		String trCode = "3001";
+		QueryAttr queryAttr = new QueryAttr();
+		queryAttr.put("evalDate",evalDate);
+		queryAttr.put("searchText", "%");
+		
+		List<Bok01Book> evalList = bookRepository.selectEvalList(queryAttr);
+		for(Bok01Book book : evalList) {
+			//평가 처리  ( 미평가건만 해당)
+			if("P".equals(procType) && "false".equals(book.getBok01EvalYn())) {
+				// 평가내역 생성 (opr01 insert)
+				Opr01Cont insertModel = new Opr01Cont();
+				insertModel.setOpr01ContId(contRepository.getNewSeq());
+				insertModel.setOpr01FundCd(book.getBok01FundCd());
+				insertModel.setOpr01ItemCd(book.getBok01ItemCd());
+				insertModel.setOpr01ContDate(book.getBok01HoldDate());
+				insertModel.setOpr01TrCd("3001");
+				insertModel.setOpr01Qty(book.getBok01HoldQty());
+				
+				//평가단가
+				insertModel.setOpr01Price(book.getBok01EvalPrice());
+				
+				//평가금액 보유수량 * 평가단가
+				Long evalAmt = book.getBok01HoldQty() * book.getBok01EvalPrice();
+				insertModel.setOpr01ContAmt(evalAmt);
+				
+				//평가손익 = 평가금액 - 장부금액
+				insertModel.setOpr01TrPl(evalAmt - book.getBok01BookAmt());
+				
+				insertModel.setOpr01BookId(book.getBok01BookId());
+				insertModel.setOpr01BookAmt(book.getBok01BookAmt());
+				insertModel.setOpr01StatusCd("0");//0 : 미처리
+				
+				int procCnt = contRepository.insert(insertModel);
+				resultCnt++;
+				// 처리&취소 main 호출
+				resultMsg = procMain("P", insertModel);
+				
+			}
+			//평가 취소  (평가완료건만 해당)
+			else if("C".equals(procType) && "true".equals(book.getBok01EvalYn()) ) {
+				// 거래 내역 가져오기
+				Opr01Cont cont = new Opr01Cont();
+				cont.setOpr01ContId(book.getBok01ContId());
+				cont = contRepository.selectOne(cont);
+				resultCnt++;
+
+				
+				// 처리&취소 main 호출
+				resultMsg = procMain("C", cont);
+			}
+			else {
+				resultMsg = "처리구분을 확인해 주세요 .";
+				throw new AssetException(resultMsg);
+			}
+		}
+		if(resultCnt ==0) {
+			if("P".equals(procType)) {
+				resultMsg = "평가처리 대상이 없습니다.";
+			} else { 
+				resultMsg = "평가취소 대상이 없습니다.";
+			}throw new AssetException(resultMsg);
+		}
 	
+		return resultMsg;
+}
 	@Transactional
 	public String delete(Opr01Cont cont)throws Exception{
 		
@@ -151,7 +221,7 @@ public class Opr01ContService {
 			log.debug("cont : {} ", cont);
 			cont.setOpr01StatusCd("9");
 			cont.setOpr01ContId(cont.getOpr01ContId());
-			procCnt = opr01ContRepository.statusChange9(cont);
+			procCnt = contRepository.statusChange9(cont);
 			
 			//보유일자 = 오늘  조건 
 			QueryAttr setHoldDateSetId =new QueryAttr();

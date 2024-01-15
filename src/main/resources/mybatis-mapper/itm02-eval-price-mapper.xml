@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+      "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kfs.assetedu.repository.Itm02EvalPriceRepository">
+	
+   <select id="selectList" parameterType="QueryAttr" resultType="Itm02EvalPrice">
+	  SELECT 	bok01_item_cd									AS         itm02ItemCd
+			,	bok01_hold_date                    				AS         itm02ApplyDate
+			,	COALESCE(itm02_apply_price,0)                   AS         itm02ApplyPrice
+			,   itm01_item_nm									AS		   itm02ItemNm
+	  FROM bok01_book
+	  INNER JOIN itm01_item  									ON			itm01_item_cd  = bok01_item_cd
+	  LEFT OUTER JOIN itm02_eval_price							ON			(itm02_item_cd = bok01_item_cd AND
+																			itm02_apply_date = Bok01_hold_date)
+	  WHERE bok01_hold_date = #{stdDate} 	
+	  AND	bok01_hold_qty	!= 0
+	  AND	UPPER(CONCAT(itm01_item_cd, itm01_item_nm)) LIKE CONCAT('%', upper(#{searchText}), '%')
+	  GROUP BY bok01_hold_date, bok01_item_cd, itm01_item_nm, itm02_apply_price
+   </select>
+   
+   <update id="update" parameterType="Itm02EvalPrice" >
+   UPDATE Itm02_eval_price
+   SET    itm02_apply_price = #{itm02ApplyPrice}
+   WHERE  itm02_item_cd = #{itm02ItemCd}	
+   AND itm02_apply_date = #{itm02ApplyDate}	
+   </update>
+   
+   
+   <update id="upsert" parameterType="Bok01Book">
+   	WITH upsert AS (UPDATE itm02_eval_price 
+   					SET    itm02_apply_price      =	#{itm02ApplyPrice}
+   					WHERE    itm02_item_cd 		=  #{itm02ItemCd}
+   					AND      itm02_apply_date    =	#{itm02ApplyDate}
+   					RETURNING * 
+   		) INSERT
+   			INTO itm02_eval_price
+   			SELECT #{itm02ItemCd}
+             	 , #{itm02ApplyDate}
+             	  , #{itm02ApplyPrice}
+			WHERE NOT EXISTS (SELECT * FROM upsert )
+   </update>
+   
+<!--   <select id="selectCount" parameterType="QueryAttr" resultType="Long">
+   		SELECT 
+   			count(*) as count
+   		FROM
+   			itm01_item
+   		WHERE 1=1
+   			<include refid="whereQueryAttr"/>	
+   </select> 
+   
+   <insert id="insert" parameterType="Itm01Item">
+   insert into itm01_item(itm01_item_cd, itm01_item_nm, itm01_item_enm, itm01_short_cd
+   						,	itm01_iss_type, itm01_stk_type, itm01_list_type, itm01_market_type
+   						,	itm01_par, itm01_iss_co_cd)
+   values(#{itm01ItemCd},#{itm01ItemNm},#{itm01ItemEnm},#{itm01ShortCd}
+   		, #{itm01IssType},#{itm01StkType},#{itm01ListType},#{itm01MarketType}
+   		, #{itm01Par},#{itm01IssCoCd})
+   </insert>
+   
+   
+   <update id="update" parameterType="Itm01Item">
+   update itm01_item 
+   set itm01_item_nm = #{itm01ItemNm}, itm01_item_enm = #{itm01ItemEnm} 
+   , itm01_short_cd = #{itm01ShortCd} 	, itm01_iss_type = #{itm01IssType} , itm01_stk_type = #{itm01StkType} 
+   , itm01_list_type = #{itm01ListType} , itm01_market_type = #{itm01MarketType} , itm01_par = #{itm01Par} 
+   , itm01_iss_co_cd= #{itm01IssCoCd} 
+   where itm01_item_cd = #{itm01ItemCd}
+   </update>
+   
+   <delete id ="delete"	parameterType="Itm01Item">
+   delete from itm01_item
+   where itm01_item_cd = #{itm01ItemCd}
+   </delete> --> 
+ 
+   </mapper>

@@ -170,7 +170,7 @@ public class OprController {
 
 
 	@GetMapping("buy_success")
-	public String buySuccess(String msg, String mode, String contId, Model model) {
+	public String buySuccess(String msg, String mode, Long contId, Model model) {
 		log.debug("매수 운용지시 성공화면 ");
 		log.debug(msg);
 		model.addAttribute("pageTitle", "매수처리");

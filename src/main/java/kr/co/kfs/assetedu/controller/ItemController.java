@@ -3,6 +3,7 @@ package kr.co.kfs.assetedu.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Objects;
 
 import javax.validation.Valid;
 
@@ -14,15 +15,19 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.kfs.assetedu.model.Com01Corp;
+import kr.co.kfs.assetedu.model.ApiData;
 import kr.co.kfs.assetedu.model.Itm01Item;
+import kr.co.kfs.assetedu.model.Itm02EvalPrice;
 import kr.co.kfs.assetedu.model.QueryAttr;
-import kr.co.kfs.assetedu.service.Com01CorpService;
 import kr.co.kfs.assetedu.service.Com02CodeService;
 import kr.co.kfs.assetedu.service.Itm01ItemService;
+import kr.co.kfs.assetedu.service.Itm02EvalPriceService;
+import kr.co.kfs.assetedu.utils.AssetUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -33,6 +38,8 @@ public class ItemController {
 	Itm01ItemService itm01ItemService;
 	@Autowired
 	Com02CodeService com02CodeService;
+	@Autowired
+	Itm02EvalPriceService itm02EvalPriceService;
 
 
 	@GetMapping("list")
@@ -128,5 +135,46 @@ public class ItemController {
 		}
 		return "redirect:/item/list";
 		}
+	@GetMapping("price")
+	public String price(String searchText, String stdDate, Model model) {
+		if(Objects.isNull(stdDate)) {
+			stdDate = AssetUtil.today();
+		} else {
+			stdDate = AssetUtil.removeDash(stdDate);
+		}
+		
+		QueryAttr queryAttr = new QueryAttr();
+		queryAttr.put("stdDate", stdDate);
+		queryAttr.put("searchText", searchText);
+		
+		List<Itm02EvalPrice> list = itm02EvalPriceService.selectList(queryAttr);
+		
+		model.addAttribute("list", list);
+		model.addAttribute("stdDate", AssetUtil.displayYmd(stdDate));
+		return "/item/price";
+	}
 	
+	@ResponseBody
+	@PostMapping("price_update")
+	public String priceUpdate(@Valid @RequestBody Itm02EvalPrice itm02EvalPrice) {
+		ApiData apiData = new ApiData();
+		itm02EvalPrice.setItm02ApplyDate (AssetUtil.removeDash (itm02EvalPrice.getItm02ApplyDate()));
+		itm02EvalPrice.setItm02ApplyPrice(AssetUtil.removeComma(itm02EvalPrice.getItm02ApplyPrice()+""));
+		
+		try {
+			int count = itm02EvalPriceService.update(itm02EvalPrice);
+			
+			apiData.put("count", count);
+			apiData.put("result", "OK");
+			apiData.put("itm02EvalPrice", itm02EvalPrice);
+			apiData.put("msg", "저장되었습니다.");
+		}
+		catch(Exception e) {
+			apiData.put("result", "NK:" + e.getMessage());
+		}
+		
+		return apiData.toJson();
+		
+		
+	}
 	}

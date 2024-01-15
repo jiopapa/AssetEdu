@@ -52,6 +52,40 @@
 		</if>  
    </select>
    
+   
+   <select id="selectEvalList" parameterType="QueryAttr" resultType="Bok01Book">
+ SELECT 	bok01_book_id   as bok01BookId   /** 원장id */ 
+             , bok01_hold_date as bok01HoldDate /** 보유일자 */ 
+             , bok01_fund_cd   as bok01FundCd   /** 펀드코드 */ 
+             , bok01_item_cd   as bok01ItemCd   /** 종목코드 */ 
+             , bok01_hold_qty  as bok01HoldQty  /** 보유수량 */ 
+             , bok01_pur_amt   as bok01PurAmt   /** 취득금액 */ 
+             , bok01_book_amt  as bok01BookAmt  /** 장부금액 */ 
+             , bok01_eval_amt  as bok01EvalAmt  /** 평가금액 */ 
+             , bok01_eval_pl   as bok01EvalPl   /** 평가손익 */
+             , bok01_eval_yn   as bok01EvalYn   /** 평가여부 */
+             , COALESCE(itm02_apply_price,0)                                                  as bok01EvalPrice
+             , CASE WHEN COALESCE(bok01_eval_yn,'false') = 'true' THEN '완료' ELSE '미처리' END  as bok01EvalYnStr
+             , opr01_cont_id                                                                  as bok01ContId
+             , itm01_item_nm   as itm01ItemNm
+             , fnd01_fund_nm   as fnd01FundNm
+          FROM bok01_book
+               INNER JOIN fnd01_fund ON fnd01_fund_cd = bok01_fund_cd
+               INNER JOIN itm01_item ON itm01_item_cd = bok01_item_cd
+               LEFT OUTER JOIN itm02_eval_price ON ( itm02_item_cd    = bok01_item_cd   AND
+                                                     itm02_apply_date = bok01_hold_date )
+               LEFT OUTER JOIN opr01_cont ON ( opr01_cont_date = bok01_hold_date    AND
+                                               opr01_book_id   = bok01_book_id      AND
+                                               opr01_tr_cd     = '3001'             AND
+                                               opr01_status_cd = '1'                )
+         WHERE bok01_hold_date = #{evalDate}
+         <if test = "searchText != null and searchText != ''">
+   AND      UPPER(CONCAT(bok01_fund_cd,fnd01_fund_nm, bok01_item_cd,itm01_item_nm ))
+   			LIKE CONCAT('%',UPPER(#{searchText}),'%')
+   			</if>
+   ORDER BY fnd01_fund_cd, itm01_item_nm 
+   </select>
+   
    <select id="selectCount" parameterType="QueryAttr" resultType="Long">
    	SELECT 
    			count(*) as count
@@ -113,7 +147,7 @@
 				,bok01_book_amt
 				,bok01_eval_amt
 				,bok01_eval_pl
-				bok01_eval_yn
+				,bok01_eval_yn
 		FROM bok01_book
 		WHERE bok01_hold_date = f_get_date(#{holdDate}, -1) 
 		AND		bok01_hold_qty <![CDATA[>]]>0
@@ -125,34 +159,20 @@
    <insert id="insert" parameterType="Bok01Book">
    INSERT 
    INTO bok01_book
-   SELECT 	 		
-   				 #{bok01BookId}
-				,#{bok01HoldDate}
-				,#{bok01FundCd}
-				,#{bok01ItemCd}
-				,#{bok01HoldQty}
-				,#{bok01PurAmt}
-				,#{bok01BookAmt}
-				,#{bok01EvalAmt}
-				,#{bok01EvalPl}
-				,#{bok01EvalYn}
+ 					 (bok01_book_id ,bok01_hold_date, bok01_fund_cd, bok01_item_cd, bok01_hold_qty, bok01_pur_amt, bok01_book_amt
+					, bok01_eval_amt, bok01_eval_pl, bok01_eval_yn) 		
+   	VALUES			 (#{bok01BookId} ,#{bok01HoldDate} ,#{bok01FundCd} ,#{bok01ItemCd} ,#{bok01HoldQty} ,#{bok01PurAmt}, ,#{bok01BookAmt}
+				    ,#{bok01EvalAmt} ,#{bok01EvalPl} ,#{bok01EvalYn})
    </insert>
    
      <insert id="reInsert" parameterType="Bok01Book">
-   INSERT 
-   INTO bok01_book
-   SELECT 	 		
-   				 #{bok01BookId}
-				,#{bok01HoldDate}
-				,#{bok01FundCd}
-				,#{bok01ItemCd}
-				,#{bok01HoldQty}
-				,#{bok01PurAmt}
-				,#{bok01BookAmt}
-				,#{bok01EvalAmt}
-				,#{bok01EvalPl}
-				,#{bok01EvalYn}
-   </insert>
+ 	 INSERT 
+   	INTO bok01_book
+ 					 (bok01_book_id ,bok01_hold_date, bok01_fund_cd, bok01_item_cd, bok01_hold_qty, bok01_pur_amt, bok01_book_amt
+					, bok01_eval_amt, bok01_eval_pl, bok01_eval_yn) 		
+   	VALUES			 (#{bok01BookId} ,#{bok01HoldDate} ,#{bok01FundCd} ,#{bok01ItemCd} ,#{bok01HoldQty} ,#{bok01PurAmt}, ,#{bok01BookAmt}
+				    ,#{bok01EvalAmt} ,#{bok01EvalPl} ,#{bok01EvalYn})
+				    </insert>
    
    <update id="upsert" parameterType="Bok01Book">
    	WITH upsert AS (UPDATE bok01_book 

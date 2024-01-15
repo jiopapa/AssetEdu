@@ -7,10 +7,13 @@ import kr.co.kfs.assetedu.model.QueryAttr;
 
 public interface Bok01BookRepository {
 	List<Bok01Book> 	selectList (QueryAttr queryAttr);
+	List<Bok01Book> 	selectEvalList (QueryAttr queryAttr);
 	String 				getBookId(QueryAttr queryAttr);
 	String 				getLastHoldDate();
 	Bok01Book 			selectByBookId(QueryAttr queryAttr);
 	Bok01Book  			selectByItemCode(QueryAttr queryAttr);
+
+	
 	int insert(Bok01Book book);
 	int insertByDayBefor(QueryAttr dateCondition);
 	int upsert(Bok01Book book);

@@ -62,7 +62,7 @@
 	LEFT OUTER JOIN JNL10_acnt AS cr			ON 		jnl01_cr_acnt_cd = cr.jnl10_acnt_cd
 	WHERE 1=1
 	<include refid="whereQueryAttr"></include>
-	ORDER BY jnl01_cont_id ASC , jnl01_seq ASC 
+	ORDER BY jnl01_cont_id ASC , jnl01_seq ASC ,opr01_fund_cd
 	</select>
 	
 	<delete id="deleteByContId" parameterType="String">

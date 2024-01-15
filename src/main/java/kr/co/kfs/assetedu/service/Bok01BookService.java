@@ -32,6 +32,9 @@ public class Bok01BookService {
 	public List<Bok01Book> selectList(QueryAttr queryAttr) {
 		return bookRepository.selectList(queryAttr);
 	}
+	public List<Bok01Book> selectEvalList(QueryAttr queryAttr) {
+		return bookRepository.selectEvalList(queryAttr);
+	}
 
 	@Transactional
 	public String createBook(Opr01Cont cont) throws Exception {
@@ -72,42 +75,23 @@ public class Bok01BookService {
 		// --------------------------
 		if ("1".equals(trInfo.getJnl12InOutType())) {
 
-			System.out.println("########### 입고!!!!");
-
 			cont.setOpr01BookAmt(cont.getOpr01ContAmt());
-
-			System.out.println("########### 입고!!!!  11111");
-
 			// 보유수량
 			Long holdQty = 0l;
-			System.out.println("########### 입고!!!!  11111-1");
-
 			if (book.getBok01HoldQty() != null) {
-				System.out.println("########### 입고!!!!  11111-2");
 				holdQty = book.getBok01HoldQty();
 			}
-			System.out.println("########### 입고!!!!  11111-3");
-
 			book.setBok01HoldQty(holdQty + cont.getOpr01Qty());
-
-			System.out.println("########### 입고!!!!  22222");
-
 			Long bookAmt = 0l;
 			if (book.getBok01BookAmt() != null) {
 				bookAmt = book.getBok01BookAmt();
 			}
 			book.setBok01BookAmt(bookAmt + cont.getOpr01BookAmt());
-
-			System.out.println("########### 입고!!!!  333333");
-
 			Long purAmt = 0l;
 			if (book.getBok01PurAmt() != null) {
 				purAmt = book.getBok01PurAmt();
 			}
 			book.setBok01PurAmt(purAmt + cont.getOpr01BookAmt());
-
-			System.out.println("########### 입고!!!!  44444");
-
 		}
 		// --------------------------
 		// 2:출고
@@ -154,16 +138,15 @@ public class Bok01BookService {
 		// 3:원장변경 (평가)
 		// --------------------------
 		else if ("3".equals(trInfo.getJnl12InOutType())) {
-
+			book.setBok01EvalAmt(cont.getOpr01ContAmt()); //평가금액
+			book.setBok01EvalPl(cont.getOpr01TrPl()); //평가손익
+			book.setBok01EvalYn("true"); //평가처리
 		}
 		// -------
 		else {
 			resultMsg = "정해지지 않은 처리코드입니다. 관리팀에 문의하세요.";
 			throw new AssetException(resultMsg);
 		}
-
-		System.out.println("########### 입고!!!!  5555");
-
 		// 원장 반영 insert update
 		procCnt = bookRepository.upsert(book);
 

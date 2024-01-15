@@ -167,11 +167,41 @@
    AND	 opr01_cont_id       =    #{opr01ContId}				
    </update>
    
-   
    <update id="statusChange9" parameterType="Opr01Cont">
    UPDATE opr01_cont
    SET opr01_status_cd = #{opr01StatusCd}
    WHERE opr01_cont_id = #{opr01ContId}
    </update>
+   
+   <select id="selectOne2" parameterType="String" resultType="Opr01Cont">
+   	SELECT	opr01_cont_id							as opr01ContId					
+			,opr01_fund_cd							as opr01FundCd		
+			,opr01_item_cd 							as opr01ItemCd		
+			,opr01_cont_date						as opr01ContDate		
+			,opr01_tr_cd                            as opr01TrCd		
+			,opr01_qty                              as opr01Qty		
+			,opr01_price                            as opr01Price		
+			,opr01_cont_amt                         as opr01ContAmt		
+			,opr01_tr_pl                            as opr01TrPl		
+			,opr01_fee                              as opr01Fee		
+			,opr01_tax                              as opr01Tax		
+			,opr01_settle_amt                       as opr01SettleAmt		
+			,opr01_settle_date                      as opr01SettleDate		
+			,opr01_tr_co_cd                         as opr01TrCoCd		
+			,opr01_book_id                          as opr01BookId		
+			,opr01_book_amt                         as opr01BookAmt		
+			,opr01_status_cd                        as opr01StatusCd		
+			,fnd01_fund_nm 								as opr01FundNm
+			,itm01_item_nm							    as opr01ItemNm
+			,jnl12_tr_nm								as opr01TrNm
+			,f_corp_nm(opr01_tr_co_cd)  				as opr01TrCoNm
+			,f_com_nm('TrStatusCode', opr01_status_cd)  as opr01StatusNm
+			, to_char(now(),'yyyymmdd')					 as opr01BizDate
+			FROM 	opr01_cont
+					INNER JOIN fnd01_fund ON fnd01_fund_cd = opr01_fund_cd
+					INNER JOIN itm01_item ON itm01_item_cd = opr01_item_cd
+					INNER JOIN jnl12_tr	ON jnl12_tr_cd = opr01_tr_cd
+			WHERE opr01_cont_id = #{opr01ContId}
+   </select>
   
    </mapper>

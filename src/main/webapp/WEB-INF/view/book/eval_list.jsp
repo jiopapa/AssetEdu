@@ -168,7 +168,7 @@ $(document).ready(function () {
                 searchText : $('#searchText').val(), 
                 evalDate : $('#evalDate').val()
             }
-        AssetUtil.submitGet('/book/eval_process', data );   
+        AssetUtil.submitGet('/book/eval_insert', data );   
     });
 
     //평가취소
