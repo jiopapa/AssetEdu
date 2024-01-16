@@ -24,7 +24,7 @@
 	<h2><i class="fa-solid fa-cube my-3"></i> 주식매수 거래내역 > 상세내역</h2>
     <div class="border-top border-2 p-4">
 
-        <form:form action="/opr/buy_delete" method="POST" modelAttribute="cont" class="validcheck" >
+        <form:form action="/opr/buy_delete" method="POST" modelAttribute="cont" class="validcheck" onsubmit="return confirmSubmit('${cont.opr01FundNm}')" >
         <input type="hidden" path="opr01BookId" value="${opr01BookId }"/>
             <table class="table table-sm table-borderless">
                 <tr class="align-middle">
@@ -76,7 +76,7 @@
 
             <div class="row justify-content-md-center pt-5">
                 <c:if test="${cont.opr01ContDate == cont.opr01BizDate}">
-                    <button type="submit" class="col col-lg-2 btn btn-danger" tabindex="110">매수처리취소</button>
+                    <button type="submit" class="col col-lg-2 btn btn-danger" tabindex="110" onclick="confirm">매수처리취소</button>
                     &nbsp;
                 </c:if>
                 <a href="/opr/buy_list" class="col col-lg-2 btn btn-secondary" tabindex="120">취소, 리스트로 돌아감</a>
@@ -102,5 +102,13 @@ $(document).ready(function () {
     });
 });
 </script>
+  <script>
+    function confirmSubmit(opr01FundNm) {
+      // confirm 창을 띄우고 사용자가 확인을 누르면 true를 반환하고
+      // 취소를 누르면 false를 반환합니다.
+      var isConfirmed = confirm("'" + opr01FundNm +"'"  + "  종목의 매수를 취소하시겠습니까?");
+      return isConfirmed;
+    }
+  </script>
 </body>
 </html>

@@ -148,12 +148,15 @@ public class Bok01BookService {
 			throw new AssetException(resultMsg);
 		}
 		// 원장 반영 insert update
+		System.out.println("!!!!!!!!!!!!!!!!원장 반영 insert update!!!!!!!!!!!");
 		procCnt = bookRepository.upsert(book);
-
+		
 		// 체결내역 장부금액 UPDATE
+		System.out.println("!!!!!!!!!!!!!!!!체결 장부  update!!!!!!!!!!!");
 		procCnt = contRepository.update(cont);
 
 		// 분개모듈 호출
+		System.out.println("!!!!!!!!!!!!!!!!모듈 호출!!!!!!!!!!!!!!");
 		resultMsg = jnlService.createJournal(cont);
 
 		return resultMsg;

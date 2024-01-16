@@ -39,27 +39,27 @@
 	</select>
 	
 	<select id="selectList" parameterType="QueryAttr" resultType="Jnl01Journal">
-	SELECT 	jnl01_cont_id				AS      jnl01ContId
-			,jnl01_seq                  AS      jnl01Seq
-			,jnl01_dr_acnt_cd           AS      jnl01DrAcntCd
-			,jnl01_dr_amt               AS      jnl01DrAmt
-			,jnl01_cr_acnt_cd           AS      jnl01CrAcntCd
-			,jnl01_cr_amt               AS      jnl01CrAmt
-			,opr01_cont_date 			AS		opr01ContDate
-			,jnl12_tr_nm				AS		opr01TrNm
-			,fnd01_fund_nm				AS		fnd01FundNm
-			,itm01_item_nm				AS		itm01ItemNm
-			,dr.jnl10_acnt_nm			AS 		drJnl10AcntNm
-			,cr.jnl10_acnt_nm			AS 		crJnl10AcntNm
-			,dr.jnl10_acnt_cd			AS		drJnl10AcntCd
-			,cr.jnl10_acnt_cd			AS		crJnl10AcntCd
-	FROM jnl01_journal AS j
-	INNER JOIN opr01_cont 				ON		opr01_cont_id = j.jnl01_cont_id
-	INNER JOIN jnl12_tr					ON      jnl12_tr_cd   = opr01_tr_cd
-	INNER JOIN fnd01_fund				ON		fnd01_fund_cd = opr01_fund_cd
-	INNER JOIN itm01_item				ON      itm01_item_cd = opr01_item_cd
-	LEFT OUTER JOIN jnl10_acnt AS dr			ON  	jnl01_dr_acnt_cd = dr.jnl10_acnt_cd  
-	LEFT OUTER JOIN JNL10_acnt AS cr			ON 		jnl01_cr_acnt_cd = cr.jnl10_acnt_cd
+	SELECT 				jnl01_cont_id				AS      jnl01ContId
+						,jnl01_seq                  AS      jnl01Seq
+						,jnl01_dr_acnt_cd           AS      jnl01DrAcntCd
+						,jnl01_dr_amt               AS      jnl01DrAmt
+						,jnl01_cr_acnt_cd           AS      jnl01CrAcntCd
+						,jnl01_cr_amt               AS      jnl01CrAmt
+						,opr01_cont_date 			AS		opr01ContDate
+						,jnl12_tr_nm				AS		opr01TrNm
+						,fnd01_fund_nm				AS		fnd01FundNm
+						,itm01_item_nm				AS		itm01ItemNm
+						,dr.jnl10_acnt_nm			AS 		drJnl10AcntNm
+						,cr.jnl10_acnt_nm			AS 		crJnl10AcntNm
+						,dr.jnl10_acnt_cd			AS		drJnl10AcntCd
+						,cr.jnl10_acnt_cd			AS		crJnl10AcntCd
+	FROM 				jnl01_journal AS j
+	INNER JOIN  		opr01_cont 				ON		( opr01_cont_id = j.jnl01_cont_id AND opr01_status_cd = '1' )
+    INNER JOIN  		jnl12_tr					ON      jnl12_tr_cd   = opr01_tr_cd
+    INNER JOIN  		fnd01_fund				ON		fnd01_fund_cd = opr01_fund_cd
+    INNER JOIN  		itm01_item				ON      itm01_item_cd = opr01_item_cd
+    LEFT OUTER JOIN 	jnl10_acnt AS dr			ON  	jnl01_dr_acnt_cd = dr.jnl10_acnt_cd  
+    LEFT OUTER JOIN 	jnl10_acnt AS cr			ON 		jnl01_cr_acnt_cd = cr.jnl10_acnt_cd
 	WHERE 1=1
 	<include refid="whereQueryAttr"></include>
 	ORDER BY jnl01_cont_id ASC , jnl01_seq ASC ,opr01_fund_cd

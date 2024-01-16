@@ -54,6 +54,7 @@ public class Jnl01JournalService {
 		Long lastSeq = 0l;
 		
 		//임시분개장, 실분개장 정리
+		System.out.println("!!!!!!!!!!!!!!!!임시 , 실 분개장 삭제!!!!!!!!!!!");
 		procCnt = jnlTmpRepository.deleteByContId(cont.getOpr01ContId());
 		procCnt = jnlRepository.deleteByContId(cont.getOpr01ContId());
 		///////

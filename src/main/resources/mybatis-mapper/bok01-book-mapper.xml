@@ -54,16 +54,16 @@
    
    
    <select id="selectEvalList" parameterType="QueryAttr" resultType="Bok01Book">
- SELECT 	bok01_book_id   as bok01BookId   /** 원장id */ 
-             , bok01_hold_date as bok01HoldDate /** 보유일자 */ 
-             , bok01_fund_cd   as bok01FundCd   /** 펀드코드 */ 
-             , bok01_item_cd   as bok01ItemCd   /** 종목코드 */ 
-             , bok01_hold_qty  as bok01HoldQty  /** 보유수량 */ 
-             , bok01_pur_amt   as bok01PurAmt   /** 취득금액 */ 
-             , bok01_book_amt  as bok01BookAmt  /** 장부금액 */ 
-             , bok01_eval_amt  as bok01EvalAmt  /** 평가금액 */ 
-             , bok01_eval_pl   as bok01EvalPl   /** 평가손익 */
-             , bok01_eval_yn   as bok01EvalYn   /** 평가여부 */
+ SELECT 	bok01_book_id   as bok01BookId                                                    /** 원장id */ 
+             , bok01_hold_date as bok01HoldDate                                               /** 보유일자 */ 
+             , bok01_fund_cd   as bok01FundCd                                                 /** 펀드코드 */ 
+             , bok01_item_cd   as bok01ItemCd                                                 /** 종목코드 */ 
+             , bok01_hold_qty  as bok01HoldQty                                                /** 보유수량 */ 
+             , bok01_pur_amt   as bok01PurAmt                                                 /** 취득금액 */ 
+             , bok01_book_amt  as bok01BookAmt                                                /** 장부금액 */ 
+             , bok01_eval_amt  as bok01EvalAmt                                                /** 평가금액 */ 
+             , bok01_eval_pl   as bok01EvalPl                                                 /** 평가손익 */
+             , bok01_eval_yn   as bok01EvalYn                                                 /** 평가여부 */
              , COALESCE(itm02_apply_price,0)                                                  as bok01EvalPrice
              , CASE WHEN COALESCE(bok01_eval_yn,'false') = 'true' THEN '완료' ELSE '미처리' END  as bok01EvalYnStr
              , opr01_cont_id                                                                  as bok01ContId
@@ -145,9 +145,9 @@
 				,bok01_hold_qty
 				,bok01_pur_amt
 				,bok01_book_amt
-				,bok01_eval_amt
-				,bok01_eval_pl
-				,bok01_eval_yn
+				,0
+				,0
+				,'false'
 		FROM bok01_book
 		WHERE bok01_hold_date = f_get_date(#{holdDate}, -1) 
 		AND		bok01_hold_qty <![CDATA[>]]>0

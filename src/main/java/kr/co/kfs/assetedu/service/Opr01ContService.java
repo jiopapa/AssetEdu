@@ -131,10 +131,7 @@ public class Opr01ContService {
 				// 처리&취소 main 호출
 				resultMsg = procMain("C", cont);
 			}
-			else {
-				resultMsg = "처리구분을 확인해 주세요 .";
-				throw new AssetException(resultMsg);
-			}
+			
 		}
 		if(resultCnt ==0) {
 			if("P".equals(procType)) {
@@ -220,8 +217,8 @@ public class Opr01ContService {
 			//취소대상 거래내역 9로 변경  9:취소
 			log.debug("cont : {} ", cont);
 			cont.setOpr01StatusCd("9");
-			cont.setOpr01ContId(cont.getOpr01ContId());
 			procCnt = contRepository.statusChange9(cont);
+	
 			
 			//보유일자 = 오늘  조건 
 			QueryAttr setHoldDateSetId =new QueryAttr();
