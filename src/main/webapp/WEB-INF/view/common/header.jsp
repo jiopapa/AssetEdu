@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
-
+<style>
+    .navbar-nav .nav-item.dropdown:hover .dropdown-menu {
+        display: block;
+    }
+</style>
 <nav class="navbar navbar-expand-lg bg-dark">
      <div class="container-fluid">
          <a class="navbar-brand text-warning fw-bold" href="/main">AssetEDU</a>
@@ -68,6 +72,7 @@
                      <ul class="dropdown-menu">
                          <li><a class="dropdown-item" href="/admin/user/list">사용자관리</a></li>
                          <li><a class="dropdown-item" href="/admin/dict/list">용어사전</a></li>
+                         <li><a class="dropdown-item" href="/admin/user/siteMap">사이트맵</a></li>
                      </ul>
                  </li>
                  </sec:authorize>                 

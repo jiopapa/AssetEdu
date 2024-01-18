@@ -119,6 +119,10 @@ public class UserController {
 		return "redirect:/admin/user/list";
 		
 		}
+	@GetMapping("siteMap")
+	public String siteMap() {
+		return "/admin/user/siteMap";
+	}
 		
 	}
 	
